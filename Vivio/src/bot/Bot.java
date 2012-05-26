@@ -62,8 +62,9 @@ public class Bot extends PircBotX implements Constants{
 
 	//Constants
 	final static String INTERNAL_VERSION = "0.1";
-	final static String DEFAULT_SERVER = "irc.esper.net";
-	final static int DEFAULT_PORT = 6667;
+	public final static String DEFAULT_SERVER = "irc.esper.net";
+	public final static String DEFAULT_NICKNAME = "VivioBot";
+	public final static int DEFAULT_PORT = 6667;
 	
 	//Variables 
 	@Getter @Setter private boolean parsesSelf = false;
@@ -97,30 +98,40 @@ public class Bot extends PircBotX implements Constants{
 	}
 
 	public Bot(String server, int port, boolean SSL) {
-
+		this(server, port, SSL, DEFAULT_NICKNAME);
+	}
+	
+	public Bot(String server, int port, boolean SSL, String nick)
+	{
+		this(server, port, SSL, nick,"");
+	}
+	
+	public Bot(String server, int port, boolean SSL, String nick,
+				String serverPass)
+	{
+		System.out.println("THE NICK IS " + nick);
 		initialize();
-		
-		connectToServer(server, port, SSL);
+		connectToServer(server, port, SSL, nick, serverPass);
 		
 	}
-
+	
 	//Methods
-	private void connectToServer(String server, int port, boolean SSL) {
+	private void connectToServer(String server, int port, boolean SSL, String nick, String serverPass) {
 		
 		this.setAutoNickChange(true);
 		this.setVerbose(true);
 		this.setAutoSplitMessage(true);
 
 		this.setVersion("PircBotX~Vivio v" + INTERNAL_VERSION);
-		this.setLogin("VivioBot");
-		this.setName("VivioBot");
+		this.setLogin(nick);
+		this.setName(nick);
 
 		try {
 			if (SSL)
-				this.connect(server, port,
+				this.connect(server, port, serverPass,
 						new UtilSSLSocketFactory().trustAllCertificates());
 			else
-				this.connect(server, port);
+				this.connect(server, port, serverPass);
 		} catch (IOException | IrcException e) {
 			e.printStackTrace();
 		}

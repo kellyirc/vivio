@@ -1,57 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-
-    <classpathentry
-        kind="src"
-        path="src" />
-
-    <classpathentry
-        kind="con"
-        path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/derby.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/lombok-edge.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/pircbotx-1.7.jar"
-        sourcepath="lib/pircbotx-1.7-sources.zip" >
-
-        <attributes>
-
-            <attribute
-                name="javadoc_location"
-                value="jar:platform:/resource/Vivio/lib/pircbotx-1.7-javadoc.zip!/" />
-        </attributes>
-    </classpathentry>
-
-    <classpathentry
-        kind="lib"
-        path="lib/reflections-0.9.8.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/guava-11.0.2.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/javassist-3.12.1.GA.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/slf4j-api-1.6.1.jar" />
-
-    <classpathentry
-        kind="lib"
-        path="lib/dom4j-1.6.1.jar" />
-
-    <classpathentry
-        kind="output"
-        path="bin" />
-
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="lib/derby.jar"/>
+	<classpathentry kind="lib" path="lib/lombok-edge.jar"/>
+	<classpathentry kind="lib" path="lib/pircbotx-1.7.jar" sourcepath="lib/pircbotx-1.7-sources.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Vivio/lib/pircbotx-1.7-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/reflections-0.9.8.jar"/>
+	<classpathentry kind="lib" path="lib/guava-11.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.12.1.GA.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/knicker-2.2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

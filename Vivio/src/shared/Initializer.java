@@ -14,11 +14,12 @@ public class Initializer {
 	//TODO bot auth?
 	//TODO server pass
 	public static void parseCommands(String[] args) {
-		String server = null;
-		String password = null;
+		String server = Bot.DEFAULT_SERVER;
+		String password = "";
 		String channel = null;
-		String nickservPass = null;
-		int port = -1;
+		String nickservPass = "";
+		String nickname = Bot.DEFAULT_NICKNAME;
+		int port = Bot.DEFAULT_PORT;
 		boolean ssl = false;
 	 	
 		for(int i=0; i<args.length; i++) {
@@ -40,29 +41,35 @@ public class Initializer {
 			if(args[i].equals("-c") || args[i].equals("-channel") && args.length >= i+1) {
 				channel = args[i+1];
 			}
-			if(args[i].equals("-n") || args[i].equals("-nickserv") && args.length > i+1) {
+			if(args[i].equals("-n") || args[i].equals("-nickserv") && args.length >= i+1) {
 				nickservPass = args[i+1];
+			}
+			if(args[i].equals("-nick") && args.length >= i+1) {
+				nickname = args[i+1];
 			}
 		}
 		Bot b = null;
 				
-		if(server!=null) {
-			if(port != -1) {
-				if(ssl) {
-					b = new Bot(server, port, ssl);
-					if(channel!=null) b.joinChannel(channel);
-					return;
-				}
-				
-				b =new Bot(server, port);
-				if(channel!=null) b.joinChannel(channel);
-				return;
-			}
-			
-			b =new Bot(server);
-			if(channel!=null) b.joinChannel(channel);
-			return;
-		}
+//		if(server!=null) {
+//			if(port != -1) {
+//				if(ssl) {
+//					b = new Bot(server, port, ssl, nickname);
+//					if(channel!=null) b.joinChannel(channel);
+//					return;
+//				}
+//				
+//				b =new Bot(server, port);
+//				if(channel!=null) b.joinChannel(channel);
+//				return;
+//			}
+//			
+//			b =new Bot(server);
+//			if(channel!=null) b.joinChannel(channel);
+//			return;
+//		}
+		b = new Bot(server, port, ssl, nickname, password);
+		if(channel!=null) b.joinChannel(channel);
+		return;
 	}
 	
 }
