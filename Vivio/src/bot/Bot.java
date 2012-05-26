@@ -49,10 +49,10 @@ public class Bot extends PircBotX implements Constants{
 		
 		if(data != null) {
 			for(HashMap<String,Object> column : data) {
-					if(column.get("BANNED")!=null) addBanned(column.get("NAME").toString());
-					if(column.get("OWNER")!=null) addOwner(column.get("NAME").toString());
-					if(column.get("ELEVATED")!=null) addElevated(column.get("NAME").toString());
-				//}
+				Object i = new Integer(0);
+				if(column.get("BANNED")!=null && !(column.get("BANNED").equals(i))) addBanned(column.get("NAME").toString());
+				if(column.get("OWNER")!=null && !(column.get("OWNER").equals(i))) addOwner(column.get("NAME").toString());
+				if(column.get("ELEVATED")!=null && !(column.get("ELEVATED").equals(i))) addElevated(column.get("NAME").toString());
 			}
 		}
 	}

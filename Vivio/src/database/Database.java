@@ -16,6 +16,16 @@ public class Database {
 	private final static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private final static String database = "command_data";
 	
+	private static Connection conn;
+	private static int queryCount = 0;
+	
+	private static void queryCommit() throws SQLException {
+		if(queryCount++ > 0)  {
+			conn.commit();
+			queryCount = 0;
+		}
+	}
+	
 	//build connection
 	private static Connection connect() throws SQLException {
 		try {
@@ -24,35 +34,36 @@ public class Database {
 				| ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return DriverManager.getConnection("jdbc:derby:" + database+";create=true");
+		Connection rv = DriverManager.getConnection("jdbc:derby:" + database+";create=true");
+		rv.setAutoCommit(true);
+		return rv;
 	}
 	
 	//update, delete
 	public static void execRaw(String query) throws SQLException {
-		Connection conn = connect();
+		if(conn == null) conn = connect();
 		Statement stmt = conn.createStatement();
 		stmt.execute(query);
 		stmt.close();
-		conn.close();
+		queryCommit();
 	}
 	
 	//insert
 	public static void insert(String table, String columns, String values) throws SQLException {
-		Connection conn = connect();
+		if(conn == null) conn = connect();
 		Statement stmt = conn.createStatement();
 		stmt.execute("insert into "+table+"("+columns+") values ("+values+")");
 		stmt.close();
-		conn.close();
+		queryCommit();
 	}
 	
 	//select
 	public static List<HashMap<String,Object>> select(String query, int max) throws SQLException{
-		Connection conn = connect();
+		if(conn == null) conn = connect();
 		Statement stmt = conn.createStatement();
 		stmt.setMaxRows(max);
 		List<HashMap<String,Object>> rv =  convertResultSetToList(stmt.executeQuery(query));
 		stmt.close();
-		conn.close();
 		return rv;
 	}
 	
@@ -62,7 +73,7 @@ public class Database {
 	
 	//create tables
 	public static void createTable(String tableName, String columns) throws SQLException{
-		Connection conn = connect();
+		if(conn == null) conn = connect();
 		Statement stmt = conn.createStatement();
 		DatabaseMetaData dbmd = conn.getMetaData();
 		ResultSet rs = dbmd.getTables(null, "APP", tableName.toUpperCase(), null);
@@ -71,7 +82,6 @@ public class Database {
 		}
 		rs.close();
 		stmt.close();
-		conn.close();
 	}
 	
 	public static boolean hasRow(String query) throws SQLException {

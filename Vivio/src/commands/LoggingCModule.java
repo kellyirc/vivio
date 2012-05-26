@@ -15,14 +15,23 @@ import bot.Bot;
 public class LoggingCModule extends Command {
 
 	@Override
-	public void execute(Bot bot, Channel chan, User user, String message) {
-		passMessage(bot, chan, user, "");
-		try {
-			List<HashMap<String,Object>> returned = Database.select("");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void execute(final Bot bot, final Channel chan, final User user, String message) {
+		//TODO generate stats for a channel
+		if(chan == null) return;
+		passMessage(bot, chan, user, "I will begin generating statistics for "+chan.getName()+ " now.");
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					List<HashMap<String,Object>> returned = Database.select("select * from "+getFormattedTableName()+" where channel="+Database.getEnclosedString(chan.getName()));
+					passMessage(bot, chan, user, "I have "+returned.size()+" records.");
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}}).start();
+		passMessage(bot, chan, user, "I have finished generating statistics for "+chan.getName()+ " now.");
 	}
 
 	@Override
@@ -32,7 +41,7 @@ public class LoggingCModule extends Command {
 		this.setPriorityLevel(PRIORITY_MODULE);
 		this.setHelpText("Wheeeee, retrieve those logs!");
 		this.setName("Logging");
-		this.setTableName("logs");
+		this.setTableName("logs"); 
 
 		try {
 			Database.createTable(

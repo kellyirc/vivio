@@ -11,6 +11,7 @@ public class Initializer {
 		}
 	}
 	
+	//TODO bot nick
 	//TODO bot auth?
 	//TODO server pass
 	public static void parseCommands(String[] args) {
@@ -50,23 +51,23 @@ public class Initializer {
 		}
 		Bot b = null;
 				
-//		if(server!=null) {
-//			if(port != -1) {
-//				if(ssl) {
-//					b = new Bot(server, port, ssl, nickname);
-//					if(channel!=null) b.joinChannel(channel);
-//					return;
-//				}
-//				
-//				b =new Bot(server, port);
-//				if(channel!=null) b.joinChannel(channel);
-//				return;
-//			}
-//			
-//			b =new Bot(server);
-//			if(channel!=null) b.joinChannel(channel);
-//			return;
-//		}
+		if(server!=null) {
+			if(port != -1) {
+				if(ssl) {
+					b = new Bot(server, port, ssl, nickname);
+					if(channel!=null) b.joinChannel(channel);
+					return;
+				}
+				
+				b =new Bot(server, port);
+				if(channel!=null) b.joinChannel(channel);
+				return;
+			}
+			
+			b =new Bot(server);
+			if(channel!=null) b.joinChannel(channel);
+			return;
+		}
 		b = new Bot(server, port, ssl, nickname, password);
 		if(channel!=null) b.joinChannel(channel);
 		return;

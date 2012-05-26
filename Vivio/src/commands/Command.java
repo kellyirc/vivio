@@ -62,7 +62,6 @@ public abstract class Command extends Module {
 		b.sendMessage(getTarget(c, u), s);
 	}
 
-	
 	public boolean hasAlias(String commandString) {
 		for(String s : getAliases()) {
 			if(commandString.startsWith(s)) return true;
