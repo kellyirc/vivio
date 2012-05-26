@@ -18,7 +18,7 @@ public class ListCommand extends Command {
 	protected void initialize() {
 		setName("List");
 		getAliases().add("list");
-		
+		this.setHelpText("I'll tell you what all of my modules are!");
 	}
 
 }

@@ -13,8 +13,11 @@ public class Initializer {
 	
 	//TODO bot auth?
 	//TODO server pass
-	private static void parseCommands(String[] args) {
+	public static void parseCommands(String[] args) {
 		String server = null;
+		String password = null;
+		String channel = null;
+		String nickservPass = null;
 		int port = -1;
 		boolean ssl = false;
 	 	
@@ -25,26 +28,39 @@ public class Initializer {
 			if((args[i].equals("-p") || args[i].equals("-port")) && args.length >= i+1) {
 				port = Integer.parseInt(args[i+1]);
 			}
+			if(args[i].equals("-pass") && args.length >= i+1) {
+				password = args[i+1];
+			}
 			if(args[i].equals("--ssl") || args[i].equals("--use-ssl")) {
 				ssl = true;
 			}
-			if(args[i].equals("-owner") || args[i].equals("-o") && args.length >= i+1) {
+			if(args[i].equals("-o") || args[i].equals("-owner") && args.length >= i+1) {
 				Bot.addOwner(args[i+1]);
 			}
+			if(args[i].equals("-c") || args[i].equals("-channel") && args.length >= i+1) {
+				channel = args[i+1];
+			}
+			if(args[i].equals("-n") || args[i].equals("-nickserv") && args.length > i+1) {
+				nickservPass = args[i+1];
+			}
 		}
-		
+		Bot b = null;
+				
 		if(server!=null) {
 			if(port != -1) {
 				if(ssl) {
-					new Bot(server, port, ssl);
+					b = new Bot(server, port, ssl);
+					if(channel!=null) b.joinChannel(channel);
 					return;
 				}
 				
-				new Bot(server, port);
+				b =new Bot(server, port);
+				if(channel!=null) b.joinChannel(channel);
 				return;
 			}
 			
-			new Bot(server);
+			b =new Bot(server);
+			if(channel!=null) b.joinChannel(channel);
 			return;
 		}
 	}

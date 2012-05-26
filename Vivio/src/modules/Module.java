@@ -46,16 +46,4 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 		return isActive ? name : Colors.RED + name + Colors.NORMAL;
 	}
 	
-		//create tables here
-		//load data here
-		
-		/*
-		something like:
-		
-		create if not exists table (id, var1, var2, var3);
-		select * from table;
-		
-		foreach(data as x=>y)
-			map.set(x, y);
-		 */
 }

@@ -12,6 +12,7 @@ public class TestCommand extends Command{
 	protected void initialize() {
 		getAliases().add("test");
 		setName("Test");
+		this.setHelpText("This is just a test. This is only a test.");
 	}
 
 	@Override
@@ -27,6 +28,5 @@ public class TestCommand extends Command{
 		event.getBot().sendMessage(event.getChannel(), event.getMessage());
 		super.onMessage(event);
 	}
-
 
 }

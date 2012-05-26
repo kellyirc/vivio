@@ -3,12 +3,15 @@ package bot;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import listeners.ListenerBuilder;
@@ -21,25 +24,44 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
+import org.reflections.Reflections;
 
-import commands.*;
+import commands.Command;
+import database.Database;
+
 
 import shared.Constants;
 
 public class Bot extends PircBotX implements Constants{
+
+	@Getter private static HashSet<String> owners = new HashSet<>();
+	@Getter private static HashSet<String> elevated = new HashSet<>();
+	@Getter private static HashSet<String> banned = new HashSet<>();
 	
 	static {
-		//TODO load owners, elevated, banned from the database
+		List<HashMap<String,Object>> data = null;
+		try {
+			Database.createTable("bot_users", "name char(25) not null, owner smallint, elevated smallint, banned smallint");
+			data = Database.select("select * from bot_users");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(data != null) {
+			for(HashMap<String,Object> column : data) {
+					if(column.get("BANNED")!=null) addBanned(column.get("NAME").toString());
+					if(column.get("OWNER")!=null) addOwner(column.get("NAME").toString());
+					if(column.get("ELEVATED")!=null) addElevated(column.get("NAME").toString());
+				//}
+			}
+		}
 	}
 	
 	//All of the Bot instances
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
-	@Getter private static HashSet<String> owners = new HashSet<>();
-	@Getter private static HashSet<String> elevated = new HashSet<>();
-	@Getter private static HashSet<String> banned = new HashSet<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "0.01";
+	final static String INTERNAL_VERSION = "0.1";
 	final static String DEFAULT_SERVER = "irc.esper.net";
 	final static int DEFAULT_PORT = 6667;
 	
@@ -80,10 +102,6 @@ public class Bot extends PircBotX implements Constants{
 		
 		connectToServer(server, port, SSL);
 		
-		//TODO: this belongs in a module
-		this.joinChannel("#blargity");
-		this.joinChannel("#kellyirc");
-		
 	}
 
 	//Methods
@@ -112,10 +130,21 @@ public class Bot extends PircBotX implements Constants{
 	private void initialize() {
 		bots.add(this);
 		this.setListenerManager(ListenerBuilder.getManager());
-		addModule(new TestCommand());
-		addModule(new QuietCommand());
-		addModule(new ListCommand());
-		addModule(new ToggleCommand());
+		loadModules();
+	}
+
+	public void loadModules() {
+		modules.clear();
+		Reflections reflections = new Reflections("commands");
+		Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
+		for(Class<? extends Command> c : classes) {
+			try {
+				addModule((Module) Class.forName(c.getName()).newInstance());
+			} catch (InstantiationException | IllegalAccessException
+					| ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	//get the default bot -- this will almost always be the proper one to get.
@@ -192,35 +221,94 @@ public class Bot extends PircBotX implements Constants{
 	}
 
 	private int getLevelForUser(User u, Channel c) {
-		if(c == null) {
-			if(owners.contains(u.getNick())) return LEVEL_OWNER;
-			if(elevated.contains(u.getNick())) return LEVEL_ELEVATED;
-			if(banned.contains(u.getNick())) return LEVEL_BANNED;
-		} else if(c.isOp(u)) return LEVEL_OPERATOR;
+		if(owners.contains(u.getNick().toLowerCase())) return LEVEL_OWNER;
+		if(elevated.contains(u.getNick().toLowerCase())) return LEVEL_ELEVATED;
+		if(banned.contains(u.getNick().toLowerCase())) return LEVEL_BANNED;
+		if(c!=null && c.isOp(u)) return LEVEL_OPERATOR;
 		return LEVEL_NORMAL;
 	}
 	
 	public static void addBanned(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set banned=1 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, banned) values ('"+bnd+"', 1)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		banned.add(bnd);
 	}
 	
 	public static void removeBanned(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set banned=0 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, banned) values ('"+bnd+"', 0)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		banned.remove(bnd);
 	}
 	
 	public static void addOwner(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set owner=1 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, owner) values ('"+bnd+"', 1)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		owners.add(bnd);
 	}
 	
 	public static void removeOwner(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set owner=0 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, owner) values ('"+bnd+"', 0)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		owners.remove(bnd);
 	}
 	
 	public static void addElevated(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set elevated=1 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, elevated) values ('"+bnd+"', 1)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		elevated.add(bnd);
 	}
 	
 	public static void removeElevated(String bnd) {
+		bnd = bnd.trim().toLowerCase();
+		try {
+			if(Database.hasRow("select * from bot_users where name='"+bnd+"'")) {
+				Database.execRaw("update bot_users set elevated=0 where name='"+bnd+"'");
+			} else {
+				Database.execRaw("insert into bot_users (name, elevated) values ('"+bnd+"', 0)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		elevated.remove(bnd);
 	}
 }

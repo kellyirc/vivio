@@ -60,13 +60,17 @@ public class Database {
 		Connection conn = connect();
 		Statement stmt = conn.createStatement();
 		DatabaseMetaData dbmd = conn.getMetaData();
-		ResultSet rs = dbmd.getTables(null, "APP", "TEST", null);
+		ResultSet rs = dbmd.getTables(null, "APP", tableName.toUpperCase(), null);
 		if(!rs.next()) {
 			stmt.execute("create table "+tableName+"(id integer not null generated always as identity (start with 1, increment by 1), "+columns+", constraint primary_key primary key(id))");
 		}
 		rs.close();
 		stmt.close();
 		conn.close();
+	}
+	
+	public static boolean hasRow(String query) throws SQLException {
+		return select(query).size() > 0;
 	}
 	
 	//turn a result set into an iterable, mutable list

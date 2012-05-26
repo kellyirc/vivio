@@ -15,7 +15,7 @@ public class ToggleCommand extends Command {
 	public void execute(Bot bot, Channel chan, User user, String message) {
 
 		if(!Util.checkArgs(message, 2)) {
-			passMessage(bot, chan, user, "Invalid format: " + format() + " [module]");
+			passMessage(bot, chan, user, "Invalid format: " + format());
 			return;
 		}
 		String[] args = Util.getArgs(message, 2);
@@ -35,11 +35,16 @@ public class ToggleCommand extends Command {
 		
 		passMessage(bot, chan, user, "The module "+args[1]+" does not exist.");
 	}
+	
+	protected String format() {
+		return super.format() + " [module]";
+	}
 
 	@Override
 	protected void initialize() {
 		getAliases().add("toggle");
 		setName("Toggle");
+		this.setHelpText("I can toggle other modules on and off, whee!");
 	}
 
 }
