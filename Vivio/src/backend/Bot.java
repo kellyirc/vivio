@@ -1,4 +1,4 @@
-package bot;
+package backend;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import listeners.ListenerBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import modules.Module;
@@ -27,10 +26,8 @@ import org.pircbotx.exception.IrcException;
 import org.reflections.Reflections;
 
 import commands.Command;
-import database.Database;
 
 
-import shared.Constants;
 
 public class Bot extends PircBotX implements Constants{
 

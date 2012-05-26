@@ -11,9 +11,9 @@ import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.User;
 
-import shared.Util;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Util;
 
 public class DefineCommand extends Command
 {

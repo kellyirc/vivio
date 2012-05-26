@@ -3,13 +3,13 @@ package modules;
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Constants;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import shared.Constants;
 
 public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 

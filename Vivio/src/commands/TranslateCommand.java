@@ -3,12 +3,12 @@ package commands;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import shared.Util;
 
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Util;
 
 public class TranslateCommand extends Command
 {

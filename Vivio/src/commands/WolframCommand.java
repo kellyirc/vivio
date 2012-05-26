@@ -3,8 +3,8 @@ package commands;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import shared.Util;
-import bot.Bot;
+import backend.Bot;
+import backend.Util;
 
 import com.wolfram.alpha.WAEngine;
 import com.wolfram.alpha.WAException;

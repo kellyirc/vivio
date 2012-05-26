@@ -3,10 +3,10 @@ package commands;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import shared.Initializer;
-import shared.Util;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Initializer;
+import backend.Util;
 
 public class NewBotCommand extends Command{
 

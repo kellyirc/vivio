@@ -1,4 +1,4 @@
-package listeners;
+package backend;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -13,7 +13,6 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.managers.ListenerManager;
 import org.pircbotx.hooks.managers.ThreadedListenerManager;
 
-import bot.Bot;
 
 public class ListenerBuilder {
 	

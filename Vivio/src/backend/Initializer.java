@@ -1,5 +1,4 @@
-package shared;
-import bot.Bot;
+package backend;
 
 
 public class Initializer {

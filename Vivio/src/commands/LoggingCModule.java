@@ -8,9 +8,9 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import database.Database;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Database;
 
 public class LoggingCModule extends Command {
 

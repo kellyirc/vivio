@@ -1,4 +1,4 @@
-package shared;
+package backend;
 
 public interface Constants {
 	

@@ -7,11 +7,11 @@ import java.util.List;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import database.Database;
 
-import shared.Util;
 
-import bot.Bot;
+import backend.Bot;
+import backend.Database;
+import backend.Util;
 
 public class RawSqlCommand extends Command{
 
