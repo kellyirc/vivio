@@ -55,8 +55,9 @@ public class ListenerBuilder {
 		 */
 		@Override
 		public void onMessage(MessageEvent<Bot> event) throws Exception {
-			event.getBot().checkCommands(event.getUser(), event.getMessage(), event.getChannel());
 			super.onMessage(event);
+			event.getBot().invokeAll("onMessage", new Object[]{event});
+			event.getBot().checkCommands(event.getUser(), event.getMessage(), event.getChannel());
 		}
 
 		/* (non-Javadoc)
@@ -64,6 +65,7 @@ public class ListenerBuilder {
 		 */
 		@Override
 		public void onNotice(NoticeEvent<Bot> event) throws Exception {
+			event.getBot().invokeAll("onNotice", new Object[]{event});
 			event.getBot().checkCommands(event.getUser(), event.getMessage(), null);
 			super.onNotice(event);
 		}
@@ -74,6 +76,7 @@ public class ListenerBuilder {
 		@Override
 		public void onPrivateMessage(PrivateMessageEvent<Bot> event)
 				throws Exception {
+			event.getBot().invokeAll("onPrivateMessage", new Object[]{event});
 			event.getBot().checkCommands(event.getUser(), event.getMessage(), null);
 			super.onPrivateMessage(event);
 		}

@@ -22,12 +22,17 @@ public class RawSqlCommand extends Command{
 			passMessage(bot, chan, user, "Invalid format: " + format());
 			return;
 		}
+
+		String root = message.split(" ")[0];
+		int select = 0;
+		if(root.length() > 4) 
+			select = Integer.parseInt(root.substring(4));
 		
 		String sql = message.substring(message.indexOf(" "));
 		List<HashMap<String,Object>> data = null;
 		try {
 			if(sql.toLowerCase().contains("select"))
-				data = Database.select(sql);
+				data = Database.select(sql, select);
 			else
 				Database.execRaw(sql);
 		} catch (SQLException e) {
@@ -37,7 +42,9 @@ public class RawSqlCommand extends Command{
 		if(data==null) {
 			passMessage(bot, chan, user, "Executed query successfully.");
 		} else {
-			passMessage(bot, chan, user, data.toString());
+			for(HashMap<String, Object> row : data) {
+				passMessage(bot, chan, user, row.toString());
+			}
 		}
 		
 	}

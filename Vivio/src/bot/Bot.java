@@ -156,6 +156,9 @@ public class Bot extends PircBotX implements Constants{
 	public void invokeAll(String method, Object[] args) {
 		for(Module m : modules) {
 			
+			if(!m.isActive()) continue;
+			if(botMode < m.getAccessMode()) continue;
+			
 			//invoke methods onFoo
 			for(Method methodName : m.getClass().getMethods()) {
 				if(methodName.getName().equals(method)) {
@@ -185,8 +188,8 @@ public class Bot extends PircBotX implements Constants{
 				if(!command.isActive()) continue;
 				if(botMode < command.getAccessMode()) continue;
 				if(getLevelForUser(user, chan) < command.getAccessLevel()) continue;
-				if(!prefix.equals(command.getCmdSequence())) continue;
-				if(!command.getAliases().contains(comm)) continue;
+				if(!prefix.startsWith(command.getCmdSequence())) continue;
+				if(!command.hasAlias(comm)) continue;
 				command.execute(comm, this, chan, user, message);
 				if(command.isStopsExecution()) return false;
 			}

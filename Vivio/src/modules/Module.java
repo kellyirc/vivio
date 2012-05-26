@@ -38,8 +38,8 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 		setPriorityLevel(PRIORITY_MODULE);
 	}
 	
-	protected String getFormattedTableName() {
-		return getClass().getSimpleName() + tableName == null ? "_generic_table" : getTableName();
+	protected final String getFormattedTableName() {
+		return getClass().getSimpleName() + (tableName == null ? "_generic_table" : "_"+getTableName());
 	}
 	
 	public String toString() {

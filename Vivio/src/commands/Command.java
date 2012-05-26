@@ -61,4 +61,12 @@ public abstract class Command extends Module {
 	public void passMessage(Bot b, Channel c, User u, String s) {
 		b.sendMessage(getTarget(c, u), s);
 	}
+
+	
+	public boolean hasAlias(String commandString) {
+		for(String s : getAliases()) {
+			if(commandString.startsWith(s)) return true;
+		}
+		return false;
+	}
 }

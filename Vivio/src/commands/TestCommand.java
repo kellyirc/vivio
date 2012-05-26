@@ -13,6 +13,7 @@ public class TestCommand extends Command{
 		getAliases().add("test");
 		setName("Test");
 		this.setHelpText("This is just a test. This is only a test.");
+		this.setActive(false);
 	}
 
 	@Override

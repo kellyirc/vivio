@@ -40,19 +40,24 @@ public class Database {
 	public static void insert(String table, String columns, String values) throws SQLException {
 		Connection conn = connect();
 		Statement stmt = conn.createStatement();
-		stmt.execute("insert into "+table+"("+columns+") values ("+values+");");
+		stmt.execute("insert into "+table+"("+columns+") values ("+values+")");
 		stmt.close();
 		conn.close();
 	}
 	
 	//select
-	public static List<HashMap<String,Object>> select(String query) throws SQLException{
+	public static List<HashMap<String,Object>> select(String query, int max) throws SQLException{
 		Connection conn = connect();
 		Statement stmt = conn.createStatement();
+		stmt.setMaxRows(max);
 		List<HashMap<String,Object>> rv =  convertResultSetToList(stmt.executeQuery(query));
 		stmt.close();
 		conn.close();
 		return rv;
+	}
+	
+	public static List<HashMap<String,Object>> select(String query) throws SQLException {
+		return select(query, 0);
 	}
 	
 	//create tables
@@ -62,7 +67,7 @@ public class Database {
 		DatabaseMetaData dbmd = conn.getMetaData();
 		ResultSet rs = dbmd.getTables(null, "APP", tableName.toUpperCase(), null);
 		if(!rs.next()) {
-			stmt.execute("create table "+tableName+"(id integer not null generated always as identity (start with 1, increment by 1), "+columns+", constraint primary_key primary key(id))");
+			stmt.execute("create table "+tableName+"(id integer not null generated always as identity (start with 1, increment by 1), "+columns+", constraint primary_key_"+tableName.toLowerCase()+" primary key(id))");
 		}
 		rs.close();
 		stmt.close();
@@ -88,5 +93,9 @@ public class Database {
 	    }
 
 	    return list;
+	}
+
+	public static String getEnclosedString(String s) {
+		return "'" + s + "'";
 	}
 }
