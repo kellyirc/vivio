@@ -3,7 +3,7 @@ package commands;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import bot.Bot;
+import backend.Bot;
 
 public class ReloadCommand extends Command{
 

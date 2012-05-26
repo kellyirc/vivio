@@ -22,7 +22,7 @@ public class HelpCommand extends Command {
 		for(Module mod : bot.getModules()) {
 			if(mod instanceof Command) {
 				Command c = (Command) mod;
-				if(c.getAliases().contains(args[1])) {
+				if(c.getAliases().contains(args[1]) || c.getName().toLowerCase().equals(args[1].toLowerCase())) {
 					passMessage(bot, chan, user, c.format() + " -- " + c.getHelpText());
 					return;
 				}

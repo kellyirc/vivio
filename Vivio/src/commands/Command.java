@@ -6,7 +6,7 @@ import java.util.List;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-import bot.Bot;
+import backend.Bot;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public abstract class Command extends Module {
 
 	public boolean hasAlias(String commandString) {
 		for(String s : getAliases()) {
-			if(commandString.startsWith(s)) return true;
+			if(commandString.toLowerCase().startsWith(s.toLowerCase())) return true;
 		}
 		return false;
 	}

@@ -32,7 +32,7 @@ public class DefineCommand extends Command
 	{
 		super.initialize();
 		System.setProperty("WORDNIK_API_KEY", "406ed874a052a17533000020f430da862109779ddb217756f");
-		setHelpText("Gets the definition of english words. Usage: " + format());
+		setHelpText("Gets the definition of english words.");
 		setName("Define");
 		getAliases().add("define");
 	}

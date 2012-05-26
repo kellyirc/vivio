@@ -4,7 +4,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import bot.Bot;
+import backend.Bot;
 
 public class TestCommand extends Command{
 	

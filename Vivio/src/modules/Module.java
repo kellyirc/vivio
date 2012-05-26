@@ -46,4 +46,8 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 		return isActive ? name : Colors.RED + name + Colors.NORMAL;
 	}
 	
+	protected void debug(String s) {
+		if(this.getAccessMode() != ACCESS_DEVELOPMENT) return;
+		System.err.println(s);
+	}
 }

@@ -106,7 +106,6 @@ public class Bot extends PircBotX implements Constants{
 	public Bot(String server, int port, boolean SSL, String nick,
 				String serverPass)
 	{
-		System.out.println("THE NICK IS " + nick);
 		initialize();
 		connectToServer(server, port, SSL, nick, serverPass);
 		

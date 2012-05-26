@@ -11,6 +11,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import backend.Bot;
 import backend.Database;
+import backend.Util;
 
 public class LoggingCModule extends Command {
 
@@ -18,20 +19,51 @@ public class LoggingCModule extends Command {
 	public void execute(final Bot bot, final Channel chan, final User user, String message) {
 		//TODO generate stats for a channel
 		if(chan == null) return;
+		
+		if(Util.checkArgs(message, 2)) {
+			String[] args = Util.getArgs(message, 2);
+			switch(args[1]) {
+			case "quote":
+				try {
+					displayRandomQuote(bot, chan, user, getDataForChannel(chan));
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			default:
+					
+			}
+			return;
+		}
+		
+		
 		passMessage(bot, chan, user, "I will begin generating statistics for "+chan.getName()+ " now.");
 		new Thread(new Runnable(){
 
 			@Override
 			public void run() {
 				try {
-					List<HashMap<String,Object>> returned = Database.select("select * from "+getFormattedTableName()+" where channel="+Database.getEnclosedString(chan.getName()));
-					passMessage(bot, chan, user, "I have "+returned.size()+" records.");
+					List<HashMap<String, Object>> returned = getDataForChannel(chan);
+					passMessage(bot, chan, user, "I have "+returned.size()+" recorded messages from "+chan.getName()+".");
+					
+					displayRandomQuote(bot, chan, user, returned);
+					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				
 			}}).start();
-		passMessage(bot, chan, user, "I have finished generating statistics for "+chan.getName()+ " now.");
+	}
+
+	private void displayRandomQuote(final Bot bot, final Channel chan,
+			final User user, List<HashMap<String, Object>> returned) {
+			HashMap<String, Object> rand = returned.get((int) (Math.random() * returned.size()));
+			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + rand.get("MESSAGE"));
+	}
+	
+	private List<HashMap<String, Object>> getDataForChannel(
+			final Channel chan) throws SQLException {
+		List<HashMap<String,Object>> returned = Database.select("select * from "+getFormattedTableName()+" where channel="+Database.getEnclosedString(chan.getName()));
+		return returned;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class TranslateCommand extends Command
 	protected void initialize()
 	{
 		super.initialize();
-		setHelpText("Translate from one language to another via Google Translate. Usage: "+format()+". The from and to languages should be specified by their ISO 639-1 Code.");
+		setHelpText("Translate from one language to another via Google Translate. The from and to languages should be specified by their ISO 639-1 Code.");
 		setName("Translate");
 		getAliases().add("translate");
 		Translate.setKey("8867C076B95F315D1B38A380C9483A694EE865E3");
@@ -47,8 +47,7 @@ public class TranslateCommand extends Command
 	{
 		return super.format() + " [from] [to] [text]";
 	}
-	
-	
+		
 	private static String translate(String startingLanguage, String endLanguage, String toTranslate)
 	  {
 	    try

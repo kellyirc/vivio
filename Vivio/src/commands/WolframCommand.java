@@ -17,7 +17,7 @@ import com.wolfram.alpha.WASubpod;
 public class WolframCommand extends Command
 {
 
-	WAEngine engine;
+	static WAEngine engine;
 	
 	@Override
 	protected void initialize()
@@ -27,7 +27,7 @@ public class WolframCommand extends Command
 		engine.setAppID("UY6XJ8-22G848H5YA");
         engine.addFormat("plaintext");
         
-        setHelpText("Sends a call to the Wolfram Alpha API. Outputs only the result, if there is one. If you want to read the full result, use !wolfram in a private message. Usage: " + format());
+        setHelpText("Sends a call to the Wolfram Alpha API. Outputs only the result, if there is one. If you want to read the full result, use !wolfram in a private message.");
 		setName("Wolfram");
 		getAliases().add("wolfram");
 
