@@ -26,8 +26,7 @@ public class BrainfuckCommand extends Command {
 	}
 	
 	private void debugBF(String command, int pos, String text, boolean increasecounter) {
-		if(true) return; //TODO Make this instead check if the bot is running in a "debug mode" - whoever wants to may do so!
-		System.out.println("(" + (increasecounter ? ++instructionNum : instructionNum) + ") Pos: " + pos + " '" + command + "' " + text);
+		debug("(" + (increasecounter ? ++instructionNum : instructionNum) + ") Pos: " + pos + " '" + command + "' " + text);
 	}
 
 	@Override
