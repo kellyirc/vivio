@@ -105,7 +105,7 @@ public class LoggingCModule extends Command {
 		this.setAccessLevel(LEVEL_OPERATOR);
 		this.setPriorityLevel(PRIORITY_MODULE);
 		this.setHelpText("Wheeeee, retrieve those logs!");
-		this.setName("Logging");
+		this.setName("LoggingStats");
 		this.setTableName("logs"); 
 
 		try {

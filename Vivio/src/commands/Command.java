@@ -63,7 +63,7 @@ public abstract class Command extends Module {
 	}
 
 	protected void addAlias(String alias) {
-		aliases.add(alias);
+		getAliases().add(alias);
 	}
 	
 	public boolean hasAlias(String commandString) {

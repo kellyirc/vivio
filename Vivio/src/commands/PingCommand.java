@@ -5,18 +5,18 @@ import org.pircbotx.User;
 
 import backend.Bot;
 
-public class ChangeCommand extends Command{
+public class PingCommand extends Command {
 
-	//TODO change variables like verbosity etc
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		
+		passMessage(bot, chan, user, "PING!" + chan.getUsers().toString());
 	}
 
 	@Override
 	protected void initialize() {
-		addAlias("change");
-		setName("ChangeInternals");
-		setHelpText("Change internal variables! Ooooh la la!");
+		addAlias("ping");
+		setName("Ping");
+		setHelpText("Ping all users in the channel. Don't annoy them too much, now!");
 	}
+
 }
