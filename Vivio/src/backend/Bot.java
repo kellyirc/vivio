@@ -60,7 +60,7 @@ public class Bot extends PircBotX implements Constants{
 	//Constants
 	final static String INTERNAL_VERSION = "0.1";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
-	public final static String DEFAULT_NICKNAME = "VivioBot";
+	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;
 	
 	//Variables 
@@ -324,4 +324,5 @@ public class Bot extends PircBotX implements Constants{
 		}
 		elevated.remove(bnd);
 	}
+
 }

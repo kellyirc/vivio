@@ -1,5 +1,7 @@
 package modules;
 
+import java.util.Random;
+
 import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 
@@ -12,10 +14,12 @@ import lombok.Setter;
 
 
 public abstract class Module extends ListenerAdapter<Bot> implements Constants {
-
+	
 	public Module() {
 		initialize();
 	}
+	
+	protected static Random random = new Random();
 	
 	@Getter @Setter(AccessLevel.PROTECTED) private String name;
 	

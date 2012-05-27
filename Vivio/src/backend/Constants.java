@@ -3,9 +3,9 @@ package backend;
 public interface Constants {
 	
 	//access mode: development, normal, disabled -- if the bots mode is equivalent or greater than the commands mode, it's accessible
-	public static final short ACCESS_DEVELOPMENT = 2;
-	public static final short ACCESS_NORMAL = 1;
-	public static final short ACCESS_DISABLED = 0;
+	public static final short ACCESS_DISABLED = 2;
+	public static final short ACCESS_DEVELOPMENT = 1;
+	public static final short ACCESS_NORMAL = 0;
 
 	//access level: owner, op, elevated, normal, banned -- if the person executing the command is >= the access level, the command is executed
 	
