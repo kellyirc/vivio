@@ -117,6 +117,8 @@ public class Bot extends PircBotX implements Constants{
 		this.setAutoNickChange(true);
 		this.setVerbose(true);
 		this.setAutoSplitMessage(true);
+		
+		this.setFinger("Don't finger me! Vivio v"+INTERNAL_VERSION);
 
 		this.setVersion("PircBotX~Vivio v" + INTERNAL_VERSION);
 		this.setLogin(nick);

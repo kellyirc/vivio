@@ -9,7 +9,11 @@ public class PingCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		passMessage(bot, chan, user, "PING!" + chan.getUsers().toString());
+		String s = "";
+		for(User u : chan.getUsers()) {
+			s += u.getNick() + " ";
+		}
+		passMessage(bot, chan, user, "PING! " + s);
 	}
 
 	@Override
