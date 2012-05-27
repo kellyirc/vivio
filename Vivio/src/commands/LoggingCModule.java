@@ -130,7 +130,7 @@ public class LoggingCModule extends Command {
 												.getUser().getNick())
 										+ ","
 										+ Database.getEnclosedString(event
-												.getMessage().replaceAll("'", "''"))
+												.getMessage())
 												);
 		super.onMessage(event);
 	}

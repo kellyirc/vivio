@@ -106,6 +106,7 @@ public class Database {
 	}
 
 	public static String getEnclosedString(String s) {
-		return "'" + s + "'";
+		return "'" + s.replaceAll("'", "''") + "'";
+				
 	}
 }
