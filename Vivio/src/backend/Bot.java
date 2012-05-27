@@ -58,7 +58,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "0.1";
+	final static String INTERNAL_VERSION = "0.5";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
 	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;

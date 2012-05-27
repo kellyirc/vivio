@@ -39,7 +39,6 @@ public class WolframCommand extends Command
 		{
 			// Create the query.
 	        WAQuery query = engine.createQuery();
-	        
 	        // Set properties of the query.
 	        query.setInput(message.split(" ",2)[1]);
 	        

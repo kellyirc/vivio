@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,5 +111,50 @@ public class Database {
 	public static String getEnclosedString(String s) {
 		return "'" + s.replaceAll("'", "''") + "'";
 				
+	}
+	
+	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	public static String formatTimestamp(Date date) {
+		return getEnclosedString(timestampFormat.format(date));
+	}
+	
+	public static String formatTimestamp(long milliseconds) {
+		return formatTimestamp(new Date(milliseconds));
+	}
+	
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
+	public static String formatDate(Date date) {
+		return getEnclosedString(dateFormat.format(date));
+	}
+	
+	public static String formatDate(long milliseconds) {
+		return formatDate(new Date(milliseconds));
+	}
+	
+private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	
+	public static String formatTime(Date date) {
+		return getEnclosedString(timeFormat.format(date));
+	}
+	
+	public static String formatTime(long milliseconds) {
+		return formatTime(new Date(milliseconds));
+	}
+	
+	public static Date parseTimestamp(String timestamp) throws ParseException
+	{
+		return timestampFormat.parse(timestamp);
+	}
+	
+	public static Date parseDate(String date) throws ParseException
+	{
+		return dateFormat.parse(date);
+	}
+	
+	public static Date parseTime(String time) throws ParseException
+	{
+		return timeFormat.parse(time);
 	}
 }
