@@ -34,7 +34,7 @@ public class HelpCommand extends Command {
 	protected void initialize() {
 		this.setPriorityLevel(PRIORITY_MEDIUM);
 		this.setHelpText("I can give you information about the other commands!");
-		getAliases().add("help");
+		addAlias("help");
 		this.setName("Help");
 	}
 	
@@ -42,4 +42,5 @@ public class HelpCommand extends Command {
 		return super.format() + " [module]";
 	}
 
+	public void setActive(boolean active) {return;}
 }

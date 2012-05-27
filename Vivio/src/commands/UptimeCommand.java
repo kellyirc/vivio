@@ -16,7 +16,7 @@ public class UptimeCommand extends Command {
 	
 	@Override
 	protected void initialize() {
-		getAliases().add("uptime");
+		addAlias("uptime");
 		this.setHelpText("See how long I've been going ;)");
 		this.setName("Uptime");
 	}

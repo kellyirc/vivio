@@ -32,8 +32,8 @@ public class QuietCommand extends Command {
 
 	@Override
 	protected void initialize() {
-		getAliases().add("quiet");
-		getAliases().add("ignore");
+		addAlias("quiet");
+		addAlias("ignore");
 		this.setPriorityLevel(PRIORITY_HIGH);
 		this.setAccessLevel(LEVEL_OPERATOR);
 		this.setName("Quiet");
@@ -41,4 +41,5 @@ public class QuietCommand extends Command {
 		this.setHelpText("I can stop talking to another person, or stop talking to a channel with this toggled!");
 	}
 
+	public void setActive(boolean active) {return;}
 }

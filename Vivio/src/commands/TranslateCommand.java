@@ -16,10 +16,9 @@ public class TranslateCommand extends Command
 	@Override
 	protected void initialize()
 	{
-		super.initialize();
 		setHelpText("Translate from one language to another via Google Translate. The from and to languages should be specified by their ISO 639-1 Code.");
 		setName("Translate");
-		getAliases().add("translate");
+		addAlias("translate");
 		Translate.setKey("8867C076B95F315D1B38A380C9483A694EE865E3");
 	}
 	

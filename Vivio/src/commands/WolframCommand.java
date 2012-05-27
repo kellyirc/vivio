@@ -22,14 +22,13 @@ public class WolframCommand extends Command
 	@Override
 	protected void initialize()
 	{
-		super.initialize();
 		engine = new WAEngine();
 		engine.setAppID("UY6XJ8-22G848H5YA");
         engine.addFormat("plaintext");
         
         setHelpText("Sends a call to the Wolfram Alpha API. Outputs only the result, if there is one. If you want to read the full result, use !wolfram in a private message.");
 		setName("Wolfram");
-		getAliases().add("wolfram");
+		addAlias("wolfram");
 
 	}
 	

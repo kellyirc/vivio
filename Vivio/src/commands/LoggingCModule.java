@@ -47,6 +47,27 @@ public class LoggingCModule extends Command {
 					
 					displayRandomQuote(bot, chan, user, returned);
 					
+					HashMap<String, Integer> httpcount = new HashMap<>();
+					HashMap<String, Integer> cmdcount = new HashMap<>();
+					
+					for(HashMap<String, Object> column : returned) {
+						String message = column.get("MESSAGE").toString();
+						String sender = column.get("USER_NAME").toString().trim();
+						if(message.contains("http://") || message.contains("https://")) {
+							if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
+							else httpcount.put(sender, 1);
+						} else if(message.startsWith("!")) {
+							if(cmdcount.containsKey(sender)) cmdcount.put(sender, cmdcount.get(sender)+1);
+							else cmdcount.put(sender, 1);
+						}
+					}
+					
+					String maxHttp = getMax(httpcount);
+					String maxCmd = getMax(cmdcount);
+					
+					passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
+					passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
+					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -54,9 +75,21 @@ public class LoggingCModule extends Command {
 			}}).start();
 	}
 
+	private String getMax(HashMap<String, Integer> httpcount) {
+		String curMax = null;
+		
+		for(String s : httpcount.keySet()) {
+			if(curMax == null || httpcount.get(s) > httpcount.get(curMax)) curMax = s;
+		}
+		return curMax;
+	}
+
 	private void displayRandomQuote(final Bot bot, final Channel chan,
 			final User user, List<HashMap<String, Object>> returned) {
-			HashMap<String, Object> rand = returned.get((int) (Math.random() * returned.size()));
+			HashMap<String, Object> rand;
+			do {
+				rand = returned.get((int) (Math.random() * returned.size()));
+			} while(rand.get("MESSAGE").toString().startsWith("!") || rand.get("MESSAGE").toString().split(" ").length < 3);
 			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + rand.get("MESSAGE"));
 	}
 	
@@ -68,7 +101,7 @@ public class LoggingCModule extends Command {
 
 	@Override
 	protected void initialize() {
-		getAliases().add("generate-stats");
+		addAlias("generate-stats");
 		this.setAccessLevel(LEVEL_OPERATOR);
 		this.setPriorityLevel(PRIORITY_MODULE);
 		this.setHelpText("Wheeeee, retrieve those logs!");

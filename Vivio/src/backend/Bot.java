@@ -231,6 +231,7 @@ public class Bot extends PircBotX implements Constants{
 	}
 
 	private int getLevelForUser(User u, Channel c) {
+		//TODO identified users only?
 		if(owners.contains(u.getNick().toLowerCase())) return LEVEL_OWNER;
 		if(elevated.contains(u.getNick().toLowerCase())) return LEVEL_ELEVATED;
 		if(banned.contains(u.getNick().toLowerCase())) return LEVEL_BANNED;

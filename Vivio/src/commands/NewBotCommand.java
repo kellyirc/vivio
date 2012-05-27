@@ -27,7 +27,7 @@ public class NewBotCommand extends Command{
 	
 	@Override
 	protected void initialize() {
-		getAliases().add("new");
+		addAlias("new");
 		this.setHelpText("Spawn a new meeee!");
 		this.setName("NewBot");
 		this.setAccessLevel(LEVEL_OWNER);

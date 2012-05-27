@@ -16,10 +16,11 @@ public class ReloadCommand extends Command{
 	
 	@Override
 	public void initialize() {
-		getAliases().add("reload");
+		addAlias("reload");
 		this.setHelpText("Reload all of my insides, woo!");
 		this.setName("Reload");
 		this.setAccessLevel(LEVEL_OWNER);
 	}
 
+	public void setActive(boolean active) {return;}
 }

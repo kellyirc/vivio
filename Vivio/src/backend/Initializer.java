@@ -10,8 +10,6 @@ public class Initializer {
 		}
 	}
 	
-	//TODO bot nick
-	//TODO bot auth?
 	//TODO server pass
 	public static void parseCommands(String[] args) {
 		String server = Bot.DEFAULT_SERVER;

@@ -42,9 +42,10 @@ public class ToggleCommand extends Command {
 
 	@Override
 	protected void initialize() {
-		getAliases().add("toggle");
+		addAlias("toggle");
 		setName("Toggle");
 		this.setHelpText("I can toggle other modules on and off, whee!");
 	}
 
+	public void setActive(boolean active) {return;}
 }

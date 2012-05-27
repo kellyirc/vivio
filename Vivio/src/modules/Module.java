@@ -34,9 +34,7 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 	//modules should probably be sorted by priority level in a TreeSet
 	@Getter @Setter(AccessLevel.PROTECTED)	private short priorityLevel = PRIORITY_LOW;
 	
-	protected void initialize() {
-		setPriorityLevel(PRIORITY_MODULE);
-	}
+	protected abstract void initialize();
 	
 	protected final String getFormattedTableName() {
 		return getClass().getSimpleName() + (tableName == null ? "_generic_table" : "_"+getTableName());

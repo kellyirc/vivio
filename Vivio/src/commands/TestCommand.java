@@ -10,7 +10,7 @@ public class TestCommand extends Command{
 	
 	@Override
 	protected void initialize() {
-		getAliases().add("test");
+		addAlias("test");
 		setName("Test");
 		this.setHelpText("This is just a test. This is only a test.");
 		this.setActive(false);

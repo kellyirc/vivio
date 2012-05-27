@@ -15,7 +15,7 @@ import modules.Module;
 
 public abstract class Command extends Module {
 
-	protected List<String> aliases;
+	private List<String> aliases;
 	
 	public Command() {
 		super();
@@ -62,6 +62,10 @@ public abstract class Command extends Module {
 		b.sendMessage(getTarget(c, u), s);
 	}
 
+	protected void addAlias(String alias) {
+		aliases.add(alias);
+	}
+	
 	public boolean hasAlias(String commandString) {
 		for(String s : getAliases()) {
 			if(commandString.toLowerCase().startsWith(s.toLowerCase())) return true;

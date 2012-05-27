@@ -58,7 +58,8 @@ public class RawSqlCommand extends Command{
 		this.setAccessLevel(LEVEL_OWNER);
 		this.setHelpText("Execute a raw SQL command. Oooooh, dangerous!");
 		this.setName("SQL");
-		getAliases().add("sql");
+		addAlias("sql");
 	}
 
+	public void setActive(boolean active) {return;}
 }
