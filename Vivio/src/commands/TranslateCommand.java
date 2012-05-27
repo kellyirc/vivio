@@ -31,7 +31,7 @@ public class TranslateCommand extends Command
 			passMessage(bot, chan, user, translate(args[1],args[2],args[3]));
 		}
 		else
-			passMessage(bot,chan,user,"Invalid format: "+format());
+			invalidFormat(bot, chan, user);
 //		if(numArgs <3)
 //			event.getBot().sendNotice(getUser(event), "Usage: !translate [from] [to] [text]");
 //		else

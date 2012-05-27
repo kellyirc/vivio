@@ -24,7 +24,7 @@ public class DefineCommand extends Command
 		if(Util.checkArgs(message, 2))
 			passMessage(bot, chan, user, define(message.split(" ", 2)[1]));
 		else
-			passMessage(bot, chan, user, "Invalid format: " + format());
+			invalidFormat(bot, chan, user);
 	}
 
 	@Override

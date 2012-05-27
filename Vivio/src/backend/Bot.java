@@ -325,4 +325,10 @@ public class Bot extends PircBotX implements Constants{
 		elevated.remove(bnd);
 	}
 
+	public boolean isInChannel(String channel) {
+		for(Channel c : getChannels()) {
+			if(c.getName().equals(channel)) return true;
+		}
+		return false;
+	}
 }

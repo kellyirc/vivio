@@ -72,4 +72,8 @@ public abstract class Command extends Module {
 		}
 		return false;
 	}
+
+	protected void invalidFormat(Bot bot, Channel chan, User u) {
+		passMessage(bot, chan, u, "Invalid format: "+format());
+	}
 }

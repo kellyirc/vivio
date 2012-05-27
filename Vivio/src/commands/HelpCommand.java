@@ -14,7 +14,7 @@ public class HelpCommand extends Command {
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		if(!Util.checkArgs(message, 2)) {
-			passMessage(bot, chan, user, "Invalid format: " + format());
+			invalidFormat(bot, chan, user);
 			return;
 		}
 		String[] args = Util.getArgs(message, 2);

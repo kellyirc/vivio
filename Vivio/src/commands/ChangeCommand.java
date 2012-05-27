@@ -13,7 +13,7 @@ public class ChangeCommand extends Command{
 		//verbose
 		//parseself
 		if(!Util.checkArgs(message, 3)) {
-			passMessage(bot, chan, user, "Invalid format: " + format());
+			invalidFormat(bot, chan, user);
 			return;
 		}
 		String[] args = Util.getArgs(message, 3);
