@@ -8,26 +8,38 @@ import backend.Util;
 
 public class ChangeCommand extends Command{
 
-	//TODO change variables like verbosity etc
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		//verbose
 		//parseself
-		if(!Util.checkArgs(message, 2)) {
+		if(!Util.checkArgs(message, 3)) {
 			passMessage(bot, chan, user, "Invalid format: " + format());
 			return;
 		}
-		String[] args = Util.getArgs(message, 2);
+		String[] args = Util.getArgs(message, 3);
+		switch(args[1]) {
+		case "verbose":
+			if(Integer.parseInt(args[2]) > 0) bot.setVerbose(true);
+			else bot.setVerbose(false);
+			break;
+		case "parseself":
+			if(Integer.parseInt(args[2]) > 0) bot.setParsesSelf(true);
+			else bot.setParsesSelf(false);
+			break;
+		}
+		passMessage(bot, chan, user, "So it is said, and so it shall be!");
 	}
 
 	@Override
 	protected void initialize() {
 		addAlias("change");
+		addAlias("internal");
 		setName("ChangeInternals");
 		setHelpText("Change internal variables! Ooooh la la!");
+		this.setAccessLevel(LEVEL_OWNER);
 	}
 	
 	protected String format() {
-		return super.format() + " [internal_var]";
+		return super.format() + " [internal_var] [val]";
 	}
 }
