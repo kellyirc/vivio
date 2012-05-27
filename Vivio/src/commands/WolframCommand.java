@@ -92,6 +92,8 @@ public class WolframCommand extends Command
 	        	
 	        }
 		}
+		else
+			invalidFormat(bot, chan, user);
 	}
 	
 	@Override

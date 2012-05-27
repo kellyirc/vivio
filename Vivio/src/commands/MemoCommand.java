@@ -78,7 +78,7 @@ public class MemoCommand extends Command
 		}
 		else
 		{
-			passMessage(bot,chan,user,"Invalid usage: "+format());
+			invalidFormat(bot, chan, user);
 		}
 	}
 
