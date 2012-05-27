@@ -18,7 +18,7 @@ public class BrainfuckCommand extends Command {
 	
 	@Override
 	protected String format() {
-		return super.format() + " [brainfuck code] (optional input)";
+		return super.format() + " [brainfuck code] {input}";
 	}
 	
 	private void debugBF(String command, int pos, String text) {
@@ -53,8 +53,8 @@ public class BrainfuckCommand extends Command {
 			   
 				for(int i = 0; i < args[1].length(); i++) {
 						if(!allowedops.contains( "" + args[1].charAt(i) ) ) {
-								bot.sendMessage(target, "ERROR: Invalid operator: " + args[1].charAt(i));
-								return;
+							passMessage(bot, chan, user, "ERROR: Invalid operator: " + args[1].charAt(i));
+							return;
 						}
 				}
 			   
@@ -95,7 +95,7 @@ public class BrainfuckCommand extends Command {
 								int oldi = i;
 								if(lastnum == bytes[pos]) {
 									if(infloop_suspect++ > 1024*1024) {
-										bot.sendMessage(target, "Suspected infinite loop, stopping execution after " + infloop_suspect + " run(s)...");
+										passMessage(bot, chan, user, "Suspected infinite loop, stopping execution after " + infloop_suspect + " run(s)...");
 										return;
 									}
 								}
@@ -119,11 +119,18 @@ public class BrainfuckCommand extends Command {
 					}
 				}
 				output = output.replace("\n", "[\\n]");
-				if(!target.equals(user.getNick())) output = truncateOutput(output);
-				bot.sendMessage(target, "Output: " + output);
+				String[] outputs;
+				if(!target.equals(user.getNick())) {
+					outputs = new String[1];
+					outputs[0] = truncateOutput(output);
+				}
+				else outputs = output.split("(?<=\\G.{370})");
+				
+				int outputLineNum = 1;
+				for(String outputLine : outputs) passMessage(bot, chan, user, "Output (line " + (outputLineNum++) + "): " + outputLine);
 		}
 		else {
-				bot.sendMessage(target, "Invalid format: " + format());
+				invalidFormat(bot, chan, user);
 		}
 	}
 	
