@@ -7,7 +7,10 @@ import backend.Bot;
 import backend.Util;
 
 public class BrainfuckCommand extends Command {
-	int instructionNum = 1;
+	private int instructionNumber = 1;
+	
+	private final int arrayLength = 30000;
+	private final int maxLoopIterations = 64 * 1024;
 	
 	@Override
 	protected void initialize() {
@@ -21,116 +24,144 @@ public class BrainfuckCommand extends Command {
 		return super.format() + " [brainfuck code] {input}";
 	}
 	
-	private void debugBF(String command, int pos, String text) {
-		debugBF(command, pos, text, true);
+	private void debugBF(String command, int position, String text) {
+		debugBF(command, position, text, true);
 	}
 	
-	private void debugBF(String command, int pos, String text, boolean increasecounter) {
-		debug("(" + (increasecounter ? ++instructionNum : instructionNum) + ") Pos: " + pos + " '" + command + "' " + text);
+	private void debugBF(String command, int position, String text, boolean increasecounter) {
+		debug("(" + (increasecounter ? ++instructionNumber : instructionNumber) + ") position: " + position + " '" + command + "' " + text);
 	}
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		String target = getTarget(chan, user);
 		
-		byte bytes[] = new byte[1024];
-		int pos = 0;
-		int curinput = 0;
-		int lastnum = 0;
-		int infloop_suspect = 0;
+		byte bytes[] = new byte[arrayLength];
+		int position = 0;
+		int currentInput = 0;
+		int lastCellValue = 0;
+		int loopIterationCount = 0;
 		String output = "";
 		
-		instructionNum = 0;
+		instructionNumber = 0;
 	   
-		for(int i = 0; i < 1024; i++) { bytes[i] = 0; }
+		for(int i = 0; i < bytes.length; i++) { bytes[i] = 0; }
 	   
 		String[] args = null;
 	   
 		if(Util.checkArgs(message,2)) {
-				args = message.split(" ", 3);
-				args[1] = args[1].trim();
-				String allowedops = "<>+-.,[]";
-			   
-				for(int i = 0; i < args[1].length(); i++) {
-						if(!allowedops.contains( "" + args[1].charAt(i) ) ) {
-							passMessage(bot, chan, user, "ERROR: Invalid operator: " + args[1].charAt(i));
-							return;
+			args = message.split(" ", 3);
+			args[1] = args[1].trim();
+		   
+			for(int i = 0; i < args[1].length(); i++) {
+				switch(args[1].charAt(i)) {
+					case '>':
+						if(++position >= bytes.length) position = 0;
+						
+						debugBF(""+args[1].charAt(i), i, "array position now " + position);
+						break;
+					
+					case '<':
+						if(--position < 0) position = bytes.length-1;
+						
+						debugBF(""+args[1].charAt(i), i, "array position now " + position);
+						break;
+						
+					case '+':
+						bytes[position]++;
+						
+						debugBF(""+args[1].charAt(i), i, "a[" + position + "] = " + bytes[position]);
+						break;
+						
+					case '-':
+						bytes[position]--;
+						
+						debugBF(""+args[1].charAt(i), i, "a[" + position + "] = " + bytes[position]);
+						break;
+						
+					case '.':
+						output += "" + (char)bytes[position];
+						
+						debugBF(""+args[1].charAt(i), i, "output " + bytes[position] + ": " + (char)bytes[position]);
+						break;
+						
+					case ',':
+						if(args.length > 2 && currentInput < args[2].length()) {
+							bytes[position] = (byte)args[2].charAt(currentInput++);
+							debugBF(""+args[1].charAt(i), i, "read " + bytes[position] + ": " + (char)bytes[position]);
 						}
-				}
-			   
-				for(int i = 0; i < args[1].length(); i++) {
-					switch(args[1].charAt(i)) {
-						case '>': if(++pos >= 1024) pos = 0; debugBF(""+args[1].charAt(i), i, "array pos now " + pos); break;
-						case '<': if(--pos < 0) pos = 1023; debugBF(""+args[1].charAt(i), i, "array pos now " + pos); break;
-						case '+': bytes[pos]++; debugBF(""+args[1].charAt(i), i, "a[" + pos + "] = " + bytes[pos]); break;
-						case '-': bytes[pos]--; debugBF(""+args[1].charAt(i), i, "a[" + pos + "] = " + bytes[pos]); break;
-						case '.': output += "" + (char)bytes[pos]; debugBF(""+args[1].charAt(i), i, "output " + bytes[pos] + ": " + (char)bytes[pos]); break;
-						case ',':
-							if(args.length > 2 && curinput < args[2].length()) {
-								bytes[pos] = (byte)args[2].charAt(curinput++);
-								debugBF(""+args[1].charAt(i), i, "read " + bytes[pos] + ": " + (char)bytes[pos]);
+						break;
+						
+					case '[': {
+						int oldi = i;
+						
+						int startbracketsfound = 0;
+						if(bytes[position] == 0) {
+							
+							while(i < args[1].length()) {
+								++i;
+								if(args[1].charAt(i) == '[') {
+									startbracketsfound++;
+								}
+								if(args[1].charAt(i) == ']') {
+									if(startbracketsfound-- == 0) break;
+								}
 							}
-							break;
-						case '[': {
+							
+						}
+						
+						debugBF(""+args[1].charAt(i), oldi, "a[" + position + "] = " + bytes[position]);
+						
+						break;
+					}
+					case ']': {
+						debugBF(""+args[1].charAt(i), i, "a[" + position + "] = " + bytes[position]);
+						
+						if(bytes[position] != 0) {
+							if(lastCellValue == bytes[position]) {
+								if(++loopIterationCount >= maxLoopIterations) {
+									passMessage(bot, chan, user, "Suspected infinite loop, stopping execution after " + loopIterationCount + " run(s)...");
+									return;
+								}
+							}
+							lastCellValue = bytes[position];
+							
 							int oldi = i;
-							int startbracketsfound = 0;
-							if(bytes[pos] == 0) {
-								while(i < args[1].length()) {
-									++i;
-									if(args[1].charAt(i) == '[') {
-										startbracketsfound++;
-									}
-									if(args[1].charAt(i) == ']') {
-										if(startbracketsfound-- == 0) break;
-									}
-								}
-							}
 							
-							debugBF(""+args[1].charAt(i), oldi, "a[" + pos + "] = " + bytes[pos]);
-							break;
-						}
-						case ']': {
-							debugBF(""+args[1].charAt(i), i, "a[" + pos + "] = " + bytes[pos]);
-							if(bytes[pos] != 0) {
-								int oldi = i;
-								if(lastnum == bytes[pos]) {
-									if(infloop_suspect++ > 1024*1024) {
-										passMessage(bot, chan, user, "Suspected infinite loop, stopping execution after " + infloop_suspect + " run(s)...");
-										return;
-									}
-								}
-								lastnum = bytes[pos];
-								int endbracketsfound = 0;
-								while(i >= 0) {
-									--i;
-									if(args[1].charAt(i) == ']') {
-										endbracketsfound++;
-									}
-									if(args[1].charAt(i) == '[') {
-										if(endbracketsfound-- == 0) break;
-									}
-								}
-								debugBF(""+args[1].charAt(oldi), oldi, "going back to " + i, false);
+							int endbracketsfound = 0;
+							while(i >= 0) {
 								--i;
+								if(args[1].charAt(i) == ']') {
+									endbracketsfound++;
+								}
+								if(args[1].charAt(i) == '[') {
+									if(endbracketsfound-- == 0) break;
+								}
 							}
 							
-							break;
+							debugBF(""+args[1].charAt(oldi), oldi, "going back to " + i, false);
+							--i;
 						}
+						
+						break;
 					}
 				}
-				output = output.replace("\n", "[\\n]");
-				String[] outputs;
-				if(!target.equals(user.getNick())) {
-					outputs = new String[1];
-					outputs[0] = truncateOutput(output);
-				}
-				else outputs = output.split("(?<=\\G.{370})");
-				
-				int outputLineNum = 1;
-				for(String outputLine : outputs) passMessage(bot, chan, user, "Output (line " + (outputLineNum++) + "): " + outputLine);
+			}
+			
+			output = output.replace("\n", "[\\n]");
+			
+			String[] outputs;
+			if(!target.equals(user.getNick())) {
+				outputs = new String[1];
+				outputs[0] = truncateOutput(output);
+			}
+			else outputs = output.split("(?<=\\G.{370})");
+			
+			int outputLineNum = 1;
+			for(String outputLine : outputs) passMessage(bot, chan, user, "Output (line " + (outputLineNum++) + "): " + outputLine);
 		}
 		else {
-				invalidFormat(bot, chan, user);
+			invalidFormat(bot, chan, user);
 		}
 	}
 	
