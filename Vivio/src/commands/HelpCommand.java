@@ -23,13 +23,24 @@ public class HelpCommand extends Command {
 			if(mod instanceof Command) {
 				Command c = (Command) mod;
 				if(c.getAliases().contains(args[1]) || c.getName().toLowerCase().equals(args[1].toLowerCase())) {
-					passMessage(bot, chan, user, c.format() + " -- " + c.getHelpText());
+					passMessage(bot, chan, user, c.format() + " -- " + c.getHelpText() + " " + formatLevel(c.getAccessLevel()));
 					return;
 				}
 			}
 		}
 	}
 	
+	private String formatLevel(short accessLevel) {
+		switch(accessLevel) {
+		case LEVEL_OWNER: return " (Owners)";
+		case LEVEL_ELEVATED: return " (Elevated Users)";
+		case LEVEL_OPERATOR: return " (Operators)";
+		case LEVEL_BANNED: return " (Even Banned Users!)";
+		default: return "";
+		}
+	}
+	
+
 	@Override
 	protected void initialize() {
 		this.setPriorityLevel(PRIORITY_MEDIUM);

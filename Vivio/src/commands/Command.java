@@ -2,6 +2,7 @@ package commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
@@ -15,6 +16,9 @@ import modules.Module;
 
 public abstract class Command extends Module {
 
+	@Getter @Setter(AccessLevel.PROTECTED) private TimerTask task;
+	@Getter @Setter(AccessLevel.PROTECTED) private int secondsDelay;
+	
 	private List<String> aliases;
 	
 	public Command() {

@@ -27,9 +27,9 @@ import org.reflections.Reflections;
 
 import commands.Command;
 
-
-
 public class Bot extends PircBotX implements Constants{
+	
+	@Getter private TimerFrontEnd timer = new TimerFrontEnd(1);
 
 	@Getter private static HashSet<String> owners = new HashSet<>();
 	@Getter private static HashSet<String> elevated = new HashSet<>();
@@ -330,5 +330,15 @@ public class Bot extends PircBotX implements Constants{
 			if(c.getName().equals(channel)) return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void joinChannel(String s) {
+		super.joinChannel(Util.formatChannel(s));
+	}
+	
+	@Override
+	public void joinChannel(String s, String k) {
+		super.joinChannel(Util.formatChannel(s), k);
 	}
 }

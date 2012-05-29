@@ -39,11 +39,11 @@ public class Initializer {
 			if(args[i].equals("-c") || args[i].equals("-channel") && args.length >= i+1) {
 				channel = args[i+1];
 			}
-			if(args[i].equals("-n") || args[i].equals("-nickserv") && args.length >= i+1) {
-				nickservPass = args[i+1];
-			}
-			if(args[i].equals("-nick") && args.length >= i+1) {
+			if(args[i].equals("-n") || args[i].equals("-nick") && args.length >= i+1) {
 				nickname = args[i+1];
+			}
+			if(args[i].equals("-nickserv") && args.length >= i+1) {
+				nickservPass = args[i+1];
 			}
 		}
 		Bot b = null;
@@ -51,27 +51,6 @@ public class Initializer {
 		if(channel!=null) b.joinChannel(channel);
 		if(nickservPass!=null) b.identify(nickservPass);
 		return;
-				
-//		if(server!=null) {
-//			if(port != -1) {
-//				if(ssl) {
-//					b = new Bot(server, port, ssl, nickname);
-//					if(channel!=null) b.joinChannel(channel);
-//					return;
-//				}
-//				
-//				b =new Bot(server, port);
-//				if(channel!=null) b.joinChannel(channel);
-//				return;
-//			}
-//			
-//			b =new Bot(server);
-//			if(channel!=null) b.joinChannel(channel);
-//			return;
-//		}
-//		b = new Bot(server, port, ssl, nickname, password);
-//		if(channel!=null) b.joinChannel(channel);
-//		return;
 	}
 	
 }

@@ -65,8 +65,8 @@ public class LoggingCModule extends Command {
 					String maxHttp = getMax(httpcount);
 					String maxCmd = getMax(cmdcount);
 					
-					passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
-					passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
+					if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
+					if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
 					
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -87,9 +87,11 @@ public class LoggingCModule extends Command {
 	private void displayRandomQuote(final Bot bot, final Channel chan,
 			final User user, List<HashMap<String, Object>> returned) {
 			HashMap<String, Object> rand;
+			String message;
 			do {
 				rand = returned.get((int) (Math.random() * returned.size()));
-			} while(rand.get("MESSAGE").toString().startsWith("!") || rand.get("MESSAGE").toString().split(" ").length < 3);
+				message = rand.get("MESSAGE").toString();
+			} while(message.startsWith("!") || message.split(" ").length < 3 || message.length() < 10);
 			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + rand.get("MESSAGE"));
 	}
 	
@@ -102,7 +104,7 @@ public class LoggingCModule extends Command {
 	@Override
 	protected void initialize() {
 		addAlias("generate-stats");
-		this.setAccessLevel(LEVEL_OPERATOR);
+		this.setAccessLevel(LEVEL_ELEVATED);
 		this.setPriorityLevel(PRIORITY_MODULE);
 		this.setHelpText("Wheeeee, retrieve those logs!");
 		this.setName("LoggingStats");

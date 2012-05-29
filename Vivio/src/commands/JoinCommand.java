@@ -12,7 +12,6 @@ public class JoinCommand extends Command {
 	public void execute(Bot bot, Channel chan, User user, String message) {
 			if(Util.checkArgs(message, 3)) {
 				String[] args = Util.getArgs(message, 3);
-				args[1] = Util.formatChannel(args[1]);
 				if(bot.isInChannel(args[1])) {
 					bot.partChannel(bot.getChannel(args[1]), args[2]);
 					passMessage(bot, chan, user, "I have left "+args[1] + "("+args[2]+")");
@@ -22,7 +21,6 @@ public class JoinCommand extends Command {
 				}
 			} else if(Util.checkArgs(message, 2)) {
 				String[] args = Util.getArgs(message, 2);
-				args[1] = Util.formatChannel(args[1]);
 				if(bot.isInChannel(args[1])) {
 					bot.partChannel(bot.getChannel(args[1]));
 					passMessage(bot, chan, user, "I have left "+args[1]);
