@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +30,7 @@ import commands.Command;
 
 public class Bot extends PircBotX implements Constants{
 	
-	@Getter private TimerFrontEnd timer = new TimerFrontEnd(1);
+	private TimerBackend timer = new TimerBackend(1);
 
 	@Getter private static HashSet<String> owners = new HashSet<>();
 	@Getter private static HashSet<String> elevated = new HashSet<>();
@@ -341,4 +342,13 @@ public class Bot extends PircBotX implements Constants{
 	public void joinChannel(String s, String k) {
 		super.joinChannel(Util.formatChannel(s), k);
 	}
+	
+	public ArrayList<TimerThread> getTimerThreads() {
+		return timer.getThreads();
+	}
+
+	public void scheduleTask(TimerThread timerThread, int i) {
+		timer.scheduleTask(timerThread, i);
+	}
+	
 }
