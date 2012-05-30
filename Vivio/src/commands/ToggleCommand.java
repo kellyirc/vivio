@@ -22,6 +22,11 @@ public class ToggleCommand extends Command {
 		
 		for(Module m : bot.getModules()){
 			if(m.getName().toLowerCase().equals(args[1].toLowerCase())) {
+				if(!(Bot.getLevelForUser(user, chan) >= m.getAccessLevel())) {
+					passMessage(bot, chan, user, "You do not have the proper privileges to execute this action.");
+					return;
+				}
+				
 				if(m.isActive()) {
 					passMessage(bot, chan, user, m.getName() + " is now OFF.");
 					m.setActive(false);

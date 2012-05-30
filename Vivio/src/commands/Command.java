@@ -59,7 +59,10 @@ public abstract class Command extends Module {
 	
 	public String getTarget(Channel c, User u) {
 		assert(c != null && u != null);
-		return c == null ? u.getNick() : c.getName();
+		return c == null ? (
+							u == null ? "" : u.getNick()
+						)
+							: c.getName();
 	}
 	
 	public void passMessage(Bot b, Channel c, User u, String s) {

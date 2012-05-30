@@ -3,6 +3,7 @@ package backend;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +60,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "0.5";
+	final static String INTERNAL_VERSION = "0.8";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
 	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;
@@ -67,6 +68,7 @@ public class Bot extends PircBotX implements Constants{
 	//Variables 
 	@Getter @Setter private boolean parsesSelf = false;
 	@Getter @Setter private int botMode = ACCESS_DEVELOPMENT;
+	@Getter @Setter private boolean parsesCmd = true;
 	
 	//Module comparator
 	private class ModComparator implements Comparator<Module> {
@@ -145,11 +147,18 @@ public class Bot extends PircBotX implements Constants{
 
 	public void loadModules() {
 		modules.clear();
-		Reflections reflections = new Reflections("commands");
-		Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
-		for(Class<? extends Command> c : classes) {
+		loadModulesImpl("commands", Command.class);
+		loadModulesImpl("modules", Module.class);
+	}
+	
+	private void loadModulesImpl(String pkg, Class<?> cls) {
+		Reflections reflections = new Reflections(pkg);
+		Set<?> classes = reflections.getSubTypesOf(cls);
+		for(Object c : classes) {
+			Class<?> cl = (Class<?>) c;
+			if(Modifier.isAbstract(cl.getModifiers())) continue;
 			try {
-				addModule((Module) Class.forName(c.getName()).newInstance());
+				addModule((Module) Class.forName(cl.getName()).newInstance());
 			} catch (InstantiationException | IllegalAccessException
 					| ClassNotFoundException e) {
 				e.printStackTrace();
@@ -185,7 +194,7 @@ public class Bot extends PircBotX implements Constants{
 	}
 
 	//parse commands coming in
-	public boolean checkCommands(User user, String message, Channel chan) {
+	public boolean checkCommands(User user, String message, Channel chan, boolean forceExecute) {
 		
 		String commandString = message.split(" ")[0];
 	
@@ -197,14 +206,18 @@ public class Bot extends PircBotX implements Constants{
 				Command command = (Command) m;
 				if(!command.isActive()) continue;
 				if(botMode < command.getAccessMode()) continue;
-				if(getLevelForUser(user, chan) < command.getAccessLevel()) continue;
-				if(!prefix.startsWith(command.getCmdSequence())) continue;
-				if(!command.hasAlias(comm)) continue;
+				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
+				if(!forceExecute && !prefix.startsWith(command.getCmdSequence())) continue;
+				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
 				command.execute(comm, this, chan, user, message);
 				if(command.isStopsExecution()) return false;
 			}
 		}
 		return true;
+	}
+	
+	public boolean checkCommands(User user, String message, Channel chan) {
+		return checkCommands(user, message, chan, false);
 	}
 	
 	private void addModule(Module m) {
@@ -233,8 +246,9 @@ public class Bot extends PircBotX implements Constants{
 		super.sendNotice(target, notice);
 	}
 
-	private int getLevelForUser(User u, Channel c) {
+	public static int getLevelForUser(User u, Channel c) {
 		//TODO identified users only?
+		assert(u != null && c!=null);
 		if(owners.contains(u.getNick().toLowerCase())) return LEVEL_OWNER;
 		if(elevated.contains(u.getNick().toLowerCase())) return LEVEL_ELEVATED;
 		if(banned.contains(u.getNick().toLowerCase())) return LEVEL_BANNED;
@@ -328,7 +342,7 @@ public class Bot extends PircBotX implements Constants{
 
 	public boolean isInChannel(String channel) {
 		for(Channel c : getChannels()) {
-			if(c.getName().equals(channel)) return true;
+			if(c.getName().equals(Util.formatChannel(channel))) return true;
 		}
 		return false;
 	}
@@ -350,5 +364,9 @@ public class Bot extends PircBotX implements Constants{
 	public void scheduleTask(TimerThread timerThread, int i) {
 		timer.scheduleTask(timerThread, i);
 	}
-	
+
+	@Override
+	public Channel getChannel(String name) {
+		return super.getChannel(Util.formatChannel(name));
+	}
 }

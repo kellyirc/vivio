@@ -10,8 +10,6 @@ public class ChangeCommand extends Command{
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		//verbose
-		//parseself
 		if(!Util.checkArgs(message, 3)) {
 			invalidFormat(bot, chan, user);
 			return;
@@ -25,6 +23,10 @@ public class ChangeCommand extends Command{
 		case "parseself":
 			if(Integer.parseInt(args[2]) > 0) bot.setParsesSelf(true);
 			else bot.setParsesSelf(false);
+			break;
+		case "cli":
+			if(Integer.parseInt(args[2]) > 0) bot.setParsesCmd(true);
+			else bot.setParsesCmd(false);
 			break;
 		}
 		passMessage(bot, chan, user, "So it is said, and so it shall be!");
@@ -40,6 +42,6 @@ public class ChangeCommand extends Command{
 	}
 	
 	protected String format() {
-		return super.format() + " [internal_var] [val]";
+		return super.format() + " [verbose | parseself | cli] [val]";
 	}
 }

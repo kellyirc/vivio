@@ -17,7 +17,6 @@ public class LoggingCModule extends Command {
 
 	@Override
 	public void execute(final Bot bot, final Channel chan, final User user, String message) {
-		//TODO generate stats for a channel
 		if(chan == null) return;
 		
 		if(Util.checkArgs(message, 2)) {
@@ -29,12 +28,12 @@ public class LoggingCModule extends Command {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+				break;
 			default:
-					
+				break;
 			}
 			return;
 		}
-		
 		
 		passMessage(bot, chan, user, "I will begin generating statistics for "+chan.getName()+ " now.");
 		new Thread(new Runnable(){
@@ -53,7 +52,7 @@ public class LoggingCModule extends Command {
 					for(HashMap<String, Object> column : returned) {
 						String message = column.get("MESSAGE").toString();
 						String sender = column.get("USER_NAME").toString().trim();
-						if(message.contains("http://") || message.contains("https://")) {
+						if(message.contains("://")) {
 							if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
 							else httpcount.put(sender, 1);
 						} else if(message.startsWith("!")) {
