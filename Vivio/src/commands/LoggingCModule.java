@@ -52,7 +52,7 @@ public class LoggingCModule extends Command {
 					for(HashMap<String, Object> column : returned) {
 						String message = column.get("MESSAGE").toString();
 						String sender = column.get("USER_NAME").toString().trim();
-						if(message.contains("://")) {
+						if(Util.hasLink(message)) {
 							if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
 							else httpcount.put(sender, 1);
 						} else if(message.startsWith("!")) {

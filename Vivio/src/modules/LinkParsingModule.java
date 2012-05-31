@@ -8,10 +8,9 @@ import java.net.URLConnection;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import backend.Bot;
+import backend.Util;
 
 public class LinkParsingModule extends Module {
-
-	private boolean isBusy = false;
 	
 	@Override
 	protected void initialize() {
@@ -22,14 +21,11 @@ public class LinkParsingModule extends Module {
 
 	@Override
 	public void onMessage(MessageEvent<Bot> event) throws Exception {
-		if(isBusy) return;
 		super.onMessage(event);
-		
-		isBusy = true;
 		
 		String[] splitMessage = event.getMessage().split(" ");
 		for(String s : splitMessage) {
-			if(s.contains("://")) {
+			if(Util.hasLink(s)) {
 				String page = "";
 				URL url = new URL(s);
 				URLConnection con = url.openConnection();
@@ -48,7 +44,6 @@ public class LinkParsingModule extends Module {
 						}
 					}
 				}
-				isBusy = false;
 				
 				if(page.equals("")) return;
 				

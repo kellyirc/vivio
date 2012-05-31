@@ -35,7 +35,12 @@ public class Util {
 		return (s.startsWith("#") || s.startsWith("&")) ? s : "#" + s;
 	}
 
+	public static boolean hasLink(String s) {
+		return s.contains("http://") || s.contains("https://");
+	}
+	
 	private static String googUrl = "https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&key=AIzaSyBpNXaLneyOhwSzristuqzgCZVBbKdWIF8";
+	
 	public static String shorten(String longUrl)
 	{
 	    String shortUrl = "";
