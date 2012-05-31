@@ -41,13 +41,15 @@ public class LinkParsingModule extends Module {
 						} else if(inputLine.contains("</title>")) {
 							page += inputLine;
 							break;
+						} else {
+							page += inputLine;
 						}
 					}
 				}
 				
 				if(page.equals("")) return;
 				
-				String title = page.substring(page.indexOf("<title>")+7, page.indexOf("</title>"));
+				String title = page.replaceAll("\n","").substring(page.indexOf("<title>")+7, page.indexOf("</title>")).trim();
 				
 				passMessage(event.getBot(), event.getChannel(), event.getUser(), event.getUser().getNick()+"'s URL: "+title);
 				
