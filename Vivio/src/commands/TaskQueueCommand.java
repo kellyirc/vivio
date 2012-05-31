@@ -13,7 +13,7 @@ public class TaskQueueCommand extends Command {
 	
 	@Override
 	public void execute(final Bot bot, final Channel chan, final User user, String message) {
-		if(Util.checkArgs(message, 2)) {
+		if(Util.hasArgs(message, 2)) {
 			String[] args = Util.getArgs(message, 2);
 			switch(args[1]) {
 			case "queue":

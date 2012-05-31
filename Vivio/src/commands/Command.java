@@ -56,24 +56,7 @@ public abstract class Command extends Module {
 	public String toHelpString() {
 		return getCmdSequence() + aliases + " - " + getHelpText();
 	}
-	
-	public String getTarget(Channel c, User u) {
-		assert(c != null && u != null);
-		return c == null ? (
-							u == null ? null : u.getNick()
-						)
-							: c.getName();
-	}
-	
-	public void passMessage(Bot b, Channel c, User u, String s) {
-		String target = getTarget(c, u);
-		if(target == null) {
-			System.out.println(s);
-		} else {
-			b.sendMessage(getTarget(c, u), s);
-		}
-	}
-
+		
 	protected void addAlias(String alias) {
 		getAliases().add(alias);
 	}

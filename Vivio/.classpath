@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="lib/httpcore-4.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/matheval.jar"/>
+	<classpathentry kind="lib" path="lib/htmlentities.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

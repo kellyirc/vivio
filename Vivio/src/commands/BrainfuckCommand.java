@@ -49,7 +49,7 @@ public class BrainfuckCommand extends Command {
 	   
 		String[] args = null;
 	   
-		if(Util.checkArgs(message,2)) {
+		if(Util.hasArgs(message,2)) {
 			args = message.split(" ", 3);
 			args[1] = args[1].trim();
 		   

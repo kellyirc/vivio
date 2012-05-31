@@ -15,6 +15,8 @@ public class CommandLineInputModule extends Module {
 		new InputThread("Command Line").start();
 	}
 	
+	public void setActive(boolean a) {return;}
+	
 	private static class InputThread extends Thread {
 
 		private Scanner scan = new Scanner(System.in);

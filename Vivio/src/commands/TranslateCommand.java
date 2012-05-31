@@ -25,7 +25,7 @@ public class TranslateCommand extends Command
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message)
 	{
-		if(Util.checkArgs(message, 4))
+		if(Util.hasArgs(message, 4))
 		{
 			String args[] = message.split(" ",4);
 			passMessage(bot, chan, user, translate(args[1],args[2],args[3]));

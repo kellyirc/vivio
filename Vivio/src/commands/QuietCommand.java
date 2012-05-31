@@ -11,7 +11,7 @@ public class QuietCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if(!Util.checkArgs(message, 2)) {
+		if(!Util.hasArgs(message, 2)) {
 			invalidFormat(bot, chan, user);
 			return;
 		}

@@ -10,7 +10,7 @@ public class JoinCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-			if(Util.checkArgs(message, 3)) {
+			if(Util.hasArgs(message, 3)) {
 				String[] args = Util.getArgs(message, 3);
 				if(bot.isInChannel(args[1])) {
 					bot.partChannel(bot.getChannel(args[1]), args[2]);
@@ -19,7 +19,7 @@ public class JoinCommand extends Command {
 					bot.joinChannel(args[1], args[2]);
 					passMessage(bot, chan, user, "I have joined "+args[1]);
 				}
-			} else if(Util.checkArgs(message, 2)) {
+			} else if(Util.hasArgs(message, 2)) {
 				String[] args = Util.getArgs(message, 2);
 				if(bot.isInChannel(args[1])) {
 					bot.partChannel(bot.getChannel(args[1]));

@@ -2,7 +2,9 @@ package modules;
 
 import java.util.Random;
 
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
+import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 
 import backend.Bot;
@@ -51,5 +53,22 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 	protected void debug(String s) {
 		if(this.getAccessMode() != ACCESS_DEVELOPMENT) return;
 		System.err.println(s);
+	}
+	
+	public String getTarget(Channel c, User u) {
+		assert(c != null && u != null);
+		return c == null ? (
+							u == null ? null : u.getNick()
+						)
+							: c.getName();
+	}
+	
+	public void passMessage(Bot b, Channel c, User u, String s) {
+		String target = getTarget(c, u);
+		if(target == null) {
+			System.out.println(s);
+		} else {
+			b.sendMessage(getTarget(c, u), s);
+		}
 	}
 }

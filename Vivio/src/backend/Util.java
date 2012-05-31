@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class Util {
-
+	
 	public static final String[] getArgs(String s, int args) {
 		String[] temp = s.split(" ");
 		String[] rVal = new String[args];
@@ -23,7 +23,7 @@ public class Util {
 		return rVal;
 	}
 
-	public static boolean checkArgs(String s, int args) {
+	public static boolean hasArgs(String s, int args) {
 		return s.split(" ").length >= args;
 	}
 

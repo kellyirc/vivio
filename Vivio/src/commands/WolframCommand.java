@@ -35,7 +35,7 @@ public class WolframCommand extends Command
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message)
 	{
-		if(Util.checkArgs(message, 2))
+		if(Util.hasArgs(message, 2))
 		{
 			// Create the query.
 	        WAQuery query = engine.createQuery();

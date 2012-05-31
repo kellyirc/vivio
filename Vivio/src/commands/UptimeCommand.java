@@ -7,6 +7,8 @@ import backend.Bot;
 
 public class UptimeCommand extends Command {
 	
+	//TODO make this support times as they go on (ie, only show seconds if necessary, show up to weeks in time)
+	
  	static long startTime = System.currentTimeMillis();
 
 	@Override

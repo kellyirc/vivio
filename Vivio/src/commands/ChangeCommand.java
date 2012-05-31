@@ -10,7 +10,7 @@ public class ChangeCommand extends Command{
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if(!Util.checkArgs(message, 3)) {
+		if(!Util.hasArgs(message, 3)) {
 			invalidFormat(bot, chan, user);
 			return;
 		}

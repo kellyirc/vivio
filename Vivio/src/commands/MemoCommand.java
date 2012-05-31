@@ -45,7 +45,7 @@ public class MemoCommand extends Command
 			passMessage(bot, chan, user, "Sorry, I only work in channels! Use memoserv if you want private memos.");
 			return;
 		}
-		if(Util.checkArgs(message, 3))
+		if(Util.hasArgs(message, 3))
 		{
 			String[] args = message.split(" ",3);
 			String nick = args[1];

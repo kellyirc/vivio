@@ -21,7 +21,7 @@ public class DefineCommand extends Command
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message)
 	{
-		if(Util.checkArgs(message, 2))
+		if(Util.hasArgs(message, 2))
 			passMessage(bot, chan, user, define(message.split(" ", 2)[1]));
 		else
 			invalidFormat(bot, chan, user);
