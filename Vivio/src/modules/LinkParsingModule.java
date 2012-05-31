@@ -7,6 +7,8 @@ import java.net.URLConnection;
 
 import org.pircbotx.hooks.events.MessageEvent;
 
+import com.tecnick.htmlutils.htmlentities.HTMLEntities;
+
 import backend.Bot;
 import backend.Util;
 
@@ -50,6 +52,7 @@ public class LinkParsingModule extends Module {
 				if(page.equals("")) return;
 				
 				String title = page.replaceAll("\n","").substring(page.indexOf("<title>")+7, page.indexOf("</title>")).trim();
+				title = HTMLEntities.unhtmlentities(title);
 				
 				passMessage(event.getBot(), event.getChannel(), event.getUser(), event.getUser().getNick()+"'s URL: "+title);
 				
