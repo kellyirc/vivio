@@ -1,7 +1,9 @@
 package modules;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -28,36 +30,45 @@ public class LinkParsingModule extends Module {
 		String[] splitMessage = event.getMessage().split(" ");
 		for(String s : splitMessage) {
 			if(Util.hasLink(s)) {
-				String page = "";
-				URL url = new URL(s);
-				URLConnection con = url.openConnection();
-				con.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.4) Gecko/20100611 Firefox/3.6.4");
-				String inputLine;
-				try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-					while((inputLine = in.readLine()) != null) {
-						if(inputLine.contains("<title>") && inputLine.contains("</title>")) { 
-							page = inputLine.substring(inputLine.indexOf("<title>"));
-							break;
-						} else if(inputLine.contains("<title>")) {
-							page = inputLine.substring(inputLine.indexOf("<title>"));
-						} else if(inputLine.contains("</title>")) {
-							page += inputLine;
-							break;
-						} else {
-							page += inputLine;
-						}
-					}
-				}
 				
-				if(page.equals("")) return;
+				String title = parseLink(s);
 				
-				String title = page.replaceAll("\n","").substring(page.indexOf("<title>")+7, page.indexOf("</title>")).trim();
-				title = HTMLEntities.unhtmlentities(title);
+				if(title.equals("")) continue;
 				
 				passMessage(event.getBot(), event.getChannel(), event.getUser(), event.getUser().getNick()+"'s URL: "+title);
 				
 			}
 		}
+	}
+
+	public static final String parseLink(String s) throws MalformedURLException,
+			IOException {
+		String page = "";
+		URL url = new URL(s);
+		URLConnection con = url.openConnection();
+		con.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.4) Gecko/20100611 Firefox/3.6.4");
+		String inputLine;
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+			while((inputLine = in.readLine()) != null) {
+				if(inputLine.contains("<title>") && inputLine.contains("</title>")) { 
+					page = inputLine.substring(inputLine.indexOf("<title>"));
+					break;
+				} else if(inputLine.contains("<title>")) {
+					page = inputLine.substring(inputLine.indexOf("<title>"));
+				} else if(inputLine.contains("</title>")) {
+					page += inputLine;
+					break;
+				} else {
+					page += inputLine;
+				}
+			}
+		}
+		
+		if(page.equals("")) return "";
+		
+		String title = page.replaceAll("\n","").substring(page.indexOf("<title>")+7, page.indexOf("</title>")).trim();
+		title = HTMLEntities.unhtmlentities(title);
+		return title;
 	}
 
 }

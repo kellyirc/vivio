@@ -41,6 +41,8 @@ public class RawSqlCommand extends Command{
 		
 		if(data==null) {
 			passMessage(bot, chan, user, "Executed query successfully.");
+		} else if(data.size() == 0) {
+			passMessage(bot, chan, user, "No returned rows.");
 		} else {
 			for(HashMap<String, Object> row : data) {
 				passMessage(bot, chan, user, row.toString());
