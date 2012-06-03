@@ -8,6 +8,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.NickChangeEvent;
+import org.pircbotx.hooks.events.UserListEvent;
 
 import backend.Bot;
 import backend.Database;
@@ -86,6 +87,7 @@ public class MemoCommand extends Command
 	public void onJoin(JoinEvent<Bot> e) throws Exception
 	{
 		super.onJoin(e);
+		e.getBot().waitFor(UserListEvent.class);
 		String nick = e.getUser().getNick();
 		//if bot is joining channel, check for memos for people in that channel
 		if(nick.equals(e.getBot().getNick()))
@@ -97,8 +99,6 @@ public class MemoCommand extends Command
 				Bot bot = e.getBot();
 				String chan = e.getChannel().getName();
 				String recipient = memo.get("RECIPIENT").toString();
-				//FIXME: e.getChannel().getUsers() returns only the bot, so when the bot enters the channel, memos will not be sent.
-//				System.out.println(e.getChannel().getUsers());
 				if(e.getChannel().getUsers().contains(bot.getUser(recipient)))
 				{
 					String sender = memo.get("SENDER").toString();
