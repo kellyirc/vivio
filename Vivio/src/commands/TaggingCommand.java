@@ -85,7 +85,7 @@ public class TaggingCommand extends Command {
 		for(HashMap<String, Object> row : results) {
 			String url = (String) row.get("URL");
 			try {
-				passMessage(bot, chan, user, modules.LinkParsingModule.parseLink(url) + " ("+url+")" + " [" + Colors.BOLD + row.get("TAG").toString().trim() + Colors.NORMAL + "]");
+				passMessage(bot, chan, user, backend.Util.parseLink(url) + " ("+url+")" + " [" + Colors.BOLD + row.get("TAG").toString().trim() + Colors.NORMAL + "]");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

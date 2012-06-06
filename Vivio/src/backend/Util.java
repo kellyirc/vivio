@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.tecnick.htmlutils.htmlentities.HTMLEntities;
+
 public class Util {
 	
 	public static final String[] getArgs(String s, int args) {
@@ -85,6 +87,48 @@ public class Util {
 	    }
 
 	    return shortUrl;
+	}
+
+	
+	public static String extractLink(String link) {
+		if(!link.contains(" ")) return link;
+		if(!link.startsWith("http")) 
+			link = link.substring(link.indexOf("http"));
+		if(link.contains(" "))
+			link = link.substring(0, link.indexOf(" "));
+		return link;
+	}
+
+	public static final String parseLink(String s) throws MalformedURLException,
+			IOException {
+		String page = "";
+		URL url = new URL(s);
+		URLConnection con = url.openConnection();
+		con.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.4) Gecko/20100611 Firefox/3.6.4");
+		String inputLine;
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+			while((inputLine = in.readLine()) != null) {
+				if(inputLine.contains("<title>") && inputLine.contains("</title>")) { 
+					page = inputLine.substring(inputLine.indexOf("<title>"));
+					break;
+				} else if(inputLine.contains("<title>")) {
+					page = inputLine.substring(inputLine.indexOf("<title>"));
+				} else if(inputLine.contains("</title>")) {
+					page += inputLine;
+					break;
+				} else {
+					page += inputLine;
+				}
+			}
+		}
+		
+		if(page.equals("")) return "";
+		
+		if(!page.contains("<title>")) return "";
+		
+		String title = page.replaceAll("\n","").substring(page.indexOf("<title>")+7, page.indexOf("</title>")).trim();
+		title = HTMLEntities.unhtmlentities(title);
+		return title;
 	}
 	
 }

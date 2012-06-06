@@ -1,8 +1,11 @@
 package commands;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
@@ -29,6 +32,13 @@ public class LoggingCModule extends Command {
 					e.printStackTrace();
 				}
 				break;
+			case "link":
+				try {
+					displayRandomLink(bot, chan, user, getDataForChannel(chan));
+				} catch (SQLException | IOException e) {
+					e.printStackTrace();
+				}
+				break;
 			default:
 				break;
 			}
@@ -40,36 +50,47 @@ public class LoggingCModule extends Command {
 
 			@Override
 			public void run() {
+				List<HashMap<String, Object>> returned = null;
 				try {
-					List<HashMap<String, Object>> returned = getDataForChannel(chan);
-					passMessage(bot, chan, user, "I have "+returned.size()+" recorded messages from "+chan.getName()+".");
-					
-					displayRandomQuote(bot, chan, user, returned);
-					
-					HashMap<String, Integer> httpcount = new HashMap<>();
-					HashMap<String, Integer> cmdcount = new HashMap<>();
-					
-					for(HashMap<String, Object> column : returned) {
-						String message = column.get("MESSAGE").toString();
-						String sender = column.get("USER_NAME").toString().trim();
-						if(Util.hasLink(message)) {
-							if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
-							else httpcount.put(sender, 1);
-						} else if(message.startsWith("!")) {
-							if(cmdcount.containsKey(sender)) cmdcount.put(sender, cmdcount.get(sender)+1);
-							else cmdcount.put(sender, 1);
-						}
-					}
-					
-					String maxHttp = getMax(httpcount);
-					String maxCmd = getMax(cmdcount);
-					
-					if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
-					if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
-					
+					 returned = getDataForChannel(chan);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+				
+				if(returned == null) {
+					passMessage(bot, chan, user, "I could not generate statistics for "+chan.getName());
+					return;
+				}
+				passMessage(bot, chan, user, "I have "+returned.size()+" recorded messages from "+chan.getName()+".");
+				
+				displayRandomQuote(bot, chan, user, returned);
+				try {
+					displayRandomLink(bot, chan, user, returned);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				HashMap<String, Integer> httpcount = new HashMap<>();
+				HashMap<String, Integer> cmdcount = new HashMap<>();
+				
+				for(HashMap<String, Object> column : returned) {
+					String message = column.get("MESSAGE").toString();
+					String sender = column.get("USER_NAME").toString().trim();
+					if(Util.hasLink(message)) {
+						if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
+						else httpcount.put(sender, 1);
+					} else if(message.startsWith("!")) {
+						if(cmdcount.containsKey(sender)) cmdcount.put(sender, cmdcount.get(sender)+1);
+						else cmdcount.put(sender, 1);
+					}
+				}
+				
+				String maxHttp = getMax(httpcount);
+				String maxCmd = getMax(cmdcount);
+				
+				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
+				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
+				
 				
 			}}).start();
 	}
@@ -91,7 +112,18 @@ public class LoggingCModule extends Command {
 				rand = returned.get((int) (Math.random() * returned.size()));
 				message = rand.get("MESSAGE").toString();
 			} while(message.startsWith("!") || message.split(" ").length < 3 || message.length() < 10);
-			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + rand.get("MESSAGE"));
+			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + message);
+	}
+	
+	private void displayRandomLink(final Bot bot, final Channel chan,
+			final User user, List<HashMap<String, Object>> returned) throws MalformedURLException, IOException {
+			HashMap<String, Object> rand;
+			String link;
+			do {
+				rand = returned.get((int) (Math.random() * returned.size()));
+				link = rand.get("MESSAGE").toString();
+			} while(!Util.hasLink(link) || Util.parseLink(link).equals(""));
+			passMessage(bot, chan, user, "Random link: <"+((String)rand.get("USER_NAME")).trim() + "> " + Util.extractLink(link) + " -- "+Util.parseLink(link));
 	}
 	
 	private List<HashMap<String, Object>> getDataForChannel(
