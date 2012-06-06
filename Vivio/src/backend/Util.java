@@ -12,8 +12,8 @@ import com.tecnick.htmlutils.htmlentities.HTMLEntities;
 
 public class Util {
 	
-	public static final String[] getArgs(String s, int args) {
-		String[] temp = s.split(" ");
+	public static final String[] getArgs(String s, int args, String delim) {
+		String[] temp = s.split(delim);
 		String[] rVal = new String[args];
 
 		for (int i = 0; i < args; i++) {
@@ -24,9 +24,17 @@ public class Util {
 
 		return rVal;
 	}
+	
+	public static final String[] getArgs(String s, int args) {
+		return getArgs(s, args, " ");
+	}
 
 	public static boolean hasArgs(String s, int args) {
-		return s.split(" ").length >= args;
+		return hasArgs(s, args, " ");
+	}
+	
+	public static boolean hasArgs(String s, int args, String delim) {
+		return s.split(delim).length >= args;
 	}
 
 	public static int maxArgs(String s) {
@@ -38,7 +46,11 @@ public class Util {
 	}
 
 	public static boolean hasLink(String s) {
-		return s.contains("http://") || s.contains("https://");
+		String[] args = s.split(" ");
+		for(String a : args) {
+			if(a.matches("[a-z]+://.+?")) return true;
+		}
+		return false;
 	}
 	
 	private static String googUrl = "https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&key=AIzaSyBpNXaLneyOhwSzristuqzgCZVBbKdWIF8";
@@ -89,7 +101,6 @@ public class Util {
 	    return shortUrl;
 	}
 
-	
 	public static String extractLink(String link) {
 		if(!link.contains(" ")) return link;
 		if(!link.startsWith("http")) 

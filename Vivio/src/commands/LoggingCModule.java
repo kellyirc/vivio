@@ -109,7 +109,7 @@ public class LoggingCModule extends Command {
 			HashMap<String, Object> rand;
 			String message;
 			do {
-				rand = returned.get((int) (Math.random() * returned.size()));
+				rand = Database.getRandomRow(returned);
 				message = rand.get("MESSAGE").toString();
 			} while(message.startsWith("!") || message.split(" ").length < 3 || message.length() < 10);
 			passMessage(bot, chan, user, "Random quote: <"+((String)rand.get("USER_NAME")).trim() + "> " + message);
@@ -120,7 +120,7 @@ public class LoggingCModule extends Command {
 			HashMap<String, Object> rand;
 			String link;
 			do {
-				rand = returned.get((int) (Math.random() * returned.size()));
+				rand = Database.getRandomRow(returned);
 				link = rand.get("MESSAGE").toString();
 			} while(!Util.hasLink(link) || Util.parseLink(link).equals(""));
 			passMessage(bot, chan, user, "Random link: <"+((String)rand.get("USER_NAME")).trim() + "> " + Util.extractLink(link) + " -- "+Util.parseLink(link));

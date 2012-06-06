@@ -133,7 +133,7 @@ public class Database {
 		return formatDate(new Date(milliseconds));
 	}
 	
-private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 	
 	public static String formatTime(Date date) {
 		return getEnclosedString(timeFormat.format(date));
@@ -156,5 +156,9 @@ private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:s
 	public static Date parseTime(String time) throws ParseException
 	{
 		return timeFormat.parse(time);
+	}
+
+	public static HashMap<String, Object> getRandomRow(List<HashMap<String, Object>> data) {
+		return data.get((int) (Math.random() * data.size()));
 	}
 }

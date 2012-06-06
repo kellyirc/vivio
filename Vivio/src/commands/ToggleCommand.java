@@ -49,6 +49,7 @@ public class ToggleCommand extends Command {
 	protected void initialize() {
 		addAlias("toggle");
 		setName("Toggle");
+		this.setAccessLevel(LEVEL_OPERATOR);
 		this.setHelpText("I can toggle other modules on and off, whee!");
 	}
 

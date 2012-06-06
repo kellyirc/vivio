@@ -31,6 +31,7 @@ public class MathCommand extends Command {
 	protected void initialize() {
 		addAlias("math");
 		addAlias("calc");
+		addAlias("calculate");
 		setHelpText("Calculate a string of mathematical expressions.");
 		setName("Math");
 	}
