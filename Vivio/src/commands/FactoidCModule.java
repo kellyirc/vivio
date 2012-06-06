@@ -18,7 +18,8 @@ public class FactoidCModule extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		
+		//TODO support a word replacement syntax
+		//TODO support removing by id
 	}
 
 	@Override
@@ -69,11 +70,29 @@ public class FactoidCModule extends Command {
 			}
 			if(rand == null) continue;
 			
-			String message = rand.get("PRECONDITION") + " " + rand.get("ACTION_TYPE").toString().trim() + " " + rand.get("TEXT");
+			String message;
+			switch(rand.get("ACTION_TYPE").toString().trim()) {
+			case "is":
+			case "are":
+				message = rand.get("PRECONDITION") + " " + rand.get("ACTION_TYPE").toString().trim() + " " + rand.get("TEXT");
+				break;
+			case "<reply>":
+				message = rand.get("TEXT").toString();
+				break;
+			case "<action>":
+				message = rand.get("TEXT").toString();
+				passEmote(event.getBot(), event.getChannel(), event.getUser(), message);
+				lastFactoid = rand;
+				return;
+			default:
+				message = "";
+			}
+			
 			
 			passMessage(event.getBot(), event.getChannel(), event.getUser(), event.getUser().getNick()+", "+message);
 			
 			lastFactoid = rand;
+			return;
 		}
 	}
 
