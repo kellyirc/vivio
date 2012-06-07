@@ -37,6 +37,7 @@ public class RawSqlCommand extends Command{
 				Database.execRaw(sql);
 		} catch (SQLException e) {
 			passMessage(bot, chan, user, e.getMessage());
+			return;
 		}
 		
 		if(data==null) {

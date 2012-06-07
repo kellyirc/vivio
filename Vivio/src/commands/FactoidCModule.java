@@ -18,8 +18,32 @@ public class FactoidCModule extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
+		if(!Util.hasArgs(message, 3)) {
+			invalidFormat(bot, chan, user);
+			return;
+		}
+		
+		String[] args = Util.getArgs(message, 3);
+		switch(args[1]) {
 		//TODO support a word replacement syntax
-		//TODO support removing by id
+		case "replace":
+			break;
+		case "remove":
+			try {
+				Database.execRaw("delete from "+getFormattedTableName()+ " where id="+args[2]);
+			} catch (SQLException e) {
+				passMessage(bot, chan, user, "That is not possible!");
+			}
+			passMessage(bot, chan, user, "Done successfully, quickly, and with prejudice!");
+			break;
+		default:
+			invalidFormat(bot, chan, user);
+			return;
+		}
+	}
+	
+	protected String format() {
+		return super.format() + " [remove | replace] [args]";
 	}
 
 	@Override
@@ -27,6 +51,8 @@ public class FactoidCModule extends Command {
 		setName("Factoids");
 		setHelpText("I can keep track of random things with this!");		
 		setTableName("factoids");
+		addAlias("factoid");
+		setAccessLevel(LEVEL_OWNER);
 
 		try {
 			Database.createTable(
@@ -59,14 +85,15 @@ public class FactoidCModule extends Command {
 
 	private void checkForMatchesForSpeaking(MessageEvent<Bot> event) {
 		for(String s : event.getMessage().split(" ")) {
-			String query = "select * from "+this.getFormattedTableName()+" where lower(precondition) like "+Database.getEnclosedString(s.toLowerCase());
+			if(s.length()<2) continue;
+			String query = "select * from "+this.getFormattedTableName()+" where lower(precondition) like "+Database.getEnclosedString("%"+s.toLowerCase());
 			HashMap<String, Object> rand = null;
 			try {
 				if(Database.hasRow(query)){
 					rand = Database.getRandomRow(Database.select(query));
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				//this only happens when reloading after dropping the table
 			}
 			if(rand == null) continue;
 			
@@ -88,7 +115,6 @@ public class FactoidCModule extends Command {
 				message = "";
 			}
 			
-			
 			passMessage(event.getBot(), event.getChannel(), event.getUser(), event.getUser().getNick()+", "+message);
 			
 			lastFactoid = rand;
@@ -100,6 +126,9 @@ public class FactoidCModule extends Command {
 		boolean match=false;
 		String message = event.getMessage();
 		if(Util.hasLink(message)) return false;
+		
+		String[] messageArr = message.split(" ");
+		
 		if(message.matches(".+\\<(.*?)\\>.+")) {
 			String[] args = new String[3];
 			
@@ -117,7 +146,7 @@ public class FactoidCModule extends Command {
 							Database.getEnclosedString(args[2]));
 			match=true;
 			
-		} else if(Util.hasArgs(message, 2, " is ") && message.split(" ")[1].equals("is")) {
+		} else if(Util.hasArgs(message, 2, " is ") && messageArr[1].equals("is") && !messageArr[0].matches(".*\\W+.*")) {
 			String[] args = Util.getArgs(message, 2, " is ");
 			if(!allowDuplicates && Database.hasRow("select * from "+this.getFormattedTableName()+" where precondition="+Database.getEnclosedString(args[0]))) return false;
 			Database.insert(this.getFormattedTableName(), "server, channel, user_nick, precondition, action_type, text", 
@@ -129,7 +158,7 @@ public class FactoidCModule extends Command {
 							Database.getEnclosedString(args[1]));
 			match=true;
 			
-		} else if(Util.hasArgs(message, 2, " are ") && message.split(" ")[1].equals("are")) {
+		} else if(Util.hasArgs(message, 2, " are ") && messageArr[1].equals("are") && !messageArr[0].matches(".*\\W+.*")) {
 			String[] args = Util.getArgs(message, 2, " are ");
 			if(!allowDuplicates && Database.hasRow("select * from "+this.getFormattedTableName()+" where precondition="+Database.getEnclosedString(args[0]))) return false;
 			Database.insert(this.getFormattedTableName(), "server, channel, user_nick, precondition, action_type, text", 
