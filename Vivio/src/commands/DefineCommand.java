@@ -34,6 +34,7 @@ public class DefineCommand extends Command
 		setHelpText("Gets the definition of english words.");
 		setName("Define");
 		addAlias("define");
+		setUsableInPM(true);
 	}
 	
 	@Override

@@ -110,11 +110,15 @@ public class Util {
 		return link;
 	}
 
-	public static final String parseLink(String s) throws MalformedURLException,
-			IOException {
+	public static final String parseLink(String s) throws MalformedURLException {
 		String page = "";
 		URL url = new URL(s);
-		URLConnection con = url.openConnection();
+		URLConnection con;
+		try {
+			con = url.openConnection();
+		} catch (IOException e) {
+			return "";
+		}
 		con.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.4) Gecko/20100611 Firefox/3.6.4");
 		String inputLine;
 		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
@@ -131,6 +135,8 @@ public class Util {
 					page += inputLine;
 				}
 			}
+		} catch (IOException e) {
+			return "";
 		}
 		
 		if(page.equals("")) return "";
@@ -142,4 +148,14 @@ public class Util {
 		return title;
 	}
 	
+	public static String getElapsedTimeHoursMinutesSecondsString(long startTime) {     
+	    long elapsedTime = System.currentTimeMillis()-startTime;
+	    String format = String.format("%%0%dd", 2);
+	    elapsedTime = elapsedTime / 1000;
+	    String seconds = String.format(format, elapsedTime % 60);
+	    String minutes = String.format(format, (elapsedTime % 3600) / 60);
+	    String hours = String.format(format, elapsedTime / 3600);
+	    String time =  hours + " hours, " + minutes + " minutes, " + seconds+ " seconds";
+	    return time;
+	}
 }

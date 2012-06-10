@@ -62,6 +62,7 @@ public class RawSqlCommand extends Command{
 		this.setHelpText("Execute a raw SQL command. Oooooh, dangerous!");
 		this.setName("SQL");
 		addAlias("sql");
+		setUsableInPM(true);
 	}
 
 	public void setActive(boolean active) {return;}

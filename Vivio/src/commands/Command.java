@@ -48,6 +48,7 @@ public abstract class Command extends Module {
 
 	//whether or not this command can stop the execution of other commands after it executes.
 	@Getter @Setter(AccessLevel.PROTECTED)	protected boolean stopsExecution = false;
+	@Getter @Setter(AccessLevel.PROTECTED) protected boolean isUsableInPM = false;
 
 	protected String format() {
 		return getCmdSequence() + getAliases();
@@ -69,7 +70,7 @@ public abstract class Command extends Module {
 	}
 
 	protected void invalidFormat(Bot bot, Channel chan, User u, String format) {
-		passMessage(bot, chan, u, "Invalid format: "+format());
+		passMessage(bot, chan, u, "Invalid format: "+format);
 	}
 	
 	protected void invalidFormat(Bot bot, Channel chan, User u) {

@@ -31,6 +31,7 @@ public class NewBotCommand extends Command{
 		this.setHelpText("Spawn a new meeee!");
 		this.setName("NewBot");
 		this.setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 	}
 
 }

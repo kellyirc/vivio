@@ -20,6 +20,11 @@ public class TaggingCommand extends Command {
 		if(Util.hasArgs(message, 3)) {
 			String[] args = Util.getArgs(message, 3);
 			String[] tags;
+			
+			if(!Util.hasLink(args[1])) {
+				passMessage(bot, chan, user, "That isn't a link!");
+				return;
+			}
 						
 			if(args[2].contains(",")) {
 				tags = args[2].split(",");
@@ -56,10 +61,13 @@ public class TaggingCommand extends Command {
 		if(alias.equals("tag")) {
 			execute(bot, chan, user, message);
 			return;
-		}else if(alias.equals("tag-change")) {
+		} else if(alias.equals("tag-change")) {
 			tagChange(bot, chan, user, message);
-		}else if(alias.equals("tag-browse")) {
+		} else if(alias.equals("tag-browse")) {
 			tagBrowse(bot, chan, user, message);
+		} else if(alias.equals("tags")) {
+			//TODO !tags top 10
+			//TODO !tags (lists all that have more than one entry)
 		}
 	}
 
@@ -70,6 +78,10 @@ public class TaggingCommand extends Command {
 		}
 		String[] args = Util.getArgs(message, 2);
 		List<HashMap<String, Object>> results = null;
+		if(args[1].trim().equals("%")) {
+			passMessage(bot, chan, user, "Nice try!");
+			return;
+		}
 		try {
 			if(args[1].contains("%")) 
 				results = Database.select("select * from "+getFormattedTableName()+" where tag like '"+args[1]+"'");
@@ -111,10 +123,12 @@ public class TaggingCommand extends Command {
 		setName("Tagging");
 		setHelpText("Tag a link!");
 		addAlias("tag");
+		addAlias("tags");
 		addAlias("tag-change");
 		addAlias("tag-browse");
 		setAccessLevel(LEVEL_ELEVATED);
 		setTableName("tags");
+		setUsableInPM(true);
 		try {
 			Database.createTable(getFormattedTableName(), "url VARCHAR(300), tag CHAR(30)");
 		} catch (SQLException e) {

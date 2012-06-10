@@ -38,6 +38,7 @@ public class QuietCommand extends Command {
 		this.setAccessLevel(LEVEL_OPERATOR);
 		this.setName("Quiet");
 		this.setStopsExecution(true);
+		setUsableInPM(true);
 		this.setHelpText("I can stop talking to another person, or stop talking to a channel with this toggled!");
 	}
 

@@ -29,6 +29,7 @@ public class WolframCommand extends Command
         setHelpText("Sends a call to the Wolfram Alpha API. Outputs only the result, if there is one. If you want to read the full result, use !wolfram in a private message.");
 		setName("Wolfram");
 		addAlias("wolfram");
+		setUsableInPM(true);
 
 	}
 	

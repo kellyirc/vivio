@@ -50,7 +50,9 @@ public class ToggleCommand extends Command {
 		addAlias("toggle");
 		setName("Toggle");
 		this.setAccessLevel(LEVEL_OPERATOR);
+		this.setPriorityLevel(PRIORITY_HIGH);
 		this.setHelpText("I can toggle other modules on and off, whee!");
+		setUsableInPM(true);
 	}
 
 	public void setActive(boolean active) {return;}

@@ -20,6 +20,7 @@ public class TranslateCommand extends Command
 		setName("Translate");
 		addAlias("translate");
 		Translate.setKey("8867C076B95F315D1B38A380C9483A694EE865E3");
+		setUsableInPM(true);
 	}
 	
 	@Override

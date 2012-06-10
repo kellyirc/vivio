@@ -18,6 +18,7 @@ public class ListCommand extends Command {
 		setName("List");
 		addAlias("list");
 		this.setHelpText("I'll tell you what all of my modules are!");
+		setUsableInPM(true);
 	}
 
 }

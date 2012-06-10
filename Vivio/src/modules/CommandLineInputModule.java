@@ -6,13 +6,18 @@ import backend.Bot;
 
 public class CommandLineInputModule extends Module {
 
+	static InputThread inputThread;
+	
 	@Override
 	protected void initialize() {
 		setName("CommandLine");
 		setHelpText("Take in commands from the command line. Yay, server administration!");
 		setPriorityLevel(PRIORITY_MODULE);
 		
-		new InputThread("Command Line").start();
+		if(inputThread!=null) {
+			inputThread = new InputThread("Command Line");
+			inputThread.start();
+		}
 	}
 	
 	public void setActive(boolean a) {return;}

@@ -40,13 +40,13 @@ public class HelpCommand extends Command {
 		}
 	}
 	
-
 	@Override
 	protected void initialize() {
 		this.setPriorityLevel(PRIORITY_MEDIUM);
 		this.setHelpText("I can give you information about the other commands!");
 		addAlias("help");
 		this.setName("Help");
+		setUsableInPM(true);
 	}
 	
 	protected String format() {

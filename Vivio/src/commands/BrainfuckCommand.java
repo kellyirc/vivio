@@ -16,7 +16,8 @@ public class BrainfuckCommand extends Command {
 	protected void initialize() {
 		setName("BrainfuckInterpreter");
 		setHelpText("Let's interpret some Brainfuck code! ( Wikipedia: http://goo.gl/sEtF )");
-		getAliases().add("brainfuck");
+		addAlias("brainfuck");
+		setUsableInPM(true);
 	}
 	
 	@Override

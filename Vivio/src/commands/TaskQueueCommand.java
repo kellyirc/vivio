@@ -1,6 +1,6 @@
 package commands;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
@@ -39,20 +39,26 @@ public class TaskQueueCommand extends Command {
 			}}, 10);*/
 	}
 
-	private String buildQueue(ArrayList<TimerThread> queue) {
+	private String buildQueue(HashSet<TimerThread> queue) {
+		if(queue.size() == 0) return "There are no background tasks running.";
 		String s = "Running threads:";
 		for(Runnable t : queue) {
-			s += ", " + t;
+			s += " " + t;
 		}
 		return s;
 	}
 
+	protected String format() {
+		return super.format() + " {queue}";
+	}
+	
 	@Override
 	protected void initialize() {
 		setName("TaskQueue");
 		addAlias("tasks");
 		setHelpText("Get information relating to tasks running in the background.");
 		setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 	}
 
 }

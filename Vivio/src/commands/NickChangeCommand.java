@@ -27,7 +27,8 @@ public class NickChangeCommand extends Command {
 		addAlias("nick");
 		setName("NickChange");
 		setHelpText("Change my nickname!");
-		setAccessLevel(LEVEL_OPERATOR);
+		setAccessLevel(LEVEL_ELEVATED);
+		setUsableInPM(true);
 		
 	}
 	

@@ -34,6 +34,7 @@ public class MathCommand extends Command {
 		addAlias("calculate");
 		setHelpText("Calculate a string of mathematical expressions.");
 		setName("Math");
+		setUsableInPM(true);
 	}
 
 }

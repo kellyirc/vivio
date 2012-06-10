@@ -40,6 +40,7 @@ public class DieCommand extends Command {
 		setName("Die");
 		setHelpText("Kill me from the server.. possibly!");
 		setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 	}
 	
 	protected String format() {

@@ -40,6 +40,7 @@ public class JoinCommand extends Command {
 		setName("JoinPart");
 		setHelpText("Join or part a channel.. I'm so multi-purpose!");
 		setAccessLevel(LEVEL_ELEVATED);
+		setUsableInPM(true);
 	}
 	
 	protected String format() {

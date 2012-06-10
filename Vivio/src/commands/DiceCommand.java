@@ -43,6 +43,7 @@ public class DiceCommand extends Command {
 		addAlias("dice");
 		setName("DiceRoller");
 		setHelpText("Roll some dice, D&D style!");
+		setUsableInPM(true);
 	}
 
 	protected String format() {

@@ -39,6 +39,7 @@ public class ChangeCommand extends Command{
 		setName("ChangeInternals");
 		setHelpText("Change internal variables! Ooooh la la!");
 		this.setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 	}
 	
 	protected String format() {

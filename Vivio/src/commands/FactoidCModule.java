@@ -28,6 +28,7 @@ public class FactoidCModule extends Command {
 		//TODO support a word replacement syntax
 		case "replace":
 			break;
+			//TODO remove latest
 		case "remove":
 			try {
 				Database.execRaw("delete from "+getFormattedTableName()+ " where id="+args[2]);
@@ -53,6 +54,7 @@ public class FactoidCModule extends Command {
 		setTableName("factoids");
 		addAlias("factoid");
 		setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 
 		try {
 			Database.createTable(
@@ -105,7 +107,9 @@ public class FactoidCModule extends Command {
 				break;
 			case "<reply>":
 				message = rand.get("TEXT").toString();
-				break;
+				passMessage(event.getBot(), event.getChannel(), event.getUser(), message);
+				lastFactoid = rand;
+				return;
 			case "<action>":
 				message = rand.get("TEXT").toString();
 				passEmote(event.getBot(), event.getChannel(), event.getUser(), message);
@@ -129,6 +133,7 @@ public class FactoidCModule extends Command {
 		
 		String[] messageArr = message.split(" ");
 		
+		//TODO make this only match a-zA-Z inbetween <>
 		if(message.matches(".+\\<(.*?)\\>.+")) {
 			String[] args = new String[3];
 			

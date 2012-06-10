@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,7 +30,7 @@ import commands.Command;
 
 public class Bot extends PircBotX implements Constants{
 	
-	private TimerBackend timer = new TimerBackend(1);
+	private static TimerBackend timer = new TimerBackend(5);
 
 	@Getter private static HashSet<String> owners = new HashSet<>();
 	@Getter private static HashSet<String> elevated = new HashSet<>();
@@ -60,7 +59,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "0.8";
+	final static String INTERNAL_VERSION = "1.1";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
 	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;
@@ -111,6 +110,7 @@ public class Bot extends PircBotX implements Constants{
 	{
 		initialize();
 		connectToServer(server, port, SSL, nick, serverPass);
+		loadModules();
 		
 	}
 	
@@ -142,7 +142,6 @@ public class Bot extends PircBotX implements Constants{
 	private void initialize() {
 		bots.add(this);
 		this.setListenerManager(ListenerBuilder.getManager());
-		loadModules();
 	}
 
 	public void loadModules() {
@@ -196,10 +195,16 @@ public class Bot extends PircBotX implements Constants{
 	//parse commands coming in
 	public boolean checkCommands(User user, String message, Channel chan, boolean forceExecute) {
 		
-		String commandString = message.split(" ")[0];
+		String commandString;
+		if(message.startsWith(getNick()+", ")) {
+			commandString = message.split(" ")[1];
+			forceExecute = true;
+			message = message.substring(message.indexOf(" "));
+		}
+		else
+			commandString = message.split(" ")[0];
 	
 		String comm = commandString.substring(1);
-		String prefix = commandString.substring(0,1);
 				
 		for(Module m : modules) {
 			if(m instanceof Command) {
@@ -207,13 +212,18 @@ public class Bot extends PircBotX implements Constants{
 				if(!command.isActive()) continue;
 				if(botMode < command.getAccessMode()) continue;
 				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
-				if(!forceExecute && !prefix.startsWith(command.getCmdSequence())) continue;
+				if(!forceExecute && !messageHasCommand(message, command)) continue;
 				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
-				command.execute(comm, this, chan, user, message);
+				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
 				if(command.isStopsExecution()) return false;
 			}
 		}
 		return true;
+	}
+	
+	private boolean messageHasCommand(String message, Command c) {
+		//System.out.println(message.substring(0,1).equals(c.getCmdSequence())+ " " + message.startsWith(getNick()+","));
+		return message.substring(0,1).equals(c.getCmdSequence()) || message.startsWith(getNick()+",");
 	}
 	
 	public boolean checkCommands(User user, String message, Channel chan) {
@@ -341,6 +351,7 @@ public class Bot extends PircBotX implements Constants{
 	}
 
 	public boolean isInChannel(String channel) {
+		channel = channel.trim();
 		for(Channel c : getChannels()) {
 			if(c.getName().equals(Util.formatChannel(channel))) return true;
 		}
@@ -357,12 +368,19 @@ public class Bot extends PircBotX implements Constants{
 		super.joinChannel(Util.formatChannel(s), k);
 	}
 	
-	public ArrayList<TimerThread> getTimerThreads() {
+	public HashSet<TimerThread> getTimerThreads() {
 		return timer.getThreads();
 	}
+	
+	public static Bot getBotByServer(String server) {
+		server = server.trim();
+		for(Bot b : getBots())
+			if(b.getServer().equals(server)) return b;
+		return null;
+	}
 
-	public void scheduleTask(TimerThread timerThread, int i) {
-		timer.scheduleTask(timerThread, i);
+	public static void scheduleTask(TimerThread timerThread, int delayInSeconds) {
+		timer.scheduleTask(timerThread, delayInSeconds);
 	}
 
 	@Override

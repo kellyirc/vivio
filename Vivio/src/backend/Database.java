@@ -60,6 +60,18 @@ public class Database {
 		queryCommit();
 	}
 	
+	public static void insert(String table, String columns, Object[] array, boolean[] isString) throws SQLException{
+		String values="";
+		for(int i=0; i<array.length; i++) {
+			if(isString[i])
+				values += Database.getEnclosedString((String) array[i]);
+			else
+				values += String.valueOf(array[i]);
+			if(i!=array.length-1)
+				values +=",";
+		}
+		insert(table, columns, values);
+	}
 	//select
 	public static List<HashMap<String,Object>> select(String query, int max) throws SQLException{
 		if(conn == null) conn = connect();

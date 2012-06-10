@@ -51,6 +51,8 @@ public class ControlCommand extends Command {
 		setHelpText("Control various aspects of the bot.");
 		addAlias("echo");
 		addAlias("emote");
+		setUsableInPM(true);
+		setAccessLevel(LEVEL_ELEVATED);
 	}
 
 	protected String format() {

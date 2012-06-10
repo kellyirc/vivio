@@ -58,6 +58,7 @@ public class AccessCommand extends Command {
 		setHelpText("Change how accessible I am to someone ;)");
 		setName("AccessChange");
 		setAccessLevel(LEVEL_OWNER);
+		setUsableInPM(true);
 	}
 	
 	protected String format() {
