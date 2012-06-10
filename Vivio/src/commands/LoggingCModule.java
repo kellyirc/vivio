@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.pircbotx.Channel;
@@ -85,21 +86,21 @@ public class LoggingCModule extends Command {
 					}
 				}
 				
-				String maxHttp = getMax(httpcount);
-				String maxCmd = getMax(cmdcount);
+				Map.Entry<String,Integer> maxHttp = getMax(httpcount);
+				Map.Entry<String,Integer> maxCmd = getMax(cmdcount);
 				
-				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp + ", with "+httpcount.get(maxHttp)+ " links.");
-				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd + ", with "+cmdcount.get(maxCmd)+ " commands.");
+				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+httpcount.get(maxHttp)+ " links ("+(((double)maxHttp.getValue())/httpcount.size())+"% of "+httpcount.size()+ " total links)."  );
+				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+cmdcount.get(maxCmd)+ " commands.");
 				
 				
 			}}).start();
 	}
 
-	private String getMax(HashMap<String, Integer> httpcount) {
-		String curMax = null;
+	private Map.Entry<String,Integer> getMax(HashMap<String, Integer> httpcount) {
+		Map.Entry<String, Integer> curMax = null;
 		
-		for(String s : httpcount.keySet()) {
-			if(curMax == null || httpcount.get(s) > httpcount.get(curMax)) curMax = s;
+		for(Map.Entry<String, Integer> entry : httpcount.entrySet()) {
+			if(curMax == null || httpcount.get(entry) > httpcount.get(curMax)) curMax = entry;
 		}
 		return curMax;
 	}

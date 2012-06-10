@@ -51,6 +51,7 @@ public class RSSCModule extends Command {
 			
 		} else if(Util.hasArgs(message, 3)) {
 			//TODO toggle activity of feed
+			//TODO rss 'view' 'name' to view all stored updates of the feed
 		}
 		
 		invalidFormat(bot, chan, user);
@@ -112,22 +113,12 @@ public class RSSCModule extends Command {
 				}
 				
 				SyndEntry entry = (SyndEntry) feed.getEntries().get(0);
-				if(setMostRecent(feed, entry)) {
+				if(mostRecent.containsKey(feed)) {
+					if(mostRecent.get(feed).getLink().equals(entry.getLink())) continue;
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
-					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getTitle());
+					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
 				}
 			}
 		}
-		
 	}
-
-	public boolean setMostRecent(SyndFeed feed, SyndEntry object) {
-		
-		//I'm using the link to the item as the unique identifier.
-		//I can't guarantee titles will be unique, or that the objects will be the same.
-		if(mostRecent.containsKey(feed) && mostRecent.get(feed).getLink().equals(object.getLink())) return false;
-		mostRecent.put(feed, object);
-		return true;
-	}
-
 }

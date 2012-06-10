@@ -28,6 +28,9 @@ public class FactoidCModule extends Command {
 		//TODO support a word replacement syntax
 		case "replace":
 			break;
+			//TODO remember the quote for a factoid for a person in the last 20 or so lines
+		case "remember":
+			break;
 			//TODO remove latest
 		case "remove":
 			try {
