@@ -38,6 +38,10 @@ public class RSSCModule extends Command {
 						passMessage(bot, chan, user, "That feed is already being watched, you silly goat.");
 						return;
 					}
+					if(!Util.hasLink(args[2])) {
+						passMessage(bot, chan, user, "That isn't a link!");
+						return;
+					}
 					Database.insert(getFormattedTableName(), "server,channel,feedurl,feedname,feedowner,enabled", 
 							new Object[] {bot.getServer(), chan.getName(), args[2], args[3], user.getNick(), 1},
 							new boolean[] {true, true, true, true, true, false});
@@ -50,6 +54,12 @@ public class RSSCModule extends Command {
 			}
 			
 		} else if(Util.hasArgs(message, 3)) {
+			String[] args = Util.getArgs(message, 3);
+			switch(args[1]) {
+			case "toggle":
+				
+				break;
+			}
 			//TODO toggle activity of feed
 			//TODO rss 'view' 'name' to view all stored updates of the feed
 		}
