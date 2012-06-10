@@ -48,6 +48,8 @@ public class LoggingCModule extends Command {
 		}
 		
 		passMessage(bot, chan, user, "I will begin generating statistics for "+chan.getName()+ " now.");
+		
+		//TODO total domination statistic, when you are the name for every single statistic
 		new Thread(new Runnable(){
 
 			@Override
@@ -97,8 +99,12 @@ public class LoggingCModule extends Command {
 				Map.Entry<String,Integer> maxCmd = getMax(cmdcount);
 				
 				DecimalFormat twoDForm = new DecimalFormat("#.##");
-				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+maxHttp.getValue()+ " links ("+twoDForm.format((maxHttp.getValue()/httpNum)*100)+"% of "+(int)httpNum+ " total links)."  );
-				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+maxCmd.getValue()+ " commands ("+twoDForm.format((maxCmd.getValue()/cmdNum)*100)+"% of "+(int)cmdNum+ " total commands).");
+				//TODO most popular domain
+				passMessage(bot, chan, user, "Total links posted: " + (int)httpNum + " ("+twoDForm.format((httpNum/returned.size())*100)+"% of all messages).");
+				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+maxHttp.getValue()+ " links ("+twoDForm.format((maxHttp.getValue()/httpNum)*100)+"% of all links)."  );
+				
+				passMessage(bot, chan, user, "Total commands posted: " + (int)cmdNum + " ("+twoDForm.format((cmdNum/returned.size())*100)+"% of all messages).");
+				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+maxCmd.getValue()+ " commands ("+twoDForm.format((maxCmd.getValue()/cmdNum)*100)+"% of all commands).");
 				
 				
 			}}).start();
