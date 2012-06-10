@@ -3,6 +3,7 @@ package commands;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,13 +75,19 @@ public class LoggingCModule extends Command {
 				HashMap<String, Integer> httpcount = new HashMap<>();
 				HashMap<String, Integer> cmdcount = new HashMap<>();
 				
+				//these are doubles so they don't have to be cast later
+				double httpNum = 0;
+				double cmdNum = 0;
+				
 				for(HashMap<String, Object> column : returned) {
 					String message = column.get("MESSAGE").toString();
 					String sender = column.get("USER_NAME").toString().trim();
 					if(Util.hasLink(message)) {
+						httpNum++;
 						if(httpcount.containsKey(sender)) httpcount.put(sender, httpcount.get(sender)+1);
 						else httpcount.put(sender, 1);
 					} else if(message.startsWith("!")) {
+						cmdNum++;
 						if(cmdcount.containsKey(sender)) cmdcount.put(sender, cmdcount.get(sender)+1);
 						else cmdcount.put(sender, 1);
 					}
@@ -89,8 +96,9 @@ public class LoggingCModule extends Command {
 				Map.Entry<String,Integer> maxHttp = getMax(httpcount);
 				Map.Entry<String,Integer> maxCmd = getMax(cmdcount);
 				
-				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+httpcount.get(maxHttp)+ " links ("+(((double)maxHttp.getValue())/httpcount.size())+"% of "+httpcount.size()+ " total links)."  );
-				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+cmdcount.get(maxCmd)+ " commands.");
+				DecimalFormat twoDForm = new DecimalFormat("#.##");
+				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+maxHttp.getValue()+ " links ("+twoDForm.format((maxHttp.getValue()/httpNum)*100)+"% of "+(int)httpNum+ " total links)."  );
+				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+maxCmd.getValue()+ " commands ("+twoDForm.format((maxCmd.getValue()/cmdNum)*100)+"% of "+(int)cmdNum+ " total commands).");
 				
 				
 			}}).start();
@@ -100,7 +108,7 @@ public class LoggingCModule extends Command {
 		Map.Entry<String, Integer> curMax = null;
 		
 		for(Map.Entry<String, Integer> entry : httpcount.entrySet()) {
-			if(curMax == null || httpcount.get(entry) > httpcount.get(curMax)) curMax = entry;
+			if(curMax == null || httpcount.get(entry.getKey()) > httpcount.get(curMax.getKey())) curMax = entry;
 		}
 		return curMax;
 	}

@@ -110,9 +110,14 @@ public class Util {
 		return link;
 	}
 
-	public static final String parseLink(String s) throws MalformedURLException {
+	public static final String parseLink(String s) {
 		String page = "";
-		URL url = new URL(s);
+		URL url;
+		try {
+			url =  new URL(s);
+		} catch(MalformedURLException e) {
+			return "";
+		}
 		URLConnection con;
 		try {
 			con = url.openConnection();
