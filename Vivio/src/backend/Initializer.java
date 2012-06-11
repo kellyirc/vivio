@@ -48,7 +48,11 @@ public class Initializer {
 		}
 		Bot b = null;
 		b = new Bot(server, port, ssl, nickname, password);
-		if(channel!=null) b.joinChannel(channel);
+		if(channel!=null) {
+			b.joinChannel(channel);
+			b.joinChannel(channel+"-logs");
+			b.joinChannel(channel+"-feeds");
+		}
 		if(nickservPass!=null) b.identify(nickservPass);
 		return;
 	}

@@ -113,7 +113,7 @@ public class Bot extends PircBotX implements Constants{
 		loadModules();
 		
 	}
-	
+
 	//Methods
 	private void connectToServer(String server, int port, boolean SSL, String nick, String serverPass) {
 		

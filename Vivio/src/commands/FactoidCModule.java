@@ -47,7 +47,7 @@ public class FactoidCModule extends Command {
 	}
 	
 	protected String format() {
-		return super.format() + " [remove | replace] [args]";
+		return super.format() + " [remove | replace] {args}";
 	}
 
 	@Override

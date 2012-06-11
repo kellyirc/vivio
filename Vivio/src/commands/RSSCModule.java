@@ -87,7 +87,7 @@ public class RSSCModule extends Command {
 		addAlias("rss");
 		setName("RSS");
 		setHelpText("I manage RSS feeds!");
-		setAccessLevel(LEVEL_OWNER);
+		setAccessLevel(LEVEL_OPERATOR);
 		setTableName("feeds");
 
 		try {
@@ -135,14 +135,26 @@ public class RSSCModule extends Command {
 						| FeedException | IOException e) {
 					continue;
 				}
-				SyndEntry entry = (SyndEntry) feed.getEntries().get(0);
-				if(mostRecent.containsKey(feed.getTitle())) {
-					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) continue;
-					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
-					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
-					mostRecent.put(feed.getTitle(), entry);
-				} else {
-					mostRecent.put(feed.getTitle(), entry);
+				boolean foundMostRecent = false;
+				
+				if(!mostRecent.containsKey(feed.getTitle())) {
+					mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
+					continue;
+				}
+				
+				for(Object o : feed.getEntries()) {
+					if(foundMostRecent) break;
+					SyndEntry entry = (SyndEntry) o;
+					if(mostRecent.containsKey(feed.getTitle())) {
+						if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
+							break;
+						}
+						String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
+						passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
+						mostRecent.put(feed.getTitle(), entry);
+					} else {
+						mostRecent.put(feed.getTitle(), entry);
+					}
 				}
 			}
 		}

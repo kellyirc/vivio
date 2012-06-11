@@ -17,7 +17,7 @@ public class NewBotCommand extends Command{
 			invalidFormat(bot, chan, user);
 			return;
 		}
-		
+		//TODO make it so there can't be multiple bots per server
 		Initializer.parseCommands(message.substring(message.indexOf(" ")).split(" "));
 	}
 	
