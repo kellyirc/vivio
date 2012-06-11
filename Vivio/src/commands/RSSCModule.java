@@ -23,7 +23,7 @@ import backend.Util;
 
 public class RSSCModule extends Command {
 	
-	private final int RSS_CHECK_TIME = 5;
+	private final int RSS_CHECK_TIME = 600;
 	private HashMap<String, SyndEntry> mostRecent = new HashMap<>();
 	
 	private SyndFeedInput input = new SyndFeedInput();
@@ -102,7 +102,7 @@ public class RSSCModule extends Command {
 	}
 	
 	protected String format() {
-		return super.format() + " [add | toggle] [feedUrl] [feedName | ]";
+		return super.format() + " [add | toggle-[on|off]] [feedUrl] [feedName | ]";
 	}
 	
 	private class RssThread extends TimerThread {
@@ -145,10 +145,9 @@ public class RSSCModule extends Command {
 				for(Object o : feed.getEntries()) {
 					if(foundMostRecent) break;
 					SyndEntry entry = (SyndEntry) o;
-					//
-					System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
+					//System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
 					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
-						System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
+						//System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
 						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
 						foundMostRecent=true;
 						continue;

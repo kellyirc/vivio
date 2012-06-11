@@ -214,11 +214,20 @@ public class Bot extends PircBotX implements Constants{
 				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
 				if(!forceExecute && !messageHasCommand(message, command)) continue;
 				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
+				logMessage(chan, user, message);
 				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
 				if(command.isStopsExecution()) return false;
 			}
 		}
 		return true;
+	}
+	
+	private void logMessage(Channel chan, User user, String message) {
+		for(Channel c : getChannels()) {
+			if(c.getName().contains("-logs")) {
+				sendMessage(c, ">> "+(chan!=null ? chan.getName(): "Private Message") + " <" + user.getNick() + " ("+ getLevelForUser(user, chan)+")> " + message);
+			}
+		}
 	}
 	
 	private boolean messageHasCommand(String message, Command c) {
