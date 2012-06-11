@@ -155,7 +155,7 @@ public class RSSCModule extends Command {
 					}
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
-					mostRecent.put(feed.getTitle(), entry);
+					//mostRecent.put(feed.getTitle(), entry);
 				}
 			}
 		}
