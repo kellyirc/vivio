@@ -24,7 +24,7 @@ import backend.Util;
 
 public class RSSCModule extends Command {
 	
-	private final int RSS_CHECK_TIME = 600;
+	private final int RSS_CHECK_TIME = 5;
 	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
 	
 	private SyndFeedInput input = new SyndFeedInput();
@@ -138,15 +138,16 @@ public class RSSCModule extends Command {
 				
 				if(!mostRecent.containsKey(feed.getTitle())) {
 					mostRecent.put(feed.getTitle(), new LimitedQueue<String>(30));
-					mostRecent.get(feed.getTitle()).add(((SyndEntry)feed.getEntries().get(0)).getLink());
+					for(Object o : feed.getEntries()) {
+						SyndEntry entry = (SyndEntry) o;
+						mostRecent.get(feed.getTitle()).add(entry.getLink());
+					}
 					continue;
 				}
 				
 				for(Object o : feed.getEntries()) {
 					SyndEntry entry = (SyndEntry) o;
-					//System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
 					if(mostRecent.get(feed.getTitle()).contains(entry.getLink())) {
-						//System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
 						continue;
 					}
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
