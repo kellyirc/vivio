@@ -145,17 +145,14 @@ public class RSSCModule extends Command {
 				for(Object o : feed.getEntries()) {
 					if(foundMostRecent) break;
 					SyndEntry entry = (SyndEntry) o;
-					if(mostRecent.containsKey(feed.getTitle())) {
-						if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
-							foundMostRecent=true;
-							break;
-						}
-						String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
-						passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
-						mostRecent.put(feed.getTitle(), entry);
-					} else {
-						mostRecent.put(feed.getTitle(), entry);
+					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
+						foundMostRecent=true;
+						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
+						break;
 					}
+					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
+					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
+					mostRecent.put(feed.getTitle(), entry);
 				}
 			}
 		}
