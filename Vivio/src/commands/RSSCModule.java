@@ -135,10 +135,9 @@ public class RSSCModule extends Command {
 						| FeedException | IOException e) {
 					continue;
 				}
-				
 				SyndEntry entry = (SyndEntry) feed.getEntries().get(0);
 				if(mostRecent.containsKey(feed.getTitle())) {
-					if(mostRecent.get(feed).getLink().equals(entry.getLink())) continue;
+					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) continue;
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
 				} else {
