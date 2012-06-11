@@ -214,8 +214,8 @@ public class Bot extends PircBotX implements Constants{
 				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
 				if(!forceExecute && !messageHasCommand(message, command)) continue;
 				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
-				logMessage(chan, user, message);
 				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
+				logMessage(chan, user, message);
 				if(command.isStopsExecution()) return false;
 			}
 		}

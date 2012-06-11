@@ -18,15 +18,14 @@ import com.sun.syndication.io.XmlReader;
 
 import backend.Bot;
 import backend.Database;
+import backend.LimitedQueue;
 import backend.TimerThread;
 import backend.Util;
-
-//TODO Keep a LimitedQueue<RssFeedCount*30> of previous links. Perhaps keep one per feed instead of one total, for space efficiency.
 
 public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 600;
-	private HashMap<String, SyndEntry> mostRecent = new HashMap<>();
+	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
 	
 	private SyndFeedInput input = new SyndFeedInput();
 
@@ -136,26 +135,23 @@ public class RSSCModule extends Command {
 						| FeedException | IOException e) {
 					continue;
 				}
-				boolean foundMostRecent = false;
 				
 				if(!mostRecent.containsKey(feed.getTitle())) {
-					mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
+					mostRecent.put(feed.getTitle(), new LimitedQueue<String>(30));
+					mostRecent.get(feed.getTitle()).add(((SyndEntry)feed.getEntries().get(0)).getLink());
 					continue;
 				}
 				
 				for(Object o : feed.getEntries()) {
-					if(foundMostRecent) break;
 					SyndEntry entry = (SyndEntry) o;
 					//System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
-					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
+					if(mostRecent.get(feed.getTitle()).contains(entry.getLink())) {
 						//System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
-						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
-						foundMostRecent=true;
 						continue;
 					}
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
-					//mostRecent.put(feed.getTitle(), entry);
+					mostRecent.get(feed.getTitle()).add(entry.getLink());
 				}
 			}
 		}
