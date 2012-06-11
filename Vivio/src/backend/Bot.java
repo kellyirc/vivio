@@ -269,9 +269,9 @@ public class Bot extends PircBotX implements Constants{
 		//TODO identified users only?
 		assert(u != null && c!=null);
 		if(owners.contains(u.getNick().toLowerCase())) return LEVEL_OWNER;
+		if(c!=null && c.isOp(u)) return LEVEL_OPERATOR;
 		if(elevated.contains(u.getNick().toLowerCase())) return LEVEL_ELEVATED;
 		if(banned.contains(u.getNick().toLowerCase())) return LEVEL_BANNED;
-		if(c!=null && c.isOp(u)) return LEVEL_OPERATOR;
 		return LEVEL_NORMAL;
 	}
 	
