@@ -30,7 +30,7 @@ public class RSSCModule extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if(Util.hasArgs(message, 4)) {
+		if(Util.hasArgs(message, 4) && !message.contains("toggle")) {
 			String[] args = Util.getArgs(message, 4);
 			if(args[1].equals("add")) {
 				try {
@@ -56,12 +56,27 @@ public class RSSCModule extends Command {
 		} else if(Util.hasArgs(message, 3)) {
 			String[] args = Util.getArgs(message, 3);
 			switch(args[1]) {
-			case "toggle":
-				
+			//TODO merge these
+			case "toggle-off":
+				try {
+					Database.execRaw("update "+getFormattedTableName()+" set enabled=0 where name='"+args[2]+"'");
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				passMessage(bot, chan, user, "Successfully turned off "+args[2]);
+				break;
+			case "toggle-on":
+				try {
+					Database.execRaw("update "+getFormattedTableName()+" set enabled=1 where name='"+args[2]+"'");
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				passMessage(bot, chan, user, "Successfully turned on "+args[2]);
 				break;
 			}
 			//TODO toggle activity of feed
 			//TODO rss 'view' 'name' to view all stored updates of the feed
+			return;
 		}
 		
 		invalidFormat(bot, chan, user);
@@ -118,16 +133,18 @@ public class RSSCModule extends Command {
 					feed = input.build(new XmlReader(new URL(url)));
 				} catch (IllegalArgumentException
 						| FeedException | IOException e) {
-					e.printStackTrace();
 					continue;
 				}
 				
 				SyndEntry entry = (SyndEntry) feed.getEntries().get(0);
 				if(mostRecent.containsKey(feed)) {
+					System.out.println(entry.getTitle());
 					if(mostRecent.get(feed).getLink().equals(entry.getLink())) continue;
+					System.out.println("new entry in db");
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
 				} else {
+					System.out.println("no entry in db");
 					mostRecent.put(feed, entry);
 				}
 			}
