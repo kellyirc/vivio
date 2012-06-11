@@ -13,7 +13,6 @@ public class LimitedQueue<E> extends ArrayList<E> {
 		if(size()>limit) {
 			remove(0);
 		}
-		System.out.println(this);
 		return super.add(e);
 	}
 }
