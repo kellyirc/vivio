@@ -147,8 +147,7 @@ public class RSSCModule extends Command {
 					SyndEntry entry = (SyndEntry) o;
 					System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
 					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
-						foundMostRecent=true;
-						System.out.println("setting most recent to "+feed.getEntries().get(0));
+						System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
 						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
 						continue;
 					}
