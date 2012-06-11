@@ -147,6 +147,7 @@ public class RSSCModule extends Command {
 					SyndEntry entry = (SyndEntry) o;
 					if(mostRecent.containsKey(feed.getTitle())) {
 						if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
+							foundMostRecent=true;
 							break;
 						}
 						String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
