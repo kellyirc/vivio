@@ -149,6 +149,7 @@ public class RSSCModule extends Command {
 					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
 						System.out.println("setting most recent to "+((SyndEntry)feed.getEntries().get(0)).getTitle());
 						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
+						foundMostRecent=true;
 						continue;
 					}
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
