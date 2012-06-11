@@ -148,8 +148,9 @@ public class RSSCModule extends Command {
 					System.out.println(mostRecent.get(feed.getTitle()).getLink() + " " + entry.getLink() );
 					if(mostRecent.get(feed.getTitle()).getLink().equals(entry.getLink())) {
 						foundMostRecent=true;
+						System.out.println("setting most recent to "+feed.getEntries().get(0));
 						mostRecent.put(feed.getTitle(), (SyndEntry)feed.getEntries().get(0));
-						break;
+						continue;
 					}
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
