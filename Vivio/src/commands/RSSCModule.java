@@ -21,6 +21,8 @@ import backend.Database;
 import backend.TimerThread;
 import backend.Util;
 
+//TODO Keep a LimitedQueue<RssFeedCount*30> of previous links. Perhaps keep one per feed instead of one total, for space efficiency.
+
 public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 600;
@@ -74,7 +76,6 @@ public class RSSCModule extends Command {
 				passMessage(bot, chan, user, "Successfully turned on "+args[2]);
 				break;
 			}
-			//TODO toggle activity of feed
 			//TODO rss 'view' 'name' to view all stored updates of the feed
 			return;
 		}
