@@ -24,7 +24,7 @@ import backend.Util;
 public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 5;
-	private HashMap<SyndFeed, SyndEntry> mostRecent = new HashMap<>();
+	private HashMap<String, SyndEntry> mostRecent = new HashMap<>();
 	
 	private SyndFeedInput input = new SyndFeedInput();
 
@@ -137,15 +137,12 @@ public class RSSCModule extends Command {
 				}
 				
 				SyndEntry entry = (SyndEntry) feed.getEntries().get(0);
-				if(mostRecent.containsKey(feed)) {
-					System.out.println(entry.getTitle());
+				if(mostRecent.containsKey(feed.getTitle())) {
 					if(mostRecent.get(feed).getLink().equals(entry.getLink())) continue;
-					System.out.println("new entry in db");
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
 				} else {
-					System.out.println("no entry in db");
-					mostRecent.put(feed, entry);
+					mostRecent.put(feed.getTitle(), entry);
 				}
 			}
 		}
