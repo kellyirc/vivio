@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 
 public class TimerBackend extends ScheduledThreadPoolExecutor {
-	
 	@Getter private HashSet<TimerThread> threads = new HashSet<>();
 
 	public TimerBackend(int corePoolSize) {
@@ -19,12 +18,15 @@ public class TimerBackend extends ScheduledThreadPoolExecutor {
 	}
 	
 	public ScheduledFuture<?> scheduleTask(TimerThread command, long delayInSeconds) {
+		return scheduleTask(command, delayInSeconds, TimeUnit.SECONDS);
+	}
+	
+	public ScheduledFuture<?> scheduleTask(TimerThread command, long delayInSeconds, TimeUnit timeUnit) {
 		for(TimerThread t : threads) {
 			if(t.getClass().equals(command.getClass())) return null;
 		}
 		if(threads.add(command))
-			return scheduleWithFixedDelay(command, 0, delayInSeconds, TimeUnit.SECONDS);
+			return scheduleWithFixedDelay(command, 0, delayInSeconds, timeUnit);
 		return null;
 	}
-	
 }

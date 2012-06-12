@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -149,6 +151,7 @@ public class Bot extends PircBotX implements Constants{
 
 	public void loadModules() {
 		modules.clear();
+		
 		loadModulesImpl("commands", Command.class);
 		loadModulesImpl("cmods", Command.class);
 		loadModulesImpl("modules", Module.class);
@@ -392,8 +395,20 @@ public class Bot extends PircBotX implements Constants{
 		return null;
 	}
 
-	public static void scheduleTask(TimerThread timerThread, int delayInSeconds) {
-		timer.scheduleTask(timerThread, delayInSeconds);
+	public static ScheduledFuture<?> scheduleTask(TimerThread timerThread, int delayInSeconds) {
+		return scheduleTask(timerThread, delayInSeconds, TimeUnit.SECONDS);
+	}
+	
+	public static ScheduledFuture<?> scheduleTask(TimerThread timerThread, long delay, TimeUnit timeUnit) {
+		return timer.scheduleTask(timerThread, delay, timeUnit);
+	}
+	
+	public static ScheduledFuture<?> scheduleOneShotTask(TimerThread timerThread, int delayInSeconds) {
+		return scheduleOneShotTask(timerThread, delayInSeconds, TimeUnit.SECONDS);
+	}
+	
+	public static ScheduledFuture<?> scheduleOneShotTask(TimerThread timerThread, long delay, TimeUnit timeUnit) {
+		return timer.schedule(timerThread, delay, timeUnit);
 	}
 
 	@Override
