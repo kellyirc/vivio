@@ -35,15 +35,15 @@ public class RSSCModule extends Command {
 	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
 	
 	private SyndFeedInput input = new SyndFeedInput();
+	private HashMap<String, SyndFeed> cache = new HashMap<>();
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		if(Util.hasArgs(message, 4) && !message.contains("toggle")) {
 			String[] args = Util.getArgs(message, 4);
 			if(args[1].equals("add")) {
-         //TODO make it save for multiple channels and cache each iteration
 				try {
-					if(Database.hasRow("select * from "+getFormattedTableName()+" where feedurl='"+args[2]+"'")){
+					if(Database.hasRow("select * from "+getFormattedTableName()+" where channel='"+chan.getName()+"' and server='"+bot.getServer()+"' and feedurl='"+args[2]+"'")){
 						passMessage(bot, chan, user, "That feed is already being watched, you silly goat.");
 						return;
 					}
@@ -65,11 +65,10 @@ public class RSSCModule extends Command {
 		} else if(Util.hasArgs(message, 3)) {
 			String[] args = Util.getArgs(message, 3);
 			switch(args[1]) {
-      //TODO make it only select from the correct channel
 			//TODO merge these
 			case "toggle-off":
 				try {
-					Database.execRaw("update "+getFormattedTableName()+" set enabled=0 where feedname='"+args[2]+"'");
+					Database.execRaw("update "+getFormattedTableName()+" set enabled=0 where channel='"+chan.getName()+"' and server='"+bot.getServer()+"' and feedname='"+args[2]+"'");
 				} catch (SQLException e) {
 					passMessage(bot, chan, user, "Unsuccessfully turned off "+args[2]);
 					return;
@@ -78,7 +77,7 @@ public class RSSCModule extends Command {
 				break;
 			case "toggle-on":
 				try {
-					Database.execRaw("update "+getFormattedTableName()+" set enabled=1 where feedname='"+args[2]+"'");
+					Database.execRaw("update "+getFormattedTableName()+" set enabled=1 where channel='"+chan.getName()+"' and server='"+bot.getServer()+"' and feedname='"+args[2]+"'");
 				} catch (SQLException e) {
 					passMessage(bot, chan, user, "Unsuccessfully turned off "+args[2]);
 					return;
@@ -124,6 +123,7 @@ public class RSSCModule extends Command {
 		
 		@Override
 		public void run() {
+			cache.clear();
 			List<HashMap<String, Object>> feedData = null;
 			try {
 				feedData = Database.select("select * from "+getFormattedTableName());
@@ -141,7 +141,8 @@ public class RSSCModule extends Command {
 				
 				SyndFeed feed;
 				try {
-					feed = input.build(new XmlReader(new URL(url)));
+					if(cache.containsKey(url)) feed = cache.get(url);
+					else feed = input.build(new XmlReader(new URL(url)));
 				} catch (IllegalArgumentException
 						| FeedException | IOException e) {
 					continue;

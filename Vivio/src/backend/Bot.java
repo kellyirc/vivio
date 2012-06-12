@@ -217,10 +217,10 @@ public class Bot extends PircBotX implements Constants{
 			if(m instanceof Command) {
 				Command command = (Command) m;
 				if(!command.isActive()) continue;
-        if(botMode < command.getAccessMode()) {
-          sendMessage(chan == null ? user : chan, "You are not allowed to execute this command.");
-          continue;
-        }
+				if(botMode < command.getAccessMode()) {
+					sendMessage(chan == null ? user.getNick() : chan.getName(), "You are not allowed to execute this command.");
+					continue;
+				}
 				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
 				if(!forceExecute && !messageHasCommand(message, command)) continue;
 				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;

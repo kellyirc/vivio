@@ -6,7 +6,6 @@
  */
 package commands;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -151,7 +150,7 @@ public class ReminderCommand extends Command {
 							}
 							lastParsed = LAST_PARSED_DIGIT;
 							
-							currentNumber = currentNumber*10 + ((int)params.charAt(i) - '0');
+							currentNumber = currentNumber*10 + (params.charAt(i) - '0');
 						}
 						
 						else if(Character.isLetter(params.charAt(i))) {
@@ -182,7 +181,7 @@ public class ReminderCommand extends Command {
 						}
 					}
 					
-					moment += (long)currentNumber * getUnitToMillisecMultiplier(unit);
+					moment += currentNumber * getUnitToMillisecMultiplier(unit);
 					
 					break;
 					

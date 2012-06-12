@@ -5,7 +5,6 @@ package commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
