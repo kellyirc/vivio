@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to calculate a mathematical expression.
+ * @basecmd math
+ * @category utility
+ */
 package commands;
 
 import org.pircbotx.Channel;

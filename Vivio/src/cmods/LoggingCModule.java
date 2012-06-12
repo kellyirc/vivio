@@ -1,4 +1,10 @@
-package commands;
+/*
+ * @author Kyle Kemp
+ * @description This module allows the bot to log all chat and generate statistics for every channel it is a part of.
+ * @basecmd generate-stats
+ * @category misc
+ */
+package cmods;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -12,6 +18,8 @@ import java.util.Map;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+
+import commands.Command;
 
 
 import backend.Bot;

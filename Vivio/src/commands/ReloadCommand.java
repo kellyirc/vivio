@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to reload all of the modules in the bot.
+ * @basecmd reload
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

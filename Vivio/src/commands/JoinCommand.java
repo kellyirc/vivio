@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to have the bot join another channel.
+ * @basecmd join
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows users to 'tag' links and browse them, a la a mini reddit or stumbleupon.
+ * @basecmd tag
+ * @category misc
+ */
 package commands;
 
 import java.sql.SQLException;

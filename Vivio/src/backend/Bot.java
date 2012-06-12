@@ -1,3 +1,6 @@
+/*
+ * @author Kyle Kemp
+ */
 package backend;
 
 import java.io.IOException;
@@ -59,7 +62,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "1.1";
+	final static String INTERNAL_VERSION = "1.25";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
 	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;
@@ -147,6 +150,7 @@ public class Bot extends PircBotX implements Constants{
 	public void loadModules() {
 		modules.clear();
 		loadModulesImpl("commands", Command.class);
+		loadModulesImpl("cmods", Command.class);
 		loadModulesImpl("modules", Module.class);
 	}
 	

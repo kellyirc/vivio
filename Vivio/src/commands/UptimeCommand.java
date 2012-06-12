@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to check how long the bot has been online.
+ * @basecmd uptime
+ * @category misc
+ */
 package commands;
 
 import org.pircbotx.Channel;

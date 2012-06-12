@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to roll a set of x-sided dice, y times. 
+ * @basecmd roll
+ * @category util
+ */
 package commands;
 
 import org.pircbotx.Channel;

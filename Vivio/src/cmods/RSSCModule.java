@@ -1,4 +1,10 @@
-package commands;
+/*
+ * @author Kyle Kemp
+ * @description This module allows the bot to pull RSS/Atom feeds from across the internet to syndicate content into an IRC channel.
+ * @basecmd rss
+ * @category util
+ */
+package cmods;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +21,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import commands.Command;
 
 import backend.Bot;
 import backend.Database;

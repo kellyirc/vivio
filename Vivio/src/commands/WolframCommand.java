@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module allows for the querying of Wolfram Alpha.
+ * @basecmd wolfram
+ * @category utility
+ */
 package commands;
 
 import org.pircbotx.Channel;

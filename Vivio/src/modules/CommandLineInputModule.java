@@ -1,3 +1,8 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows the server host to control the bot from the command line.
+ * @category core
+ */
 package modules;
 
 import java.util.Scanner;

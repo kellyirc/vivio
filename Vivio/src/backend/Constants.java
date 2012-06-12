@@ -1,3 +1,6 @@
+/*
+ * @author Kyle Kemp
+ */
 package backend;
 
 public interface Constants {

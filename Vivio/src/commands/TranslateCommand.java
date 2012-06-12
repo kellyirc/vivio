@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module allows for the translation between languages using Google Translate.
+ * @basecmd translate
+ * @category utility
+ */
 package commands;
 
 import org.pircbotx.Channel;

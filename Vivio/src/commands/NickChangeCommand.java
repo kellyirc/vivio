@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This allows a user to change the bots nickname.
+ * @basecmd nick
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to create a new bot on a new server using the proper command line switches, as if IRC were the command line.
+ * @basecmd new
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

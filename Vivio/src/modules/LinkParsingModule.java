@@ -1,3 +1,8 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows the bot to crawl links to get a proper title for them.
+ * @category utility
+ */
 package modules;
 
 

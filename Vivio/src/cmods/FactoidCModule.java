@@ -1,4 +1,10 @@
-package commands;
+/*
+ * @author Kyle Kemp
+ * @description This module allows the bot to learn and speak about various topics.
+ * @basecmd factoid
+ * @category ai
+ */
+package cmods;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -6,6 +12,8 @@ import java.util.HashMap;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+
+import commands.Command;
 
 import backend.Bot;
 import backend.Database;

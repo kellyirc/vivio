@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to tell the bot to either quit all channels or leave the server completely.
+ * @basecmd die
+ * @category misc
+ */
 package commands;
 
 import org.pircbotx.Channel;

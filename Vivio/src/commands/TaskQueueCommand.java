@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to check what tasks the bot is running in the background.
+ * @basecmd task-queue
+ * @category core
+ */
 package commands;
 
 import java.util.HashSet;
@@ -7,21 +13,12 @@ import org.pircbotx.User;
 
 import backend.Bot;
 import backend.TimerThread;
-import backend.Util;
 
 public class TaskQueueCommand extends Command {
 	
 	@Override
 	public void execute(final Bot bot, final Channel chan, final User user, String message) {
-		if(Util.hasArgs(message, 2)) {
-			String[] args = Util.getArgs(message, 2);
-			switch(args[1]) {
-			case "queue":
-				passMessage(bot, chan, user, buildQueue(bot.getTimerThreads()));
-				break;
-			}
-			return;
-		}
+		passMessage(bot, chan, user, buildQueue(bot.getTimerThreads()));
 		
 		/*
 		The following is an example of how to add a task to the bot.
@@ -55,7 +52,8 @@ public class TaskQueueCommand extends Command {
 	@Override
 	protected void initialize() {
 		setName("TaskQueue");
-		addAlias("tasks");
+		addAlias("task");
+		addAlias("task-queue");
 		setHelpText("Get information relating to tasks running in the background.");
 		setAccessLevel(LEVEL_OWNER);
 		setUsableInPM(true);

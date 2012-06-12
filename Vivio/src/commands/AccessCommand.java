@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows for the changing of user permissions on the bot.
+ * @basecmd access
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

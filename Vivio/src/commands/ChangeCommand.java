@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows for the changing of internal bot variables, such as verbosity, parsing, and CLI mode.
+ * @basecmd change
+ * @category utility
+ */
 package commands;
 
 import org.pircbotx.Channel;

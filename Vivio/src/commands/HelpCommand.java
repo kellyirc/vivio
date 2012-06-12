@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to get additional information and syntax help for another module.
+ * @basecmd help
+ * @category core
+ */
 package commands;
 
 import modules.Module;

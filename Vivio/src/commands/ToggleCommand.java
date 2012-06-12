@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows for the toggling on and off of other modules.
+ * @basecmd toggle
+ * @category core
+ */
 package commands;
 
 import modules.Module;

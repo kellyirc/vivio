@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module is a shell that does next to nothing.
+ * @basecmd test
+ * @category misc
+ */
 package commands;
 
 import org.pircbotx.Channel;

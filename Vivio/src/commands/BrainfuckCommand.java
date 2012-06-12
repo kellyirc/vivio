@@ -1,3 +1,9 @@
+/*
+ * @author Raymond Hammarling
+ * @description This module allows for the parsing of Brainfuck code.
+ * @basecmd brainfuck
+ * @category utility
+ */
 package commands;
 
 import org.pircbotx.Channel;

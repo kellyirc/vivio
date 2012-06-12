@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This allows a user to 'ping' every other user in a given channel, by saying their respective nicknames all at once.
+ * @basecmd ping
+ * @category misc
+ */
 package commands;
 
 import org.pircbotx.Channel;

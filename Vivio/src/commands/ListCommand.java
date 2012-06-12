@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows a user to get a list of all modules currently loaded on the bot.
+ * @basecmd list
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

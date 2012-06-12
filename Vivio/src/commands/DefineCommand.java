@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module allows for quick defining of a word via dictionary.com.
+ * @basecmd define
+ * @category utility
+ */
 package commands;
 
 import java.util.List;

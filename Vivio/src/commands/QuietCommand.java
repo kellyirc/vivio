@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows an operator to tell the bot to be quiet in a channel, if it were to get annoying.
+ * @basecmd quiet
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;

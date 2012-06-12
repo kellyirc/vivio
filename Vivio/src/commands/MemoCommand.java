@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module allows a user to send memos to another user that may be offline at the time. Functions almost identically to memoserv.
+ * @basecmd memo
+ * @category utility
+ */
 package commands;
 
 import java.sql.SQLException;
@@ -63,7 +69,7 @@ public class MemoCommand extends Command
 									Database.getEnclosedString(chan.getName())+"," +
 									Database.formatTimestamp(System.currentTimeMillis())+"," +
 									Database.getEnclosedString(msg.replaceAll("'", "''")));
-					passMessage(bot, chan, user, "Okay, i'll let "+nick+" know.");
+					passMessage(bot, chan, user, "Okay, I'll let "+nick+" know.");
 
 				} catch (SQLException e)
 				{

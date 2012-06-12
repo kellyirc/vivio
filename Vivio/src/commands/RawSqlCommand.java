@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This allows a user to send a raw query to the bot to get results, mostly used for debugging.
+ * @basecmd sql
+ * @category core
+ */
 package commands;
 
 import java.sql.SQLException;

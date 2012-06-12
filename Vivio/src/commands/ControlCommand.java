@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module allows for the remote management of a channel. This includes features such as talking, emoting, and other functions such as opping, kicking, and changing the topic.
+ * @basecmd control
+ * @category core
+ */
 package commands;
 
 import org.pircbotx.Channel;
@@ -51,6 +57,7 @@ public class ControlCommand extends Command {
 		setHelpText("Control various aspects of the bot.");
 		addAlias("echo");
 		addAlias("emote");
+		addAlias("control");
 		setUsableInPM(true);
 		setAccessLevel(LEVEL_ELEVATED);
 	}
