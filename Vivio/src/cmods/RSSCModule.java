@@ -41,6 +41,7 @@ public class RSSCModule extends Command {
 		if(Util.hasArgs(message, 4) && !message.contains("toggle")) {
 			String[] args = Util.getArgs(message, 4);
 			if(args[1].equals("add")) {
+         //TODO make it save for multiple channels and cache each iteration
 				try {
 					if(Database.hasRow("select * from "+getFormattedTableName()+" where feedurl='"+args[2]+"'")){
 						passMessage(bot, chan, user, "That feed is already being watched, you silly goat.");
