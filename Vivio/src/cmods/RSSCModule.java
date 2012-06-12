@@ -65,6 +65,7 @@ public class RSSCModule extends Command {
 		} else if(Util.hasArgs(message, 3)) {
 			String[] args = Util.getArgs(message, 3);
 			switch(args[1]) {
+      //TODO make it only select from the correct channel
 			//TODO merge these
 			case "toggle-off":
 				try {
