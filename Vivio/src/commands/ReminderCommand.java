@@ -230,8 +230,7 @@ public class ReminderCommand extends Command {
 					"server, target, task, endtime, setter",
 					reminder.toDatabaseString());
 			
-			BigDecimal LastID = (BigDecimal) Database.select("select IDENTITY_VAL_LOCAL() as lastid from " + getFormattedTableName()).get(0).get("LASTID");
-			reminder.setId( LastID.intValue() );
+			reminder.setId( Database.getLastGeneratedId(getFormattedTableName()) );
 			
 			debug("LastID is " + reminder.getId());
 		} catch (SQLException e) {

@@ -3,6 +3,7 @@
  */
 package backend;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -23,14 +24,6 @@ public class Database {
 	private final static String database = "command_data";
 	
 	private static Connection conn;
-	private static int queryCount = 0;
-	
-	private static void queryCommit() throws SQLException {
-		if(queryCount++ > 0)  {
-			conn.commit();
-			queryCount = 0;
-		}
-	}
 	
 	//build connection
 	private static Connection connect() throws SQLException {
@@ -51,7 +44,6 @@ public class Database {
 		Statement stmt = conn.createStatement();
 		stmt.execute(query);
 		stmt.close();
-		queryCommit();
 	}
 	
 	//insert
@@ -60,7 +52,6 @@ public class Database {
 		Statement stmt = conn.createStatement();
 		stmt.execute("insert into "+table+"("+columns+") values ("+values+")");
 		stmt.close();
-		queryCommit();
 	}
 	
 	public static void insert(String table, String columns, Object[] array, boolean[] isString) throws SQLException{
@@ -104,6 +95,10 @@ public class Database {
 	
 	public static boolean hasRow(String query) throws SQLException {
 		return select(query).size() > 0;
+	}
+	
+	public static int getLastGeneratedId(String tableName) throws SQLException {
+		return ((BigDecimal) Database.select("select IDENTITY_VAL_LOCAL() as lastid from " + tableName).get(0).get("LASTID")).intValue();
 	}
 	
 	//turn a result set into an iterable, mutable list
