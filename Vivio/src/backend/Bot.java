@@ -217,13 +217,15 @@ public class Bot extends PircBotX implements Constants{
 			if(m instanceof Command) {
 				Command command = (Command) m;
 				if(!command.isActive()) continue;
-				if(botMode < command.getAccessMode()) {
+				if(botMode < command.getAccessMode()) continue;
+				if(!forceExecute && !messageHasCommand(message, command)) continue;
+				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
+				int level = getLevelForUser(user, chan);
+				if(level == LEVEL_BANNED) continue;
+				if(level < command.getAccessLevel()) {
 					sendMessage(chan == null ? user.getNick() : chan.getName(), "You are not allowed to execute this command.");
 					continue;
 				}
-				if(!forceExecute &&  getLevelForUser(user, chan) < command.getAccessLevel()) continue;
-				if(!forceExecute && !messageHasCommand(message, command)) continue;
-				if(!command.hasAlias(forceExecute ? commandString : comm)) continue;
 				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
 				logMessage(chan, user, message);
 				if(command.isStopsExecution()) return false;
@@ -277,7 +279,8 @@ public class Bot extends PircBotX implements Constants{
 
 	public static int getLevelForUser(User u, Channel c) {
 		//TODO identified users only?
-		assert(u != null && c!=null);
+		if(u == null) return LEVEL_OWNER;
+		if(u.getNick().equals("NickServ")) return LEVEL_BANNED;
 		if(owners.contains(u.getNick().toLowerCase())) return LEVEL_OWNER;
 		if(c!=null && c.isOp(u)) return LEVEL_OPERATOR;
 		if(elevated.contains(u.getNick().toLowerCase())) return LEVEL_ELEVATED;

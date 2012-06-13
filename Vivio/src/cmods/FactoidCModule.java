@@ -65,6 +65,7 @@ public class FactoidCModule extends Command {
 		setTableName("factoids");
 		addAlias("factoid");
 		setAccessLevel(LEVEL_OWNER);
+		setActive(false);
 		setUsableInPM(true);
 
 		try {

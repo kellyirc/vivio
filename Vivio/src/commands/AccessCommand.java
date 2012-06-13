@@ -68,7 +68,7 @@ public class AccessCommand extends Command {
 	}
 	
 	protected String format() {
-		return super.format() + " [user] [banned | elevated | owner]";
+		return super.format() + " {user} [banned | elevated | owner]";
 	}
 
 }
