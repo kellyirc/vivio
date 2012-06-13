@@ -306,6 +306,17 @@ public class ReminderCommand extends Command {
 					e.printStackTrace();
 				}
 			}
+			
+			if(reminder.getSetter().equals(event.getOldNick())) {
+				reminder.setSetter(event.getNewNick());
+				
+				try {
+					Database.execRaw("update " + getFormattedTableName()
+							+ " set setter='" + reminder.getSetter() + "' where id=" + reminder.getId());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -345,9 +356,13 @@ public class ReminderCommand extends Command {
 				}
 			}
 			
-			getContext().sendMessage(messageTarget, "'Ey, you, " + reminderData.getTarget() + "! "
+			String message = "'Ey, you, " + reminderData.getTarget() + "! "
 					+ (reminderData.getTarget().equals(reminderData.getSetter()) ? "You" : reminderData.getSetter())
-					+ " wanted me to remind you to " + reminderData.getTask() + "!");
+					+ " wanted me to remind you to " + reminderData.getTask() + "!";
+			
+			getContext().sendMessage(messageTarget, message);
+			if(reminderData.getTarget() != messageTarget) getContext().sendMessage(reminderData.getTarget(), message);
+			getContext().sendNotice(reminderData.getTarget(), message);
 			
 			if(reminderData.getId() != -1) {
 				try {
