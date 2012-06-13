@@ -31,11 +31,11 @@ import backend.Util;
 
 public class RSSCModule extends Command {
 	
-	private final int RSS_CHECK_TIME = 600;
+	private final int RSS_CHECK_TIME = 5;
 	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
 	
-	private SyndFeedInput input = new SyndFeedInput();
-	private HashMap<String, SyndFeed> cache = new HashMap<>();
+	private static SyndFeedInput input = new SyndFeedInput();
+	private static HashMap<String, SyndFeed> cache = new HashMap<>();
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
@@ -142,7 +142,10 @@ public class RSSCModule extends Command {
 				SyndFeed feed;
 				try {
 					if(cache.containsKey(url)) feed = cache.get(url);
-					else feed = input.build(new XmlReader(new URL(url)));
+					else {
+						feed = input.build(new XmlReader(new URL(url)));
+						cache.put(feed.getLink(), feed);
+					}
 				} catch (IllegalArgumentException
 						| FeedException | IOException e) {
 					continue;
