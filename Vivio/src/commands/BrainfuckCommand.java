@@ -162,7 +162,7 @@ public class BrainfuckCommand extends Command {
 				outputs = new String[1];
 				outputs[0] = truncateOutput(output);
 			}
-			else outputs = output.split("(?<=\\G.{370})");
+			else outputs = output.split("(?<=\\G.{340})");
 			
 			int outputLineNum = 1;
 			for(String outputLine : outputs) passMessage(bot, chan, user, "Output (line " + (outputLineNum++) + "): " + outputLine);
