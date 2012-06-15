@@ -1,6 +1,6 @@
 /*
  * @author Kyle Kemp
- * @description This allows a user to change the bots nickname.
+ * @description This module allows a user to change the bots nickname.
  * @basecmd nick
  * @category core
  */
