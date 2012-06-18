@@ -36,6 +36,7 @@ public class RSSCModule extends Command {
 	
 	private static SyndFeedInput input = new SyndFeedInput();
 	private static HashMap<String, SyndFeed> cache = new HashMap<>();
+   //TODO cache the previous feed size and update if necessary to prevent from accidental spam in case the feed size increases.
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
