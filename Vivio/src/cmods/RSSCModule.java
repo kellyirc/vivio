@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.pircbotx.Channel;
@@ -25,14 +26,13 @@ import commands.Command;
 
 import backend.Bot;
 import backend.Database;
-import backend.LimitedQueue;
 import backend.TimerThread;
 import backend.Util;
 
 public class RSSCModule extends Command {
 	
-	private final int RSS_CHECK_TIME = 5;
-	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
+	private final int RSS_CHECK_TIME = 600;
+	private HashMap<String, LinkedList<String>> mostRecent = new HashMap<>();
 	
 	private static SyndFeedInput input = new SyndFeedInput();
 	private static HashMap<String, SyndFeed> cache = new HashMap<>();
@@ -152,7 +152,7 @@ public class RSSCModule extends Command {
 					continue;
 				}
 				if(!mostRecent.containsKey(feed.getTitle())) {
-					mostRecent.put(feed.getTitle(), new LimitedQueue<String>(feed.getEntries().size()+10));
+					mostRecent.put(feed.getTitle(), new LinkedList<String>());
 					for(Object o : feed.getEntries()) {
 						SyndEntry entry = (SyndEntry) o;
 						mostRecent.get(feed.getTitle()).add(entry.getLink());

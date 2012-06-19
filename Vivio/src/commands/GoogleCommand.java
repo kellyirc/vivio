@@ -30,16 +30,8 @@ public class GoogleCommand extends Command
 		private ArrayList<String> results;
 		private int position;
 		
-		public ArrayList<String> getResults() {
-			return results;
-		}
-
 		public void setResults(ArrayList<String> results) {
 			this.results = results;
-		}
-
-		public int getPosition() {
-			return position;
 		}
 
 		public void setPosition(int position) {

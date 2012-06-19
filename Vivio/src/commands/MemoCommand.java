@@ -98,7 +98,7 @@ public class MemoCommand extends Command
 			for(HashMap<String,Object> memo : returned)
 			{
 				System.out.println("CHECKIN DIS MEMO");
-				String chan = e.getChannel().getName();
+				//String chan = e.getChannel().getName();
 				String recipient = memo.get("RECIPIENT").toString();
 				if(e.getChannel().getUsers().contains(bot.getUser(recipient)))
 				{
@@ -120,7 +120,7 @@ public class MemoCommand extends Command
 			for(HashMap<String,Object> memo : returned)
 			{
 				String sender = memo.get("SENDER").toString();
-				String chan = memo.get("CHAN").toString();
+				//String chan = memo.get("CHAN").toString();
 				String timestamp = memo.get("TIME").toString();
 				String msg = memo.get("MSG").toString();
 //				passMessage(e.getBot(),e.getBot().getChannel(chan),null,"A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
@@ -143,7 +143,7 @@ public class MemoCommand extends Command
 		for(HashMap<String,Object> memo : returned)
 		{
 			String sender = memo.get("SENDER").toString();
-			String chan = memo.get("CHAN").toString();
+			//String chan = memo.get("CHAN").toString();
 			String timestamp = memo.get("TIME").toString();
 			String msg = memo.get("MSG").toString();
 //			passMessage(e.getBot(),e.getBot().getChannel(chan),null,"A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
