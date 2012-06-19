@@ -97,7 +97,7 @@ public class MemoCommand extends Command
 			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(CHAN)="+Database.getEnclosedString(e.getChannel().getName().toLowerCase()));
 			for(HashMap<String,Object> memo : returned)
 			{
-				System.out.println("CHECKIN DIS MEMO");
+				//System.out.println("CHECKIN DIS MEMO");
 				//String chan = e.getChannel().getName();
 				String recipient = memo.get("RECIPIENT").toString();
 				if(e.getChannel().getUsers().contains(bot.getUser(recipient)))
