@@ -32,6 +32,7 @@ import backend.Util;
 public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 600;
+   //TODO change this back to a limitedqueue of size 100 or something. Maybe 200.
 	private HashMap<String, LinkedList<String>> mostRecent = new HashMap<>();
 	
 	private static SyndFeedInput input = new SyndFeedInput();
