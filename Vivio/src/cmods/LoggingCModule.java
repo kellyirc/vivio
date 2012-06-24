@@ -111,7 +111,7 @@ public class LoggingCModule extends Command {
 				passMessage(bot, chan, user, "Total links posted: " + (int)httpNum + " ("+twoDForm.format((httpNum/returned.size())*100)+"% of all messages).");
 				if(maxHttp!=null)passMessage(bot, chan, user, "Most links posted: "+maxHttp.getKey() + ", with "+maxHttp.getValue()+ " links ("+twoDForm.format((maxHttp.getValue()/httpNum)*100)+"% of all links)."  );
 				
-				passMessage(bot, chan, user, "Total commands posted: " + (int)cmdNum + " ("+twoDForm.format((cmdNum/returned.size())*100)+"% of all messages).");
+				passMessage(bot, chan, user, "Total commands used: " + (int)cmdNum + " ("+twoDForm.format((cmdNum/returned.size())*100)+"% of all messages).");
 				if(maxCmd!=null)passMessage(bot, chan, user, "Most commands used: "+maxCmd.getKey() + ", with "+maxCmd.getValue()+ " commands ("+twoDForm.format((maxCmd.getValue()/cmdNum)*100)+"% of all commands).");
 				
 				

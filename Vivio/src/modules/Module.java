@@ -74,6 +74,7 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 			System.out.println(s);
 		} else {
 			b.sendMessage(getTarget(c, u), s);
+			b.logMessage(c, u, s);
 		}
 	}
 	

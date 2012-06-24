@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -50,6 +51,15 @@ public class ListenerBuilder {
 					}
 				}
 			}
+		}
+
+		/* (non-Javadoc)
+		 * @see org.pircbotx.hooks.ListenerAdapter#onConnect(org.pircbotx.hooks.events.ConnectEvent)
+		 */
+		@Override
+		public void onConnect(ConnectEvent<Bot> event) throws Exception {
+			event.getBot().invokeAll("onConnect", new Object[]{event});
+			super.onConnect(event);
 		}
 
 		/* (non-Javadoc)

@@ -34,6 +34,10 @@ public class ChangeCommand extends Command{
 			if(Integer.parseInt(args[2]) > 0) bot.setParsesCmd(true);
 			else bot.setParsesCmd(false);
 			break;
+		case "log":
+			if(Integer.parseInt(args[2]) > 0) bot.setLogsSelf(true);
+			else bot.setLogsSelf(false);
+			break;
 		}
 		passMessage(bot, chan, user, "So it is said, and so it shall be!");
 	}

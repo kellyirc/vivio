@@ -64,7 +64,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter private static LinkedList<Bot> bots = new LinkedList<>();
 
 	//Constants
-	final static String INTERNAL_VERSION = "1.25";
+	final static String INTERNAL_VERSION = "1.67";
 	public final static String DEFAULT_SERVER = "irc.esper.net";
 	public final static String DEFAULT_NICKNAME = "Jar";
 	public final static int DEFAULT_PORT = 6667;
@@ -73,6 +73,7 @@ public class Bot extends PircBotX implements Constants{
 	@Getter @Setter private boolean parsesSelf = false;
 	@Getter @Setter private int botMode = ACCESS_DEVELOPMENT;
 	@Getter @Setter private boolean parsesCmd = true;
+	@Getter @Setter private boolean logsSelf = true;
 	
 	//Module comparator
 	private class ModComparator implements Comparator<Module> {
@@ -114,8 +115,8 @@ public class Bot extends PircBotX implements Constants{
 				String serverPass)
 	{
 		initialize();
-		connectToServer(server, port, SSL, nick, serverPass);
 		loadModules();
+		connectToServer(server, port, SSL, nick, serverPass);
 		
 	}
 
@@ -125,6 +126,7 @@ public class Bot extends PircBotX implements Constants{
 		this.setAutoNickChange(true);
 		this.setVerbose(true);
 		this.setAutoSplitMessage(true);
+		this.setMessageDelay(500);
 		
 		this.setFinger("Don't finger me! Vivio v"+INTERNAL_VERSION);
 
@@ -226,18 +228,18 @@ public class Bot extends PircBotX implements Constants{
 					sendMessage(chan == null ? user.getNick() : chan.getName(), "You are not allowed to execute this command.");
 					continue;
 				}
-				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
 				logMessage(chan, user, message);
+				command.execute(forceExecute ? commandString : comm, this, chan, user, message.trim());
 				if(command.isStopsExecution()) return false;
 			}
 		}
 		return true;
 	}
 	
-	private void logMessage(Channel chan, User user, String message) {
+	public void logMessage(Channel chan, User user, String message) {
 		for(Channel c : getChannels()) {
 			if(c.getName().contains("-logs")) {
-				sendMessage(c, ">> "+(chan!=null ? chan.getName(): "Private Message") + " <" + user.getNick() + " ("+ getLevelForUser(user, chan)+")> " + message);
+				sendMessage(c, ">> "+(chan!=null ? chan.getName(): "Private Message") + " <" + user.getNick() + " ("+ getLevelForUser(user, chan)+") @ "+user.getHostmask()+"> " + message);
 			}
 		}
 	}
@@ -420,5 +422,29 @@ public class Bot extends PircBotX implements Constants{
 	@Override
 	public Channel getChannel(String name) {
 		return super.getChannel(Util.formatChannel(name));
+	}
+
+	//TODO figure out why onpart isn't being called for self
+	@Override
+	public void partChannel(Channel channel) {
+
+		String query = "delete from channelremembermodule_channels where server='"+getServer()+"' and channel='"+channel.getName()+"'";
+		try {
+			Database.execRaw(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		super.partChannel(channel);
+	}
+
+	@Override
+	public void partChannel(Channel channel, String reason) {
+		String query = "delete from channelremembermodule_channels where server='"+getServer()+"' and channel='"+channel.getName()+"'";
+		try {
+			Database.execRaw(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		super.partChannel(channel, reason);
 	}
 }

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.pircbotx.Channel;
@@ -26,6 +25,7 @@ import commands.Command;
 
 import backend.Bot;
 import backend.Database;
+import backend.LimitedQueue;
 import backend.TimerThread;
 import backend.Util;
 
@@ -33,7 +33,7 @@ public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 600;
    //TODO change this back to a limitedqueue of size 100 or something. Maybe 200.
-	private HashMap<String, LinkedList<String>> mostRecent = new HashMap<>();
+	private HashMap<String, LimitedQueue<String>> mostRecent = new HashMap<>();
 	
 	private static SyndFeedInput input = new SyndFeedInput();
 	private static HashMap<String, SyndFeed> cache = new HashMap<>();
@@ -67,7 +67,6 @@ public class RSSCModule extends Command {
 		} else if(Util.hasArgs(message, 3)) {
 			String[] args = Util.getArgs(message, 3);
 			switch(args[1]) {
-			//TODO merge these
 			case "toggle-off":
 				try {
 					Database.execRaw("update "+getFormattedTableName()+" set enabled=0 where channel='"+chan.getName()+"' and server='"+bot.getServer()+"' and feedname='"+args[2]+"'");
@@ -87,7 +86,6 @@ public class RSSCModule extends Command {
 				passMessage(bot, chan, user, "Successfully turned on "+args[2]);
 				break;
 			}
-			//TODO rss 'view' 'name' to view all stored updates of the feed
 			return;
 		}
 		
@@ -153,7 +151,9 @@ public class RSSCModule extends Command {
 					continue;
 				}
 				if(!mostRecent.containsKey(feed.getTitle())) {
-					mostRecent.put(feed.getTitle(), new LinkedList<String>());
+
+					mostRecent.put(feed.getTitle(), new LimitedQueue<String>(200));
+
 					for(Object o : feed.getEntries()) {
 						SyndEntry entry = (SyndEntry) o;
 						mostRecent.get(feed.getTitle()).add(entry.getLink());
