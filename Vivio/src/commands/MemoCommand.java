@@ -23,10 +23,10 @@ public class MemoCommand extends Command
 		this.setHelpText("Save a message for someone who is not in the channel. They will receive the message once they enter the channel.");
 		this.setName("Memo");
 		addAlias("memo");
-		
+		setTableName("memos");
 		try
 		{
-			Database.createTable(getFormattedTableName(), "sender VARCHAR(30), recipient VARCHAR(30), chan VARCHAR(30), time TIMESTAMP, msg VARCHAR(600)");
+			Database.createTable(getFormattedTableName(), "sender VARCHAR(30), recipient VARCHAR(30), time TIMESTAMP, msg VARCHAR(600)");
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,10 +57,9 @@ public class MemoCommand extends Command
 			{
 				try
 				{
-					Database.insert(getFormattedTableName(), "sender, recipient, chan, time, msg",
+					Database.insert(getFormattedTableName(), "sender, recipient, time, msg",
 									Database.getEnclosedString(user.getNick())+"," +
 									Database.getEnclosedString(nick)+"," +
-									Database.getEnclosedString(chan.getName())+"," +
 									Database.formatTimestamp(System.currentTimeMillis())+"," +
 									Database.getEnclosedString(msg.replaceAll("'", "''")));
 					passMessage(bot, chan, user, "Okay, i'll let "+nick+" know.");
@@ -89,45 +88,15 @@ public class MemoCommand extends Command
 		super.onJoin(e);
 		e.getBot().waitFor(UserListEvent.class);
 		String nick = e.getUser().getNick();
-		Bot bot = e.getBot();
 
 		//if bot is joining channel, check for memos for people in that channel
 		if(nick.equals(e.getBot().getNick()))
 		{
-			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(CHAN)="+Database.getEnclosedString(e.getChannel().getName().toLowerCase()));
-			for(HashMap<String,Object> memo : returned)
-			{
-				//System.out.println("CHECKIN DIS MEMO");
-				//String chan = e.getChannel().getName();
-				String recipient = memo.get("RECIPIENT").toString();
-				if(e.getChannel().getUsers().contains(bot.getUser(recipient)))
-				{
-					String sender = memo.get("SENDER").toString();
-					String timestamp = memo.get("TIME").toString();
-					String msg = memo.get("MSG").toString();
-//					passMessage(bot,bot.getChannel(chan),null,"A memo for "+recipient+"! "+sender+" said, \""+msg+"\" at "+timestamp);
-					bot.sendNotice(bot.getUser(recipient), "A memo for "+recipient+"! "+sender+" said, \""+msg+"\" at "+timestamp);
-				}
-			}
-			Database.execRaw("DELETE FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
-
+			checkChanMemos(e.getChannel(), e.getBot());
 		}
 		else //check if entering user has a memo
 		{
-			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
-			if(returned.isEmpty())
-				return;
-			for(HashMap<String,Object> memo : returned)
-			{
-				String sender = memo.get("SENDER").toString();
-				//String chan = memo.get("CHAN").toString();
-				String timestamp = memo.get("TIME").toString();
-				String msg = memo.get("MSG").toString();
-//				passMessage(e.getBot(),e.getBot().getChannel(chan),null,"A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
-				bot.sendNotice(bot.getUser(nick), "A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
-
-			}
-			Database.execRaw("DELETE FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
+			checkNickMemos(e.getUser(),e.getBot());
 		}
 	}
 	
@@ -136,7 +105,14 @@ public class MemoCommand extends Command
 	{
 		super.onNickChange(e);
 		//check if new nick has a memo
-		String nick = e.getUser().getNick();
+		checkNickMemos(e.getUser(),e.getBot());
+	}
+	
+	private void checkNickMemos(User user, Bot b)
+	{
+		try
+		{
+		String nick = user.getNick();
 		List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
 		if(returned.isEmpty())
 			return;
@@ -147,9 +123,40 @@ public class MemoCommand extends Command
 			String timestamp = memo.get("TIME").toString();
 			String msg = memo.get("MSG").toString();
 //			passMessage(e.getBot(),e.getBot().getChannel(chan),null,"A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
-			e.getBot().sendNotice(e.getBot().getUser(nick), "A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
+			b.sendMessage(user, "A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
 		}
 		Database.execRaw("DELETE FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
+	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	private void checkChanMemos(Channel chan, Bot b)
+	{
+		try
+		{
+		for(User user:chan.getUsers())
+		{
+			String nick = user.getNick();
+			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
+			System.out.println(returned);
+			System.out.println(getFormattedTableName());
+			if(returned.isEmpty())
+				continue;
+			for(HashMap<String,Object> memo : returned)
+			{
+				String sender = memo.get("SENDER").toString();
+				//String chan = memo.get("CHAN").toString();
+				String timestamp = memo.get("TIME").toString();
+				String msg = memo.get("MSG").toString();
+//				passMessage(e.getBot(),e.getBot().getChannel(chan),null,"A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
+				b.sendMessage(user, "A memo for "+nick+"! "+sender+" said, \""+msg+"\" at "+timestamp);
+			}
+			Database.execRaw("DELETE FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
