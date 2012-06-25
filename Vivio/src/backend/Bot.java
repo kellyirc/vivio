@@ -212,6 +212,8 @@ public class Bot extends PircBotX implements Constants{
 		}
 		else
 			commandString = message.split(" ")[0];
+		
+		if(commandString.equals("")) return false;
 	
 		String comm = commandString.substring(1);
 				
