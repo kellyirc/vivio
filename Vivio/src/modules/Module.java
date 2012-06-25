@@ -66,8 +66,6 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 							: c.getName();
 	}
 	
-	//TODO how do these functions send to a user instead of a channel?
-	
 	public void passMessage(Bot b, Channel c, User u, String s) {
 		String target = getTarget(c, u);
 		if(target == null) {

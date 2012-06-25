@@ -48,7 +48,10 @@ public class ControlCommand extends Command {
 		}
 		String[] args = Util.getArgs(message, 3);
 		
-		passMessage(bot, bot.getChannel(args[1]), user, args[2]);
+		passMessage(bot, 
+				args[1].startsWith("#") ? bot.getChannel(args[1]) : null, 
+				!args[1].startsWith("#") ? bot.getUser(args[1]) : null, 
+						args[2]);
 	}
 
 	@Override
