@@ -121,6 +121,7 @@ public class RSSCModule extends Command {
 		
 		@Override
 		public void run() {
+			System.out.println("RUNNING");
 			cache.clear();
 			List<HashMap<String, Object>> feedData = null;
 			try {
@@ -130,9 +131,9 @@ public class RSSCModule extends Command {
 			}
 			
 			for(HashMap<String, Object> row : feedData) {
+				if((int)row.get("ENABLED") == 0) continue;
 				setContext(Bot.getBotByServer((String)row.get("SERVER")));
 				if(getContext() == null) continue;
-				if((int)row.get("ENABLED") == 0) continue;
 				String channel = (String)row.get("CHANNEL");
 				if(!getContext().isInChannel(channel)) continue;
 				String url = (String)row.get("FEEDURL");

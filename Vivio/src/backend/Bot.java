@@ -399,8 +399,8 @@ public class Bot extends PircBotX implements Constants{
 	}
 	
 	public static Bot getBotByServer(String server) {
-		server = server.trim();
 		if(getBots().size() == 0) return null;
+		server = server.trim();
 		for(Bot b : getBots()) {
 			if(!b.isConnected()) continue;
 			if(b.getServer().equals(server)) {
