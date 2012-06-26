@@ -137,6 +137,7 @@ public class RSSCModule extends Command {
 				if(!getContext().isInChannel(channel)) continue;
 				String url = (String)row.get("FEEDURL");
 				
+				System.out.println("reading feed");
 				SyndFeed feed;
 				try {
 					if(cache.containsKey(url)) feed = cache.get(url);
@@ -159,11 +160,13 @@ public class RSSCModule extends Command {
 					continue;
 				}
 				
+				System.out.println("doesn't already exist");
 				for(Object o : feed.getEntries()) {
 					SyndEntry entry = (SyndEntry) o;
 					if(mostRecent.get(feed.getTitle()).contains(entry.getLink())) {
 						continue;
 					}
+					System.out.println("new entry");
 					String feedFriendlyTitle = ((String) row.get("FEEDNAME")).trim();
 					passMessage(getContext(), getContext().getChannel(channel), null, "Latest entry for "+Colors.BOLD+feedFriendlyTitle+Colors.NORMAL+": "+entry.getTitle()+ " "+entry.getLink());
 					mostRecent.get(feed.getTitle()).add(entry.getLink());
