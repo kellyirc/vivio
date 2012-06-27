@@ -140,8 +140,8 @@ public class MemoCommand extends Command
 		{
 			String nick = user.getNick();
 			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
-			System.out.println(returned);
-			System.out.println(getFormattedTableName());
+			//System.out.println(returned);
+			//System.out.println(getFormattedTableName());
 			if(returned.isEmpty())
 				continue;
 			for(HashMap<String,Object> memo : returned)
