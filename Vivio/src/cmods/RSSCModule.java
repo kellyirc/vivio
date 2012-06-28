@@ -31,7 +31,7 @@ import backend.Util;
 
 public class RSSCModule extends Command {
 	
-	private final int RSS_CHECK_TIME = 600;
+	private final int RSS_CHECK_TIME = 5;
 	private HashMap<String, LinkedList<String>> mostRecent = new HashMap<>();
 	
 	private static SyndFeedInput input = new SyndFeedInput();
