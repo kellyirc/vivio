@@ -257,6 +257,8 @@ public class ReminderCommand extends Command {
 			return 7*24*60*60*1000L;
 		case "fortnight": case "fortnights":
 			return 14*24*60*60*1000L;
+		case "month": case "months":
+			return 30*24*60*60*1000L;
 		case "y": case "year": case "years":
 			return 365*24*60*60*1000L;
 		case "moment": case "moments":
