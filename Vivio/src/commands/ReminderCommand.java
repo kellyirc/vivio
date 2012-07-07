@@ -384,9 +384,11 @@ public class ReminderCommand extends Command {
 		long seconds = time % 60;
 		long minutes = (time % 3600) / 60;
 		long hours = (time % 86400) / 3600;
-		long days = time / 86400;
+		long days = (time % 31536000) / 86400;
+		long years = time / 31536000;
 		
 		String output = "";
+		if(years != 0) output += (output.length()>0 ? ", " : "") + years + " year" + (years > 1 ? "s" : "");
 		if(days != 0) output += (output.length()>0 ? ", " : "") + days + " day" + (days > 1 ? "s" : "");
 		if(hours != 0) output += (output.length()>0 ? ", " : "") + hours + " hour" + (hours > 1 ? "s" : "");
 		if(minutes != 0) output += (output.length()>0 ? ", " : "") + minutes + " minute" + (minutes > 1 ? "s" : "");
