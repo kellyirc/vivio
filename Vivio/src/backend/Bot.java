@@ -70,6 +70,10 @@ public class Bot extends PircBotX implements Constants{
 	public final static int DEFAULT_PORT = 6667;
 	
 	//Variables 
+	@Getter private boolean usesSSL = false;
+	@Getter private String serverPassword = "";
+	@Getter private String identifyPass;
+	
 	@Getter @Setter private boolean parsesSelf = false;
 	@Getter @Setter private int botMode = ACCESS_DEVELOPMENT;
 	@Getter @Setter private boolean parsesCmd = true;
@@ -124,7 +128,7 @@ public class Bot extends PircBotX implements Constants{
 	private void connectToServer(String server, int port, boolean SSL, String nick, String serverPass) {
 		
 		this.setAutoNickChange(true);
-		this.setVerbose(false);
+		this.setVerbose(true);
 		this.setAutoSplitMessage(true);
 		this.setMessageDelay(500);
 		
@@ -133,6 +137,8 @@ public class Bot extends PircBotX implements Constants{
 		this.setVersion("PircBotX~Vivio v" + INTERNAL_VERSION);
 		this.setLogin(nick);
 		this.setName(nick);
+		this.usesSSL = SSL;
+		this.serverPassword = serverPass;
 
 		try {
 			if (SSL)
@@ -149,6 +155,12 @@ public class Bot extends PircBotX implements Constants{
 	private void initialize() {
 		bots.add(this);
 		this.setListenerManager(ListenerBuilder.getManager());
+	}
+	
+	@Override
+	public void identify(String pass) {
+		this.identifyPass = pass;
+		super.identify(pass);
 	}
 
 	public void loadModules() {
