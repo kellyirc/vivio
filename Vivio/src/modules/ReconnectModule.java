@@ -1,10 +1,7 @@
 package modules;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.pircbotx.Channel;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.events.DisconnectEvent;

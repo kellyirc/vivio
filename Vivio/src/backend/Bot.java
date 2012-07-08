@@ -128,7 +128,7 @@ public class Bot extends PircBotX implements Constants{
 	private void connectToServer(String server, int port, boolean SSL, String nick, String serverPass) {
 		
 		this.setAutoNickChange(true);
-		this.setVerbose(true);
+		//this.setVerbose(true);
 		this.setAutoSplitMessage(true);
 		this.setMessageDelay(500);
 		
