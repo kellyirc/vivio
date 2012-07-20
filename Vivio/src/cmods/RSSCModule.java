@@ -92,6 +92,7 @@ public class RSSCModule extends Command {
 
 	@Override
 	protected void initialize() {
+		this.setActive(false);
 		addAlias("rss");
 		setName("RSS");
 		setHelpText("I manage RSS feeds!");
@@ -105,8 +106,7 @@ public class RSSCModule extends Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		Bot.scheduleTask(new RssThread(), RSS_CHECK_TIME);
+		//Bot.scheduleTask(new RssThread(), RSS_CHECK_TIME);
 	}
 	
 	protected String format() {
