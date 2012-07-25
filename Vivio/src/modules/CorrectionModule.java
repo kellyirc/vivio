@@ -35,7 +35,10 @@ public class CorrectionModule extends Module
 		{
 			String replaced = lastMessages.get(e.getChannel()).replaceAll(matcher.group(1), matcher.group(2));
 			if(!replaced.equals(lastMessages.get(e.getChannel()))) //msg only if changed
+			{
 				passMessage(e.getBot(), e.getChannel(), e.getUser(), replaced);
+				lastMessages.put(e.getChannel(), replaced);
+			}
 		}	
 		else //update last Message
 			lastMessages.put(e.getChannel(), e.getMessage());
