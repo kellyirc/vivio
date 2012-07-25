@@ -86,9 +86,10 @@ public class MemoCommand extends Command
 	public void onJoin(JoinEvent<Bot> e) throws Exception
 	{
 		super.onJoin(e);
-		e.getBot().waitFor(UserListEvent.class);
+		
+		if(e.getChannel().getUsers().size()==1)
+			e.getBot().waitFor(UserListEvent.class);
 		String nick = e.getUser().getNick();
-
 		//if bot is joining channel, check for memos for people in that channel
 		if(nick.equals(e.getBot().getNick()))
 		{
@@ -140,8 +141,6 @@ public class MemoCommand extends Command
 		{
 			String nick = user.getNick();
 			List<HashMap<String,Object>> returned = Database.select("SELECT * FROM "+getFormattedTableName()+" WHERE lower(RECIPIENT)="+Database.getEnclosedString(nick.toLowerCase()));
-			//System.out.println(returned);
-			//System.out.println(getFormattedTableName());
 			if(returned.isEmpty())
 				continue;
 			for(HashMap<String,Object> memo : returned)
