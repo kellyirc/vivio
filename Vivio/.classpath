@@ -32,5 +32,6 @@
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/JEntities.jar"/>
 	<classpathentry kind="lib" path="lib/lombok.jar"/>
+	<classpathentry kind="lib" path="lib/jscience.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

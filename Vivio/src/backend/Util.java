@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import com.tecnick.htmlutils.htmlentities.HTMLEntities;
+import commands.Command;
 
 public class Util {
 	
@@ -165,5 +166,19 @@ public class Util {
 	    String hours = String.format(format, elapsedTime / 3600);
 	    String time =  hours + " hours, " + minutes + " minutes, " + seconds+ " seconds";
 	    return time;
+	}
+	
+	/**
+	 * Checks if the message will invoke a command
+	 * @param message The message to check
+	 * @param bot The bot that responds to commands(used to check command invocation through the nick command sequence)
+	 * @return true if the messsage will invoke a command
+	 */
+	public static boolean isCommand(String message, Bot bot)
+	{
+		return message.startsWith(Command.CMD_SEQUENCE_DEFAULT) || 
+				message.startsWith(Command.CMD_SEQUENCE_DEVELOPMENT) || 
+				message.startsWith(Command.CMD_SEQUENCE_NORMAL) || 
+				message.startsWith(bot.getNick()+",");
 	}
 }

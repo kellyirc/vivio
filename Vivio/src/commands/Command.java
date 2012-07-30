@@ -18,6 +18,12 @@ import modules.Module;
 
 public abstract class Command extends Module {
 	
+	public static final String CMD_SEQUENCE_DEFAULT = ".";
+
+	public static final String CMD_SEQUENCE_NORMAL = "!";
+
+	public static final String CMD_SEQUENCE_DEVELOPMENT = "~";
+
 	private List<String> aliases;
 	
 	public Command() {
@@ -31,9 +37,9 @@ public abstract class Command extends Module {
 
 	public String getCmdSequence() {
 		switch(getAccessMode()) {
-		case ACCESS_DEVELOPMENT: return "~";
-		case ACCESS_NORMAL: return "!";
-		default: return ".";
+		case ACCESS_DEVELOPMENT: return CMD_SEQUENCE_DEVELOPMENT;
+		case ACCESS_NORMAL: return CMD_SEQUENCE_NORMAL;
+		default: return CMD_SEQUENCE_DEFAULT;
 		}
 	}
 	
