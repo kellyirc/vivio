@@ -1,3 +1,9 @@
+/*
+ * @author Raymond Hammarling
+ * @description This module allows for the translating to and from of morse code.
+ * @basecmd morse
+ * @category utility
+ */
 package commands;
 
 import java.util.Map;
