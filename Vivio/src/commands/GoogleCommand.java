@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module returns the result of a Google search
+ * @basecmd google
+ * @category utility
+ */
 package commands;
 
 import java.io.BufferedReader;

@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module allows a user to leave a message for other users not currently present. They will receive their memos the next time the bot sees them.
+ * @basecmd memo
+ * @category utility
+ */
 package commands;
 
 import java.sql.SQLException;
