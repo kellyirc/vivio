@@ -510,7 +510,7 @@ public class ReminderCommand extends Command {
 					+ " wanted me to remind you to " + reminderData.getTask() + "!";
 			
 			getContext().sendMessage(messageTarget, message);
-			if(reminderData.getTarget() != messageTarget) getContext().sendMessage(reminderData.getTarget(), message);
+			if(!reminderData.getTarget().equals(messageTarget)) getContext().sendMessage(reminderData.getTarget(), message);
 			getContext().sendNotice(reminderData.getTarget(), message);
 			
 			if(reminderData.getId() != -1) {
