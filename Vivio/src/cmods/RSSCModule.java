@@ -29,6 +29,7 @@ import backend.Database;
 import backend.TimerThread;
 import backend.Util;
 
+@SuppressWarnings("unused")
 public class RSSCModule extends Command {
 	
 	private final int RSS_CHECK_TIME = 600;

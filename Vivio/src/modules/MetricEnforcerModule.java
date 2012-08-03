@@ -14,14 +14,13 @@ import org.pircbotx.hooks.events.MessageEvent;
 import backend.Bot;
 import backend.Util;
 
-
 public class MetricEnforcerModule extends Module
 {
 	public static final int MAX_NUMBER_LENGTH = 10;
 
-	HashMap<String,Unit> symbols;
+	HashMap<String,Unit<?>> symbols;
 
-	HashMap<Unit,Unit> conversions;
+	HashMap<Unit<?>,Unit<?>> conversions;
 	
 	String[] quirkyMessages;
 	
@@ -122,9 +121,9 @@ public class MetricEnforcerModule extends Module
 			if(symbols.containsKey(fromStr))
 			{
 				double value = Double.parseDouble(valueStr);
-				Unit from = symbols.get(fromStr);
+				Unit<?> from = symbols.get(fromStr);
 				
-				Unit to = conversions.get(from);
+				Unit<?> to = conversions.get(from);
 				UnitConverter converter = from.getConverterTo(to);
 				double result = converter.convert(value);
 				

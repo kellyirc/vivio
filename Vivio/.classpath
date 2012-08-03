@@ -21,7 +21,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/matheval.jar"/>
 	<classpathentry kind="lib" path="lib/htmlentities.jar"/>
-	<classpathentry kind="lib" path="lib/rome-1.0 (2).jar"/>
 	<classpathentry kind="lib" path="lib/rome-modules-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen.jar"/>
@@ -31,7 +30,8 @@
 	<classpathentry kind="lib" path="lib/jdom-1.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/JEntities.jar"/>
-	<classpathentry kind="lib" path="lib/lombok.jar"/>
 	<classpathentry kind="lib" path="lib/jscience.jar"/>
+	<classpathentry kind="lib" path="lib/lombok.jar"/>
+	<classpathentry kind="lib" path="lib/rome-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
