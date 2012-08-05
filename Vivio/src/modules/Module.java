@@ -66,22 +66,22 @@ public abstract class Module extends ListenerAdapter<Bot> implements Constants {
 							: c.getName();
 	}
 	
-	public void passMessage(Bot b, Channel c, User u, String s) {
-		String target = getTarget(c, u);
+	public void passMessage(Bot bot, Channel chan, User user, String message) {
+		String target = getTarget(chan, user);
 		if(target == null) {
-			System.out.println(s);
+			System.out.println(message);
 		} else {
-			b.sendMessage(getTarget(c, u), s);
-			b.logMessage(c, u, s);
+			bot.sendMessage(getTarget(chan, user), message);
+			bot.logMessage(chan, user, message);
 		}
 	}
 	
-	public void passEmote(Bot b, Channel c, User u, String s) {
-		String target = getTarget(c, u);
+	public void passEmote(Bot bot, Channel chan, User user, String emote) {
+		String target = getTarget(chan, user);
 		if(target == null) {
-			System.out.println(s);
+			System.out.println(emote);
 		} else {
-			b.sendAction(getTarget(c, u), s);
+			bot.sendAction(getTarget(chan, user), emote);
 		}
 	}
 }
