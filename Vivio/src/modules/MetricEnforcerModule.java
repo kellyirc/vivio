@@ -100,7 +100,7 @@ public class MetricEnforcerModule extends Module
 		
 	}
 	
-	Pattern pattern = Pattern.compile("((?i)\\d*\\.?\\d+|an?)\\s*(\\w+)");
+	Pattern pattern = Pattern.compile("(\\s+|^)((?i)\\d*\\.?\\d+|an?)\\s+(\\w+)(\\s|$)+");
 	
 	@Override
 	public void onMessage(MessageEvent<Bot> event) throws Exception
@@ -114,10 +114,10 @@ public class MetricEnforcerModule extends Module
 		Matcher matcher = pattern.matcher(msg);
 		while(matcher.find())
 		{
-			String valueStr = matcher.group(1);
+			String valueStr = matcher.group(2);
 			if(valueStr.equalsIgnoreCase("a") || valueStr.equalsIgnoreCase("an"))
 				valueStr = "1.0";
-			String fromStr = matcher.group(2).toLowerCase();
+			String fromStr = matcher.group(3).toLowerCase();
 			if(symbols.containsKey(fromStr))
 			{
 				double value = Double.parseDouble(valueStr);
