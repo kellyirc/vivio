@@ -98,7 +98,7 @@ public class WikiCommand extends Command {
 	private String getWikiIntro(String title) {
 		try {
 			title = URLEncoder.encode(title, "UTF-8");
-
+			
 			URL url = new URL(
 					"http://en.wikipedia.org/w/api.php?action=parse&prop=text&format=xml&page="
 							+ title);
@@ -129,9 +129,11 @@ public class WikiCommand extends Command {
 			if (paragraphs.getLength() < 1)
 				throw new IllegalArgumentException();
 			String text = paragraphs.item(0).getTextContent();
-			return text.substring(0, Math.min(300, text.length()))
-					+ ((300 < text.length()) ? "..." : "");
-		} catch (IOException | SAXException | ParserConfigurationException e) {
+			
+			String link = Util.shorten("http://en.wikipedia.org/wiki/" + title);
+			return text.substring(0, Math.min(300,text.length())) + ((300<text.length())?"...":"") + " - " + link;
+		} catch (IOException | SAXException | ParserConfigurationException e)
+		{
 			return "Unable to get page text.";
 		} catch (IllegalArgumentException e) {
 			return "That page doesn't exist.";
