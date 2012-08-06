@@ -12,52 +12,73 @@ import org.pircbotx.User;
 import backend.Bot;
 import backend.Util;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AccessCommand.
+ */
 public class AccessCommand extends Command {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see commands.Command#execute(backend.Bot, org.pircbotx.Channel,
+	 * org.pircbotx.User, java.lang.String)
+	 */
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if(!Util.hasArgs(message, 3)) {
+		if (!Util.hasArgs(message, 3)) {
 			invalidFormat(bot, chan, user);
 			return;
 		}
 		String[] args = Util.getArgs(message, 3);
 		String nickname = args[1] = args[1].toLowerCase();
 		String status = args[2] = args[2].toLowerCase();
-		switch(status) {
+		switch (status) {
 		case "banned":
-			if(Bot.getBanned().contains(nickname)) {
+			if (Bot.getBanned().contains(nickname)) {
 				Bot.removeBanned(nickname);
-				passMessage(bot, chan, user, nickname + " is no longer bot-banned.");
+				passMessage(bot, chan, user, nickname
+						+ " is no longer bot-banned.");
 			} else {
 				Bot.addBanned(nickname);
 				passMessage(bot, chan, user, nickname + " is now bot-banned.");
 			}
 			break;
 		case "elevated":
-			if(Bot.getElevated().contains(nickname)) {
+			if (Bot.getElevated().contains(nickname)) {
 				Bot.removeElevated(nickname);
-				passMessage(bot, chan, user, nickname + " no longer has elevated access.");
+				passMessage(bot, chan, user, nickname
+						+ " no longer has elevated access.");
 			} else {
 				Bot.addElevated(nickname);
-				passMessage(bot, chan, user, nickname + " now has elevated access.");
+				passMessage(bot, chan, user, nickname
+						+ " now has elevated access.");
 			}
 			break;
 		case "owner":
-			if(Bot.getOwners().contains(nickname)) {
+			if (Bot.getOwners().contains(nickname)) {
 				Bot.removeOwner(nickname);
-				passMessage(bot, chan, user, nickname + " is no longer an owner of me.");
+				passMessage(bot, chan, user, nickname
+						+ " is no longer an owner of me.");
 			} else {
 				Bot.addOwner(nickname);
-				passMessage(bot, chan, user, nickname + " is now an owner of mine.");
+				passMessage(bot, chan, user, nickname
+						+ " is now an owner of mine.");
 			}
 			break;
 		default:
-			passMessage(bot, chan, user, "That level of access doesn't exist, you know?");
+			passMessage(bot, chan, user,
+					"That level of access doesn't exist, you know?");
 			break;
 		}
-				
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#initialize()
+	 */
 	@Override
 	protected void initialize() {
 		addAlias("access");
@@ -66,7 +87,12 @@ public class AccessCommand extends Command {
 		setAccessLevel(LEVEL_OWNER);
 		setUsableInPM(true);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see commands.Command#format()
+	 */
 	protected String format() {
 		return super.format() + " {user} [banned | elevated | owner]";
 	}

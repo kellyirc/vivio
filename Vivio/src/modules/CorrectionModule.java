@@ -9,38 +9,56 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import backend.Bot;
 
-public class CorrectionModule extends Module
-{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CorrectionModule.
+ */
+public class CorrectionModule extends Module {
+
+	/** The last messages. */
 	HashMap<Channel, String> lastMessages;
+
+	/** The pattern. */
 	Pattern pattern;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#initialize()
+	 */
 	@Override
-	protected void initialize()
-	{
+	protected void initialize() {
 		setPriorityLevel(PRIORITY_MODULE);
 		setName("Correction");
 		setHelpText("Made a typo? Use regex! Format: s/regex/replacement");
 		lastMessages = new HashMap<>();
 		pattern = Pattern.compile("s/(.+)/(.+)");
 	}
-	
-	
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.pircbotx.hooks.ListenerAdapter#onMessage(org.pircbotx.hooks.events
+	 * .MessageEvent)
+	 */
 	@Override
-	public void onMessage(MessageEvent<Bot> e) throws Exception
-	{
+	public void onMessage(MessageEvent<Bot> e) throws Exception {
 		super.onMessage(e);
-		//check for replace command
+		// check for replace command
 		Matcher matcher = pattern.matcher(e.getMessage());
-		if(matcher.find() && lastMessages.containsKey(e.getChannel()))
-		{
-			String replaced = lastMessages.get(e.getChannel()).replaceAll(matcher.group(1), matcher.group(2));
-			if(!replaced.equals(lastMessages.get(e.getChannel()))) //msg only if changed
+		if (matcher.find() && lastMessages.containsKey(e.getChannel())) {
+			String replaced = lastMessages.get(e.getChannel()).replaceAll(
+					matcher.group(1), matcher.group(2));
+			if (!replaced.equals(lastMessages.get(e.getChannel()))) // msg only
+																	// if
+																	// changed
 			{
 				passMessage(e.getBot(), e.getChannel(), e.getUser(), replaced);
 				lastMessages.put(e.getChannel(), replaced);
 			}
-		}	
-		else //update last Message
+		} else
+			// update last Message
 			lastMessages.put(e.getChannel(), e.getMessage());
 	}
 

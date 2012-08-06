@@ -11,15 +11,32 @@ import org.pircbotx.User;
 
 import backend.Bot;
 
-public class ReloadCommand extends Command{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ReloadCommand.
+ */
+public class ReloadCommand extends Command {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see commands.Command#execute(backend.Bot, org.pircbotx.Channel,
+	 * org.pircbotx.User, java.lang.String)
+	 */
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		long start = System.currentTimeMillis();
 		bot.loadModules();
-		passMessage(bot, chan, user, "Done reloading! It took "+(System.currentTimeMillis()-start)+" ms.");
+		passMessage(bot, chan, user,
+				"Done reloading! It took "
+						+ (System.currentTimeMillis() - start) + " ms.");
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#initialize()
+	 */
 	@Override
 	public void initialize() {
 		addAlias("reload");
@@ -29,5 +46,12 @@ public class ReloadCommand extends Command{
 		setUsableInPM(true);
 	}
 
-	public void setActive(boolean active) {return;}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#setActive(boolean)
+	 */
+	public void setActive(boolean active) {
+		return;
+	}
 }

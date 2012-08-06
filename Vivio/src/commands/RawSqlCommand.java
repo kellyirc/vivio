@@ -13,31 +13,39 @@ import java.util.List;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-
-
 import backend.Bot;
 import backend.Database;
 import backend.Util;
 
-public class RawSqlCommand extends Command{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RawSqlCommand.
+ */
+public class RawSqlCommand extends Command {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see commands.Command#execute(backend.Bot, org.pircbotx.Channel,
+	 * org.pircbotx.User, java.lang.String)
+	 */
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
 
-		if(!Util.hasArgs(message, 2)) {
+		if (!Util.hasArgs(message, 2)) {
 			invalidFormat(bot, chan, user);
 			return;
 		}
 
 		String root = message.split(" ")[0];
 		int select = 0;
-		if(root.length() > 4) 
+		if (root.length() > 4)
 			select = Integer.parseInt(root.substring(4));
-		
+
 		String sql = message.substring(message.indexOf(" "));
-		List<HashMap<String,Object>> data = null;
+		List<HashMap<String, Object>> data = null;
 		try {
-			if(sql.toLowerCase().contains("select"))
+			if (sql.toLowerCase().contains("select"))
 				data = Database.select(sql, select);
 			else
 				Database.execRaw(sql);
@@ -45,23 +53,33 @@ public class RawSqlCommand extends Command{
 			passMessage(bot, chan, user, e.getMessage());
 			return;
 		}
-		
-		if(data==null) {
+
+		if (data == null) {
 			passMessage(bot, chan, user, "Executed query successfully.");
-		} else if(data.size() == 0) {
+		} else if (data.size() == 0) {
 			passMessage(bot, chan, user, "No returned rows.");
 		} else {
-			for(HashMap<String, Object> row : data) {
+			for (HashMap<String, Object> row : data) {
 				passMessage(bot, chan, user, row.toString());
 			}
 		}
-		
+
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see commands.Command#format()
+	 */
 	protected String format() {
 		return super.format() + " [sql-command]";
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#initialize()
+	 */
 	@Override
 	protected void initialize() {
 		this.setAccessLevel(LEVEL_OWNER);
@@ -71,5 +89,12 @@ public class RawSqlCommand extends Command{
 		setUsableInPM(true);
 	}
 
-	public void setActive(boolean active) {return;}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see modules.Module#setActive(boolean)
+	 */
+	public void setActive(boolean active) {
+		return;
+	}
 }
