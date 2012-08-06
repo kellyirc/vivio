@@ -74,7 +74,7 @@ public class WikiCommand extends Command
 	@Override
 	protected String format()
 	{
-		return super.format();
+		return super.format() + "[title]";
 	}
 	private String getWikiIntro(String title)
 	{
