@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description This module returns the first paragraph of a Wikipedia article, limited to 300 characters
+ * @basecmd wiki
+ * @category utility
+ */
 package commands;
 
 import java.io.BufferedReader;
@@ -8,14 +14,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.tools.ant.types.Commandline.Argument;
 import org.pircbotx.Channel;
-import org.pircbotx.Colors;
 import org.pircbotx.User;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
