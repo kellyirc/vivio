@@ -628,6 +628,7 @@ public class Bot extends PircBotX implements Constants {
 	 */
 	public static int getLevelForUser(User u, Channel c) {
 		// TODO identified users only?
+		// TODO check host mask of user and if it matches bot, they are owner
 		if (u == null)
 			return LEVEL_OWNER;
 		if (u.getNick().equals("NickServ"))
