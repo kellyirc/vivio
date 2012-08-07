@@ -36,7 +36,6 @@ import org.reflections.Reflections;
 
 import commands.Command;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Bot.
  */

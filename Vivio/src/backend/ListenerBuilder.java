@@ -134,9 +134,11 @@ public class ListenerBuilder {
 		@Override
 		public void onPrivateMessage(PrivateMessageEvent<Bot> event)
 				throws Exception {
+			String message = event.getMessage();
+			if(!message.startsWith("!")) message = "!" + event.getMessage();
 			event.getBot()
 					.invokeAll("onPrivateMessage", new Object[] { event });
-			event.getBot().checkCommands(event.getUser(), event.getMessage(),
+			event.getBot().checkCommands(event.getUser(), message,
 					null);
 			super.onPrivateMessage(event);
 		}
