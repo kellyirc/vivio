@@ -16,8 +16,6 @@
 	<classpathentry kind="lib" path="lib/knicker-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/microsoft-translator-java-api-0.4-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="lib/WolframAlpha-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-4.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/matheval.jar"/>
 	<classpathentry kind="lib" path="lib/htmlentities.jar"/>
@@ -33,5 +31,7 @@
 	<classpathentry kind="lib" path="lib/jscience.jar"/>
 	<classpathentry kind="lib" path="lib/lombok.jar"/>
 	<classpathentry kind="lib" path="lib/rome-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
