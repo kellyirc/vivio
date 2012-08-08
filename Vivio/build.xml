@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Vivio">
+<project basedir="." default="build" name="Vivio">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../../../Program Files (x86)/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -11,33 +7,7 @@
     <property name="source" value="1.7"/>
     <path id="Vivio.classpath">
         <pathelement location="bin"/>
-        <pathelement location="lib/derby.jar"/>
-        <pathelement location="lib/pircbotx-1.7.jar"/>
-        <pathelement location="lib/reflections-0.9.8.jar"/>
-        <pathelement location="lib/guava-11.0.2.jar"/>
-        <pathelement location="lib/javassist-3.12.1.GA.jar"/>
-        <pathelement location="lib/slf4j-api-1.6.1.jar"/>
-        <pathelement location="lib/dom4j-1.6.1.jar"/>
-        <pathelement location="lib/knicker-2.2.0.jar"/>
-        <pathelement location="lib/microsoft-translator-java-api-0.4-jar-with-dependencies.jar"/>
-        <pathelement location="lib/WolframAlpha-1.1.jar"/>
-        <pathelement location="lib/commons-logging-1.1.1.jar"/>
-        <pathelement location="lib/matheval.jar"/>
-        <pathelement location="lib/htmlentities.jar"/>
-        <pathelement location="lib/rome-modules-1.0.jar"/>
-        <pathelement location="lib/ant.jar"/>
-        <pathelement location="lib/jaxen.jar"/>
-        <pathelement location="lib/xalan.jar"/>
-        <pathelement location="lib/xerces.jar"/>
-        <pathelement location="lib/xml-apis.jar"/>
-        <pathelement location="lib/jdom-1.1.3.jar"/>
-        <pathelement location="lib/json.jar"/>
-        <pathelement location="lib/JEntities.jar"/>
-        <pathelement location="lib/jscience.jar"/>
-        <pathelement location="lib/lombok.jar"/>
-        <pathelement location="lib/rome-1.0.jar"/>
-        <pathelement location="lib/httpclient-4.2.1.jar"/>
-        <pathelement location="lib/httpcore-4.2.1.jar"/>
+        <pathelement location="lib/*.jar"/>
     </path>
     <path id="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     <path id="run.Vivio.classpath">
@@ -64,6 +34,15 @@
             <src path="src"/>
             <classpath refid="Vivio.classpath"/>
         </javac>
+    	<jar destfile="vivio.jar">
+    		<manifest>
+    			<attribute name="Built-By" value="Kyle Kemp" />
+    			<attribute name="Main-Class" value="backend.Initializer" />
+				<attribute name="Class-Path" value="." />
+    		</manifest>
+    		<fileset dir="bin" />
+    		<zipfileset dir="lib" includes="*.jar" />
+    	</jar>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
