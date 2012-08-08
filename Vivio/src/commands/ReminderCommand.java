@@ -590,30 +590,6 @@ public class ReminderCommand extends Command {
 		}
 	}
 
-	/**
-	 * Checks if is start of delay duration.
-	 * 
-	 * @param param
-	 *            the param
-	 * @return true, if is start of delay duration
-	 */
-	public boolean isStartOfDelayDuration(String param) {
-		if (param.startsWith("in")) {
-			for (int i = "in".length(); i < param.length(); i++) {
-				if (Character.isWhitespace(param.charAt(i)))
-					continue;
-
-				if (Character.isDigit(param.charAt(i)))
-					return true;
-
-				if (Character.isLetter(param.charAt(i)))
-					return false;
-			}
-		}
-
-		return false;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
