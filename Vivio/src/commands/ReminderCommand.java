@@ -60,7 +60,7 @@ public class ReminderCommand extends Command {
 			"I don't even know what to say.",
 			"I suppose you don't have any device that can send messages back in time? Because I don't." };
 
-	// ^remind(?:\s+(\w{1,32}))?\s*(?:in(\s+(?:(?:¤AMNTS¤|(?:\d+(?:\.\d+)?))\s*(?:\w+\s*))+)|to\s+(.+?))*[.!?]*$
+	// ^remind(?:\s+(\w{1,32}))?\s*(?:in(\s+(?:(?:AMNTS|(?:\d+(?:\.\d+)?))\s*(?:\w+\s*))+)|to\s+(.+?))*[.!?]*$
 	/** The remind param pattern. */
 	private static Pattern remindParamPattern;
 
