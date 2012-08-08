@@ -40,7 +40,7 @@
         <pathelement location="lib/httpcore-4.2.1.jar"/>
     </path>
     <path id="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
-    <path id="run.Initializer (1).classpath">
+    <path id="run.Vivio.classpath">
         <path refid="Vivio.classpath"/>
         <path refid="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     </path>
@@ -79,9 +79,9 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="Initializer (1)">
+    <target name="Vivio">
         <java classname="backend.Initializer" failonerror="true" fork="yes">
-            <classpath refid="run.Initializer (1).classpath"/>
+            <classpath refid="run.Vivio.classpath"/>
         </java>
     </target>
 </project>
