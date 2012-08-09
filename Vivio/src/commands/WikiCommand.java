@@ -125,10 +125,10 @@ public class WikiCommand extends Command {
 					.parse(new ByteArrayInputStream(raw.getBytes()))
 					.getDocumentElement();
 			NodeList paragraphs = root.getElementsByTagName("p");
-			System.out.println(paragraphs.getLength());
+
 			if (paragraphs.getLength() < 1)
 				throw new IllegalArgumentException();
-			String text = paragraphs.item(0).getTextContent();
+			String text = paragraphs.item(0).getFirstChild().getNodeValue();
 			
 			String link = Util.shorten("http://en.wikipedia.org/wiki/" + title);
 			return text.substring(0, Math.min(300,text.length())) + ((300<text.length())?"...":"") + " - " + link;

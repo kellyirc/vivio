@@ -3,7 +3,6 @@
  */
 package backend;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Initializer.
  */
