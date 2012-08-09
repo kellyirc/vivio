@@ -26,10 +26,10 @@ public class RebootCommand extends Command {
 	 */
 	@Override
 	protected void initialize() {
-		setHelpText("Returns the first search result of a Google query");
+		setHelpText("Starts a new java process and kills the current one");
 		setName("Reboot");
 		addAlias("reboot");
-
+		setAccessLevel(LEVEL_OWNER);
 	}
 
 	/*
