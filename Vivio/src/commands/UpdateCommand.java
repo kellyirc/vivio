@@ -28,8 +28,7 @@ public class UpdateCommand extends Command {
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec("./update_vivio.sh");
-			p.waitFor();
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			passMessage(bot, chan, user, e.getMessage());
 			return;
 		}
