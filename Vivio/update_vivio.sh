@@ -16,5 +16,5 @@ ant -buildfile vivio.googlecode.com/svn/trunk/Vivio/build-jar.xml
 cp vivio.googlecode.com/svn/trunk/Vivio/vivio.jar .
 
 #launch jar
-java -jar vivio.jar -o Seiyria -c kellyirc
+java -jar vivio.jar -o Seiyria -c kellyirc &
 
