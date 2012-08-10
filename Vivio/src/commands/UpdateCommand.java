@@ -33,7 +33,7 @@ public class UpdateCommand extends Command {
 		
 		Process p = null;
 		try {
-			p = Runtime.getRuntime().exec("./update_vivio.sh");
+			p = Runtime.getRuntime().exec("./update_vivio.sh > log");
 		} catch (IOException e) {
 			passMessage(bot, chan, user, e.getMessage());
 			return;
