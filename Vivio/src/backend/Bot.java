@@ -107,7 +107,7 @@ public class Bot extends PircBotX implements Constants {
 
 	// Constants
 	/** The Constant INTERNAL_VERSION. */
-	final static String INTERNAL_VERSION = "1.99";
+	public final static String INTERNAL_VERSION = "2.04";
 
 	/** The Constant DEFAULT_SERVER. */
 	public final static String DEFAULT_SERVER = "irc.esper.net";

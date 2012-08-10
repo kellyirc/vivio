@@ -45,7 +45,7 @@ public class UpdateCommand extends Command {
 			while ((line = reader.readLine()) != null) {
 				passMessage(bot, chan, user, line);
 				if(line.equals("Launching new jar.")) {
-					bot.disconnect();
+					bot.quitServer("I'll be right back! I'm updating!");
 					System.exit(0);
 				}
 			}
