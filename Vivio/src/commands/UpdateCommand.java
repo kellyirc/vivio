@@ -1,9 +1,3 @@
-/*
- * @author Kyle Kemp
- * @description This module lets you run shell commands directly from irc.
- * @basecmd shell
- * @category utility
- */
 package commands;
 
 import java.io.BufferedReader;
@@ -14,22 +8,15 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 
 import backend.Bot;
-import backend.Util;
 
-public class ShellCommand extends Command {
+public class UpdateCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if (!Util.hasArgs(message, 2)) {
-			invalidFormat(bot, chan, user);
-			return;
-		}
-
-		String[] args = Util.getArgs(message, 2);
 
 		Process p = null;
 		try {
-			p = Runtime.getRuntime().exec(args[1]);
+			p = Runtime.getRuntime().exec("./update_vivio.sh");
 			p.waitFor();
 		} catch (IOException | InterruptedException e) {
 			passMessage(bot, chan, user, e.getMessage());
@@ -41,6 +28,10 @@ public class ShellCommand extends Command {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				passMessage(bot, chan, user, line);
+				if(line.equals("Launching new jar.")) {
+					bot.disconnect();
+					System.exit(0);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,9 +43,9 @@ public class ShellCommand extends Command {
 
 	@Override
 	protected void initialize() {
-		setName("ShellAccess");
-		setHelpText("Run a low-level shell command. Oh baby ;)");
-		addAlias("shell");
+		setName("Update");
+		setHelpText("Run a self-update. I rock like that!");
+		addAlias("update");
 		setAccessLevel(LEVEL_OWNER);
 		setUsableInPM(true);
 	}
