@@ -1,3 +1,9 @@
+/*
+ * @author Kyle Kemp
+ * @description This module lets the bot update itself.
+ * @basecmd update
+ * @category core
+ */
 package commands;
 
 import java.io.BufferedReader;
