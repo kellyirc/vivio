@@ -36,10 +36,10 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo "Launching new jar."
-#launch jar
-java -jar vivio.jar -o Seiyria -c kellyirc &
-
 echo "Removing old files."
 #remove old vivio
 rm -r vivio.googlecode.com/
+
+echo "Launching new jar."
+#launch jar
+java -jar vivio.jar -o Seiyria -c kellyirc
