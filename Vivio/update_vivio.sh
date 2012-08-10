@@ -2,7 +2,7 @@
 
 echo "wgetting new version."
 #wget new version
-wget -r https://vivio.googlecode.com/svn/trunk
+wget -r -o log https://vivio.googlecode.com/svn/trunk
 
 echo "Building new binary files."
 #build binary information
