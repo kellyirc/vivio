@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -128,7 +129,7 @@ public class WikiCommand extends Command {
 
 			if (paragraphs.getLength() < 1)
 				throw new IllegalArgumentException();
-			String text = paragraphs.item(0).getFirstChild().getNodeValue();
+			String text = paragraphs.item(0).getTextContent();
 			
 			String link = Util.shorten("http://en.wikipedia.org/wiki/" + title);
 			return text.substring(0, Math.min(300,text.length())) + ((300<text.length())?"...":"") + " - " + link;
@@ -140,4 +141,15 @@ public class WikiCommand extends Command {
 		}
 
 	}
+	
+//	private String getRecursiveTextContent(Node n)
+//	{
+//		String s = n.getTextContent();
+//		NodeList children = n.getChildNodes();
+//		for(int k=0;k<children.getLength();k++)
+//		{
+//			s += getRecursiveTextContent(children.item(k));
+//		}
+//		return s;
+//	}
 }
