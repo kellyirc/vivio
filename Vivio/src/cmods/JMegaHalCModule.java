@@ -256,10 +256,8 @@ public class JMegaHalCModule extends Command {
 		while (!quad.isCanEnd()) {
 			String[] nextTokens = next.get(quad).toArray(new String[0]);
 			String nextToken = nextTokens[rand.nextInt(nextTokens.length)];
-			Quad newQuad = new Quad(quad.getToken(1), quad.getToken(2),
-					quad.getToken(3), nextToken);
-			selfRef(newQuad);
-			quad = this.quads.get(newQuad);
+			quad = this.quads.get(new Quad(quad.getToken(1), quad.getToken(2),
+					quad.getToken(3), nextToken));
 			parts.add(nextToken);
 		}
 
@@ -268,10 +266,8 @@ public class JMegaHalCModule extends Command {
 			String[] previousTokens = previous.get(quad).toArray(new String[0]);
 			String previousToken = previousTokens[rand
 					.nextInt(previousTokens.length)];
-			Quad newQuad = new Quad(previousToken, quad.getToken(0),
-					quad.getToken(1), quad.getToken(2));
-			selfRef(newQuad);
-			quad = this.quads.get(newQuad);
+			quad = this.quads.get(new Quad(previousToken, quad.getToken(0),
+					quad.getToken(1), quad.getToken(2)));
 			parts.addFirst(previousToken);
 		}
 
