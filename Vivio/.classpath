@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/pircbotx-1.7.jar" sourcepath="lib/pircbotx-1.7-sources.zip">
@@ -19,11 +20,8 @@
 	<classpathentry kind="lib" path="lib/matheval.jar"/>
 	<classpathentry kind="lib" path="lib/htmlentities.jar"/>
 	<classpathentry kind="lib" path="lib/rome-modules-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen.jar"/>
-	<classpathentry kind="lib" path="lib/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xerces.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/JEntities.jar"/>
@@ -32,6 +30,5 @@
 	<classpathentry kind="lib" path="lib/rome-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
