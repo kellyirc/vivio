@@ -41,8 +41,11 @@ public class GeolocateCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
+		if(message.startsWith("!")) message = message.substring(1);
+		
 		String targetHost = user.getHostmask();
-		String[] args = message.split(" ", 2);
+		String[] args = message.trim().split(" ", 2);
+		
 		if(args.length > 1) {
 			if(args[0].equalsIgnoreCase("geolocate-nick")) {
 				User targetUser = bot.getUser(args[1]);
@@ -54,6 +57,7 @@ public class GeolocateCommand extends Command {
 			}
 			else targetHost = args[1];
 		}
+		
 		try {
 			InetAddress addr = InetAddress.getByName(targetHost);
 			
