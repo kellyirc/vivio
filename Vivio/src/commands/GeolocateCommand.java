@@ -41,7 +41,7 @@ public class GeolocateCommand extends Command {
 
 	@Override
 	public void execute(Bot bot, Channel chan, User user, String message) {
-		if(message.startsWith("!")) message = message.substring(1);
+		if(message.startsWith(getCmdSequence())) message = message.substring(1);
 		
 		String targetHost = user.getHostmask();
 		String[] args = message.trim().split(" ", 2);
