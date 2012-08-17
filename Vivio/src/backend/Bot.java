@@ -382,6 +382,7 @@ public class Bot extends PircBotX implements Constants {
 		loadModulesImpl("commands", Command.class);
 		loadModulesImpl("cmods", Command.class);
 		loadModulesImpl("modules", Module.class);
+		loadModulesImpl("games", Command.class);
 	}
 
 	/**
