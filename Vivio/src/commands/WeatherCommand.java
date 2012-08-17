@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import org.geonames.WeatherObservation;
 import org.geonames.WebService;
+import org.geonames.utils.Distance;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
@@ -85,11 +86,21 @@ public class WeatherCommand extends Command {
 			
 			WeatherObservation obsrv = WebService.findNearByWeather(latitude, longitude);
 			
-			passMessage(bot, chan, user, "The weather observation provided by " + obsrv.getStationName().trim() + " (" + obsrv.getCountryCode() + ") at " +
-					SimpleDateFormat.getInstance().format(obsrv.getObservationTime()) + ", coords " + String.format(Locale.ENGLISH, "%.2f, %.2f", obsrv.getLatitude(), obsrv.getLongitude()) + ": " +
-					obsrv.getWeatherCondition() + ", " + obsrv.getClouds() + ", humidity " + obsrv.getHumidity() + "%, temperature " + obsrv.getTemperature() + " \u00B0C, " +
-					"dew point " + obsrv.getDewPoint() + " \u00B0C, wind speed " + beaufortToMetersPerSecond(obsrv.getWindSpeed()) + " m/s" +
-					", elevation " + obsrv.getElevation() + "m");
+			double dist = Distance.distanceKM(latitude, longitude, obsrv.getLatitude(), obsrv.getLongitude());
+			String distStr = dist >= 1.0 ?
+					String.format(Locale.ENGLISH, "%.1fkm", dist) :
+					String.format(Locale.ENGLISH, "%.0fm", dist*1000);
+			
+			passMessage(bot, chan, user, String.format(Locale.ENGLISH,
+					"Weather observation provided by %s (%s) at %s, coords %.4f, %.4f (%s away): " +
+					"%s, %s, humidity %.1f%%, temperature %.1f\u00B0C, dew point %.1f\u00B0C, wind speed %.2f m/s, " +
+					"elevation %d m",
+					obsrv.getStationName().trim(), obsrv.getCountryCode(),
+					SimpleDateFormat.getInstance().format(obsrv.getObservationTime()),
+					obsrv.getLatitude(), obsrv.getLongitude(), distStr, obsrv.getWeatherCondition(),
+					obsrv.getClouds(), obsrv.getHumidity(), obsrv.getTemperature(), obsrv.getDewPoint(),
+					beaufortToMetersPerSecond(obsrv.getWindSpeed()), obsrv.getElevation()
+					));
 		}
 		catch(Exception e) {
 			passMessage(bot, chan, user, "Oh my, an error: " +
