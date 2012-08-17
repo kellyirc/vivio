@@ -26,6 +26,8 @@ import org.pircbotx.User;
 import backend.Bot;
 
 public class GeolocateCommand extends Command {
+	private static final String ipinfodbApiKey = "07b8b76fe1f6146cd24f83e290ebf16e15c5a1a5834e93ec5baa4294eada0c64";
+	
 	@Override
 	protected void initialize() {
 		setName("GeoLocator");
@@ -61,7 +63,7 @@ public class GeolocateCommand extends Command {
 		try {
 			InetAddress addr = InetAddress.getByName(targetHost);
 			
-			IpInfoDb requester = new IpInfoDb("07b8b76fe1f6146cd24f83e290ebf16e15c5a1a5834e93ec5baa4294eada0c64");
+			IpInfoDb requester = getIpInfoInstance();
 			Map<String, String> response = requester.lookUp(addr);
 			
 			DateFormat hostFormat = new SimpleDateFormat();
@@ -78,6 +80,10 @@ public class GeolocateCommand extends Command {
 			e.printStackTrace();
 			return;
 		}
+	}
+	
+	public static IpInfoDb getIpInfoInstance() {
+		return new IpInfoDb(ipinfodbApiKey);
 	}
 	
 	public static class IpInfoDb {
