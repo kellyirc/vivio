@@ -111,6 +111,7 @@ public class ReminderCommand extends Command {
 		else
 			wordAmount.clear();
 		wordAmount.put("a few", 3L);
+		wordAmount.put("a couple of", 2L);
 		wordAmount.put("a lot of", -79L);
 		wordAmount.put("alot of", -74L);
 		wordAmount.put("a long", (long) Short.MAX_VALUE);

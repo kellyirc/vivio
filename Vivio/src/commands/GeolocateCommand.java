@@ -87,7 +87,7 @@ public class GeolocateCommand extends Command {
 	}
 	
 	public static class IpInfoDb {
-		private static Pattern entryRegex = Pattern.compile("\"(.+)\"\\s*:\\s*\"(.+)\"");
+		private static Pattern entryRegex = Pattern.compile("\"(.+)\"\\s*:\\s*\"(.*)\"");
 		
 		private String apiKey = "";
 		
@@ -103,7 +103,7 @@ public class GeolocateCommand extends Command {
 			Matcher matcher = entryRegex.matcher(result);
 			
 			while(matcher.find()) {
-				returnValues.put(matcher.group(1), matcher.group(2));
+				returnValues.put(matcher.group(1), matcher.group(2) != null ? matcher.group(2) : "");
 			}
 			
 			return returnValues;
