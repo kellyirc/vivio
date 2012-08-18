@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.geonames.GeoNamesException;
 import org.geonames.WeatherObservation;
 import org.geonames.WebService;
 import org.geonames.utils.Distance;
@@ -101,6 +102,10 @@ public class WeatherCommand extends Command {
 					obsrv.getClouds(), obsrv.getHumidity(), obsrv.getTemperature(), obsrv.getDewPoint(),
 					beaufortToMetersPerSecond(obsrv.getWindSpeed()), obsrv.getElevation()
 					));
+		}
+		catch(GeoNamesException e) {
+			passMessage(bot, chan, user, "There was a problem when looking up info: " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch(Exception e) {
 			passMessage(bot, chan, user, "Oh my, an error: " +
