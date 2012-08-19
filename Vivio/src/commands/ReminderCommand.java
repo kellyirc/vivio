@@ -201,8 +201,10 @@ public class ReminderCommand extends Command {
 	 */
 	@Override
 	protected String format() {
-		return super.format()
-				+ " [{target} [to [task] | in [amount] [unit] ...] ...]";
+		return "![" +
+				"remind {target} [in [quantifier] [unit] ... | to [task]] | " +
+				"[nevermind | forget] {target's | my} {that | last} reminder" +
+		"]";
 	}
 
 	/*
