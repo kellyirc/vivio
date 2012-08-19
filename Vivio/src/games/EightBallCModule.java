@@ -1,3 +1,9 @@
+/*
+ * @author Rahat Ahmed
+ * @description Gives advice for all your yes and no questions.
+ * @basecmd 8ball
+ * @category games
+ */
 package games;
 
 import org.pircbotx.Channel;
