@@ -8,6 +8,7 @@ package commands;
 
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -93,11 +94,11 @@ public class WeatherCommand extends Command {
 					String.format(Locale.ENGLISH, "%.0fm", dist*1000);
 			
 			passMessage(bot, chan, user, String.format(Locale.ENGLISH,
-					"Weather observation provided by %s (%s) at %s, coords %.4f, %.4f (%s away): " +
+					"Weather observation provided by %s (%s) at %s (%s ago), coords %.4f, %.4f (%s away): " +
 					"%s, %s, humidity %.1f%%, temperature %.1f\u00B0C, dew point %.1f\u00B0C, wind speed %.2f m/s, " +
 					"elevation %d m",
 					obsrv.getStationName().trim(), obsrv.getCountryCode(),
-					SimpleDateFormat.getInstance().format(obsrv.getObservationTime()),
+					SimpleDateFormat.getInstance().format(obsrv.getObservationTime()), outputTime(new Date().getTime() - obsrv.getObservationTime().getTime()),
 					obsrv.getLatitude(), obsrv.getLongitude(), distStr, obsrv.getWeatherCondition(),
 					obsrv.getClouds(), obsrv.getHumidity(), obsrv.getTemperature(), obsrv.getDewPoint(),
 					beaufortToMetersPerSecond(obsrv.getWindSpeed()), obsrv.getElevation()
@@ -116,5 +117,33 @@ public class WeatherCommand extends Command {
 	
 	private double beaufortToMetersPerSecond(String beaufort) {
 		return 0.836 * Math.pow(Double.parseDouble(beaufort), 3/2);
+	}
+	
+	public String outputTime(long time) {
+		time /= 1000;
+		long seconds = time % 60;
+		long minutes = (time % 3600) / 60;
+		long hours = (time % 86400) / 3600;
+		long days = (time % 31536000) / 86400;
+		long years = time / 31536000;
+
+		String output = "";
+		if (years != 0)
+			output += (output.length() > 0 ? ", " : "") + years + " year"
+					+ (years > 1 ? "s" : "");
+		if (days != 0)
+			output += (output.length() > 0 ? ", " : "") + days + " day"
+					+ (days > 1 ? "s" : "");
+		if (hours != 0)
+			output += (output.length() > 0 ? ", " : "") + hours + " hour"
+					+ (hours > 1 ? "s" : "");
+		if (minutes != 0)
+			output += (output.length() > 0 ? ", " : "") + minutes + " minute"
+					+ (minutes > 1 ? "s" : "");
+		if (seconds != 0)
+			output += (output.length() > 0 ? ", " : "") + seconds + " second"
+					+ (seconds > 1 ? "s" : "");
+
+		return output;
 	}
 }
