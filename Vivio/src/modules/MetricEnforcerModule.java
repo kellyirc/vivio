@@ -44,7 +44,7 @@ public class MetricEnforcerModule extends Module {
 
 		symbols = new HashMap<>();
 
-		symbols.put("in", NonSI.INCH);
+		symbols.put("in.", NonSI.INCH);
 		symbols.put("inch", NonSI.INCH);
 		symbols.put("inches", NonSI.INCH);
 
