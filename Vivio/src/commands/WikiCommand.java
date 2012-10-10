@@ -21,7 +21,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -72,7 +71,14 @@ public class WikiCommand extends Command {
 	public void execute(Bot bot, Channel chan, User user, String message) {
 		if (Util.hasArgs(message, 2)) {
 			String[] args = message.split(" ", 2);
-			passMessage(bot, chan, user, getWikiIntro(args[1]));
+			try
+			{
+				passMessage(bot, chan, user, getWikiIntro(args[1]));
+			} catch (Exception e)
+			{
+				passMessage(bot, chan, user, "There was a problem searching Wikipedia.");
+				e.printStackTrace();
+			}
 		} else {
 			invalidFormat(bot, chan, user);
 		}
@@ -95,8 +101,9 @@ public class WikiCommand extends Command {
 	 * @param title
 	 *            the title
 	 * @return the wiki intro
+	 * @throws Exception 
 	 */
-	private String getWikiIntro(String title) {
+	private String getWikiIntro(String title) throws Exception {
 		try {
 			title = URLEncoder.encode(title, "UTF-8");
 			
@@ -140,6 +147,12 @@ public class WikiCommand extends Command {
 			return "That page doesn't exist.";
 		}
 
+//		WebService.setUserName("raykay");
+//		List<WikipediaArticle> results = WebService.wikipediaSearchForTitle(title, "en");
+//		if(results.isEmpty())
+//			return "No results for '"+title+"'.";
+//		WikipediaArticle article = results.get(0);
+//		return article.getSummary() + " -- " + article.getWikipediaUrl(); 
 	}
 	
 //	private String getRecursiveTextContent(Node n)

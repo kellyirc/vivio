@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="lib/rome-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/geonames-source-1.1.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
