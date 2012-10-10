@@ -1,4 +1,4 @@
-package cmods;
+package commands;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,9 +9,9 @@ import org.pircbotx.User;
 
 import backend.Bot;
 import backend.Database;
-import commands.Command;
+import backend.Util;
 
-public class BacklogCModule extends Command
+public class BacklogCommand extends Command
 {
 	public static final int PASTEBIN_LIMIT = 5;
 	@Override
@@ -41,11 +41,15 @@ public class BacklogCModule extends Command
 				{
 					String[] log = getBacklog(n, chan.getName());
 					for(String s:log)
-						passMessage(bot, chan, user, s);
+						bot.sendMessage(user, s);
 				}
 				else
 				{
-					passMessage(bot, chan, user, "Hold on dude thats too much let me get pastebin working k?");
+					String[] log = getBacklog(n, chan.getName());
+					StringBuilder text = new StringBuilder();
+					for(String s:log)
+						text.append(s);
+					passMessage(bot, chan, user, Util.pastebin(text.toString()));
 				}
 			} catch (NumberFormatException e) {
 				passMessage(bot, chan, user, "That's not an integer!");

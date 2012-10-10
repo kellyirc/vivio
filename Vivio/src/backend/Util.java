@@ -5,11 +5,15 @@ package backend;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import com.tecnick.htmlutils.htmlentities.HTMLEntities;
 import commands.Command;
@@ -280,5 +284,49 @@ public class Util {
 				|| message.startsWith(Command.CMD_SEQUENCE_DEVELOPMENT)
 				|| message.startsWith(Command.CMD_SEQUENCE_NORMAL)
 				|| message.startsWith(bot.getNick() + ",");
+	}
+	
+	private static final String PASTEBIN_API_KEY = "0d6b3e5d1484de2d0ccf3a88c4f1435b";
+	
+	/**
+	 * Upload text to pastebin.
+	 * @param text The text to upload.
+	 * @return The pastebin url if successful, else it returns the error message.
+	 */
+	public static String pastebin(String text)
+	{
+		
+		try
+		{
+			URL url = new URL("http://pastebin.com/api/api_post.php");
+			String urlParameters = "api_dev_key="+PASTEBIN_API_KEY+"&api_option=paste&api_paste_code="+URLEncoder.encode(text);
+			byte[] data = urlParameters.getBytes("UTF-8");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			//connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("charset", "utf-8");
+			connection.setRequestProperty("Content-Length",Integer.toString(urlParameters.getBytes().length));
+			connection.setUseCaches(false);
+			
+			OutputStream out = connection.getOutputStream();
+			out.write(data);
+			out.close();
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			StringBuilder builder = new StringBuilder();
+			String line = null;
+			while((line = in.readLine()) != null)
+				builder.append(line);
+			in.close();
+			connection.disconnect();
+			return builder.toString();
+			
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return "Unable to upload.";
 	}
 }
