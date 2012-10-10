@@ -548,7 +548,7 @@ public class Bot extends PircBotX implements Constants {
 		// System.out.println(message.substring(0,1).equals(c.getCmdSequence())+
 		// " " + message.startsWith(getNick()+","));
 		return message.substring(0, 1).equals(c.getCmdSequence())
-				|| message.startsWith(getNick() + ",");
+           || message.startsWith(getNick() + ",") || message.startsWith(getNick() + ":");
 	}
 
 	/**
