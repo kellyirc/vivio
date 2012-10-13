@@ -16,30 +16,25 @@ import java.util.Map;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
-import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.DisconnectEvent;
-import org.pircbotx.hooks.events.HalfOpEvent;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.ModeEvent;
 import org.pircbotx.hooks.events.NickChangeEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
-import org.pircbotx.hooks.events.OpEvent;
 import org.pircbotx.hooks.events.PartEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.events.QuitEvent;
-import org.pircbotx.hooks.events.SuperOpEvent;
 import org.pircbotx.hooks.events.TopicEvent;
-import org.pircbotx.hooks.events.VoiceEvent;
-
-import commands.Command;
 
 import backend.Bot;
 import backend.Database;
 import backend.Util;
+
+import commands.Command;
 
 // TODO: Auto-generated Javadoc
 /**

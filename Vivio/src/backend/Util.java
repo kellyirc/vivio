@@ -5,7 +5,6 @@ package backend;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -299,7 +298,7 @@ public class Util {
 		try
 		{
 			URL url = new URL("http://pastebin.com/api/api_post.php");
-			String urlParameters = "api_dev_key="+PASTEBIN_API_KEY+"&api_option=paste&api_paste_code="+URLEncoder.encode(text);
+			String urlParameters = "api_dev_key="+PASTEBIN_API_KEY+"&api_option=paste&api_paste_code="+URLEncoder.encode(text, "UTF-8");
 			byte[] data = urlParameters.getBytes("UTF-8");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);

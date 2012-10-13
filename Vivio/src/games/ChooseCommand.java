@@ -8,9 +8,9 @@ package games;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
-import org.pircbotx.hooks.events.MessageEvent;
 
 import backend.Bot;
+
 import commands.Command;
 
 public class ChooseCommand extends Command
