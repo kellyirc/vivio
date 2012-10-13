@@ -16,7 +16,24 @@ import java.util.Map;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.pircbotx.hooks.Event;
+import org.pircbotx.hooks.events.ActionEvent;
+import org.pircbotx.hooks.events.ConnectEvent;
+import org.pircbotx.hooks.events.DisconnectEvent;
+import org.pircbotx.hooks.events.HalfOpEvent;
+import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.ModeEvent;
+import org.pircbotx.hooks.events.NickChangeEvent;
+import org.pircbotx.hooks.events.NoticeEvent;
+import org.pircbotx.hooks.events.OpEvent;
+import org.pircbotx.hooks.events.PartEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.events.QuitEvent;
+import org.pircbotx.hooks.events.SuperOpEvent;
+import org.pircbotx.hooks.events.TopicEvent;
+import org.pircbotx.hooks.events.VoiceEvent;
 
 import commands.Command;
 
@@ -30,6 +47,10 @@ import backend.Util;
  */
 public class LoggingCModule extends Command {
 
+	
+	public enum EventType { ACTION, CONNECT, DISCONNECT, JOIN, KICK, MESSAGE, MODE, NICK_CHANGE, NOTICE, PART, PRIVATE_MESSAGE, QUIT, TOPIC };
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -292,12 +313,33 @@ public class LoggingCModule extends Command {
 		try {
 			Database.createTable(
 					this.getFormattedTableName(),
-					"server char(20), channel char(30), user_name char(25), message varchar(600), time timestamp not null default current timestamp");
+					"server char(20), channel char(30), user_name char(25), event_type smallint, message varchar(600), time timestamp not null default current timestamp");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private void log(String server, Channel chan, User user, EventType type, String message) throws SQLException
+	{
+		if(chan == null)
+			Database.insert(
+					getFormattedTableName(),
+					"server, user_name, event_type, message",
+					Database.getEnclosedString(server) + ","
+							+ Database.getEnclosedString(user.getNick()) + ","
+							+ type.ordinal() + ","
+							+ Database.getEnclosedString(message));
+		else
+		Database.insert(
+				getFormattedTableName(),
+				"server, channel, user_name, event_type, message",
+				Database.getEnclosedString(server) + ","
+						+ Database.getEnclosedString(chan.getName()) + ","
+						+ Database.getEnclosedString(user.getNick()) + ","
+						+ type.ordinal() + ","
+						+ Database.getEnclosedString(message));
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -306,17 +348,146 @@ public class LoggingCModule extends Command {
 	 * .MessageEvent)
 	 */
 	@Override
-	public void onMessage(MessageEvent<Bot> event) throws Exception {
-		Database.insert(
-				getFormattedTableName(),
-				"server, channel, user_name, message",
-				Database.getEnclosedString(event.getBot().getServer())
-						+ ","
-						+ Database.getEnclosedString(event.getChannel()
-								.getName()) + ","
-						+ Database.getEnclosedString(event.getUser().getNick())
-						+ "," + Database.getEnclosedString(event.getMessage()));
+	public void onMessage(MessageEvent<Bot> event) throws Exception 
+	{
 		super.onMessage(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.MESSAGE, event.getMessage());
 	}
 
+	@Override
+	public void onAction(ActionEvent<Bot> event) throws Exception
+	{
+		super.onAction(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.ACTION, event.getMessage());
+	}
+
+	@Override
+	public void onConnect(ConnectEvent<Bot> event) throws Exception
+	{
+		super.onConnect(event);
+		log(event.getBot().getServer(), null, event.getBot().getUserBot(),
+				EventType.CONNECT, "Connected to "+ event.getBot().getServer() + ".");
+	}
+	
+	@Override
+	public void onDisconnect(DisconnectEvent<Bot> event) throws Exception
+	{
+		super.onDisconnect(event);
+		log(event.getBot().getServer(), null, event.getBot().getUserBot(),
+				EventType.DISCONNECT, "Disconnected from "+ event.getBot().getServer() + ".");
+	}
+	
+//	@Override
+//	public void onHalfOp(HalfOpEvent<Bot> event) throws Exception
+//	{
+//		super.onHalfOp(event);
+//		log(event.getBot().getServer(), event.getChannel(), event.getRecipient(), EventType.HALF_OP, event.getRecipient().getNick() + 
+//				" has "+((event.isHalfOp())?"recieved":"lost")+" half op status.");
+//	}
+	
+	@Override
+	public void onJoin(JoinEvent<Bot> event) throws Exception
+	{
+		super.onJoin(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.JOIN, event.getUser().getNick() + " has joined "+ event.getChannel().getName() + ".");
+	}
+
+	@Override
+	public void onKick(KickEvent<Bot> event) throws Exception
+	{
+		super.onKick(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getRecipient(),
+				EventType.KICK, event.getRecipient().getNick() + " has been kicked from "+ event.getChannel().getName() + 
+				". (Reason: " + event.getReason() + ")");
+	}
+	
+	@Override
+	public void onMode(ModeEvent<Bot> event) throws Exception
+	{
+		super.onMode(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.MODE, event.getUser().getNick() + " set mode " + event.getMode() + " " + event.getChannel().getName());
+	}
+
+	@Override
+	public void onNickChange(NickChangeEvent<Bot> event) throws Exception
+	{
+		super.onNickChange(event);
+		for(Channel chan:event.getUser().getChannels())
+			log(event.getBot().getServer(), chan, event.getUser(),
+				EventType.NICK_CHANGE, event.getOldNick() + " has changed his nick to "+ event.getNewNick() + ".");
+	}
+
+	@Override
+	public void onNotice(NoticeEvent<Bot> event) throws Exception
+	{
+		super.onNotice(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.NOTICE, "Notice from "+event.getUser().getNick()+": "+event.getMessage());
+	}
+
+//	@Override
+//	public void onOp(OpEvent<Bot> event) throws Exception
+//	{
+//		super.onOp(event);
+//		log(event.getBot().getServer(), event.getChannel(), event.getRecipient(), EventType.OP, event.getRecipient().getNick() + 
+//				" has "+((event.isOp())?"recieved":"lost")+" op status.");
+//	}
+	
+	@Override
+	public void onPart(PartEvent<Bot> event) throws Exception
+	{
+		super.onPart(event);
+		log(event.getBot().getServer(), event.getChannel(), event.getUser(),
+				EventType.PART, event.getUser().getNick() + " has left "+ event.getChannel().getName() + " (Reason: "+event.getReason()+").");
+	}
+
+	@Override
+	public void onPrivateMessage(PrivateMessageEvent<Bot> event)
+			throws Exception
+	{
+		super.onPrivateMessage(event);
+		log(event.getBot().getServer(), null, event.getUser(),
+				EventType.MESSAGE, event.getMessage());
+	}
+	
+	@Override
+	public void onQuit(QuitEvent<Bot> event) throws Exception
+	{
+		super.onQuit(event);
+		for(Channel chan:event.getUser().getChannels())
+		log(event.getBot().getServer(), chan, event.getUser(),
+				EventType.QUIT, event.getUser().getNick() + " has quit "+ chan.getName() + " (Reason: "+event.getReason()+").");
+	}
+	
+//	@Override
+//	public void onSuperOp(SuperOpEvent<Bot> event) throws Exception
+//	{
+//		super.onSuperOp(event);
+//		log(event.getBot().getServer(), event.getChannel(), event.getRecipient(), EventType.SUPER_OP, event.getRecipient().getNick() + 
+//				" has "+((event.isSuperOp())?"recieved":"lost")+" super op status.");
+//	}
+	
+	
+	@Override
+	public void onTopic(TopicEvent<Bot> event) throws Exception
+	{
+		super.onTopic(event);
+		if(event.isChanged())
+			log(event.getBot().getServer(), event.getChannel(), event.getUser(), EventType.TOPIC, event.getUser().getNick()+" set the topic: "+ event.getTopic());
+	}
+	
+//	@Override
+//	public void onVoice(VoiceEvent<Bot> event) throws Exception
+//	{
+//		super.onVoice(event);
+//		log(event.getBot().getServer(), event.getChannel(), event.getRecipient(), EventType.VOICE, event.getRecipient().getNick() + 
+//				" has "+((event.isVoice())?"recieved":"lost")+" voice status.");
+//	}
+
+	
+	
 }

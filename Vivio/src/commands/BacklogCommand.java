@@ -1,6 +1,10 @@
 package commands;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,10 +14,13 @@ import org.pircbotx.User;
 import backend.Bot;
 import backend.Database;
 import backend.Util;
+import cmods.LoggingCModule.EventType;
 
 public class BacklogCommand extends Command
 {
 	public static final int PASTEBIN_LIMIT = 5;
+	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 	@Override
 	protected void initialize()
 	{
@@ -37,18 +44,24 @@ public class BacklogCommand extends Command
 			try
 			{
 				int n = Integer.parseInt(cmd[1]);
-				if(n <= PASTEBIN_LIMIT)
+				if(chan == null)
+				{
+					passMessage(bot, chan, user, "You have to use this command in a channel!");
+				}
+				else if(n <= PASTEBIN_LIMIT)
 				{
 					String[] log = getBacklog(n, chan.getName());
 					for(String s:log)
-						bot.sendMessage(user, s);
+						if(s!=null)
+							bot.sendMessage(user, s);
 				}
 				else
 				{
 					String[] log = getBacklog(n, chan.getName());
 					StringBuilder text = new StringBuilder();
 					for(String s:log)
-						text.append(s);
+						if(s!=null)
+							text.append(s);
 					passMessage(bot, chan, user, Util.pastebin(text.toString()));
 				}
 			} catch (NumberFormatException e) {
@@ -57,12 +70,15 @@ public class BacklogCommand extends Command
 			{
 				passMessage(bot, chan, user, "bluh bluh Freek sucks at SQL!");
 				e.printStackTrace();
+			} catch (ParseException e)
+			{
+				e.printStackTrace();
 			}
 			
 		}
 	}
 	
-	public String[] getBacklog(int n, String chan) throws SQLException
+	public String[] getBacklog(int n, String chan) throws SQLException, ParseException
 	{
 		List<HashMap<String, Object>> query = Database.select("SELECT * FROM LoggingCModule_logs WHERE CHANNEL="+Database.getEnclosedString(chan)+" ORDER BY id DESC", n+1);
 		StringBuffer backlog = new StringBuffer();
@@ -72,11 +88,14 @@ public class BacklogCommand extends Command
 		{
 			HashMap<String, Object> row = query.get(k);
 			backlog.append("[");
-			backlog.append(row.get("TIME"));
+			backlog.append(timestampFormat.format(new Date(((Timestamp) row.get("TIME")).getTime())));
 			backlog.append("] ");
-			backlog.append("<");
-			backlog.append(((String) row.get("USER_NAME")).trim());
-			backlog.append("> ");
+			if(((Integer)row.get("EVENT_TYPE")) == EventType.MESSAGE.ordinal())
+			{
+				backlog.append("<");
+				backlog.append(((String) row.get("USER_NAME")).trim());
+				backlog.append("> ");
+			}
 			backlog.append(((String) row.get("MESSAGE")).trim());
 			backlog.append("\n");
 			log[pos++] = backlog.toString();
