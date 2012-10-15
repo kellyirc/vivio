@@ -1,12 +1,14 @@
 package modules;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import org.pircbotx.Channel;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import backend.Bot;
+import backend.Database;
+import cmods.LoggingCModule;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,7 +18,7 @@ public class CorrectionModule extends Module
 {
 
 	/** The last messages. */
-	HashMap<Channel, String> lastMessages;
+//	HashMap<Channel, String> lastMessages;
 
 	/** The pattern. */
 	Pattern pattern;
@@ -31,9 +33,9 @@ public class CorrectionModule extends Module
 	{
 		setPriorityLevel(PRIORITY_MODULE);
 		setName("Correction");
-		setHelpText("Made a typo? Use regex! Format: s/regex/replacement");
-		lastMessages = new HashMap<>();
-		pattern = Pattern.compile("s/(.+)/(.+)");
+		setHelpText("Made a typo? Use regex! Format: s(n)/regex/replacement/regex/replacement...");
+//		lastMessages = new HashMap<>();
+		pattern = Pattern.compile("s\\d*/(.+)/(.+)");
 	}
 
 	/*
@@ -47,29 +49,23 @@ public class CorrectionModule extends Module
 	public void onMessage(MessageEvent<Bot> e) throws Exception
 	{
 		super.onMessage(e);
-		// // check for replace command
-		// Matcher matcher = pattern.matcher(e.getMessage());
-		// if (matcher.find() && lastMessages.containsKey(e.getChannel())) {
-		// String replaced = lastMessages.get(e.getChannel()).replaceAll(
-		// matcher.group(1), matcher.group(2));
-		// if (!replaced.equals(lastMessages.get(e.getChannel()))) // msg only
-		// // if
-		// // changed
-		// {
-		// passMessage(e.getBot(), e.getChannel(), e.getUser(), replaced);
-		// lastMessages.put(e.getChannel(), replaced);
-		// }
-		// } else
-		// // update last Message
-		// lastMessages.put(e.getChannel(), e.getMessage());
 
 		String msg = e.getMessage();
-		if (msg.startsWith("s/"))
+		if (msg.matches("s\\d*/(.+)/(.+)"))
 		{
 			msg = msg.replace("\\/", ((char) 26) + "");
 			String[] split = msg.split("/");
-			System.out.println(msg);
-			String replaced = lastMessages.get(e.getChannel());
+			
+			int n = 1;
+			//try to get the number, else assume 1
+			try { n = Integer.parseInt(split[0].substring(1)); }
+			catch (NumberFormatException ex) { };
+			
+			List<HashMap<String,Object>> query = Database.select("SELECT message FROM LoggingCModule_logs WHERE event_type="+LoggingCModule.EventType.MESSAGE.ordinal()+" AND channel="+Database.getEnclosedString(e.getChannel().getName())+" ORDER BY id DESC",n);
+			if(query.isEmpty())
+				return;
+			String original = (String) query.get(query.size()-1).get("MESSAGE");
+			String replaced = original;
 			for(int k=1;k<split.length-1;k+=2)
 			{
 				String regex = split[k].replace(((char) 26) + "", "/");
@@ -77,13 +73,11 @@ public class CorrectionModule extends Module
 				replaced = replaced.replaceAll(
 						regex, toReplace);
 			}
-			if (!replaced.equals(lastMessages.get(e.getChannel()))) // msg only if changed
+			if (!replaced.equals(original)) // msg only if changed
 			{
 				passMessage(e.getBot(), e.getChannel(), e.getUser(), replaced);
-				lastMessages.put(e.getChannel(), replaced);
 			}
-		} else
-			lastMessages.put(e.getChannel(), e.getMessage());
+		}
 	}
 
 }
