@@ -63,7 +63,6 @@ public class BacklogCommand extends Command
 					{
 						n = Integer.parseInt(cmd[1]);
 					} catch (NumberFormatException e) { //its not a number, must be a nickname
-						System.out.println("SELECT id FROM LoggingCModule_logs WHERE CHANNEL="+Database.getEnclosedString(chan.getName())+" AND user_name="+Database.getEnclosedString(cmd[1])+" AND (event_type="+LoggingCModule.EventType.QUIT.ordinal()+" OR event_type="+LoggingCModule.EventType.KICK.ordinal()+" OR event_type="+LoggingCModule.EventType.PART.ordinal()+")");
 						List<HashMap<String, Object>> query = Database.select("SELECT id FROM LoggingCModule_logs WHERE CHANNEL="+Database.getEnclosedString(chan.getName())+" AND user_name="+Database.getEnclosedString(cmd[1])+" AND (event_type="+LoggingCModule.EventType.QUIT.ordinal()+" OR event_type="+LoggingCModule.EventType.KICK.ordinal()+" OR event_type="+LoggingCModule.EventType.PART.ordinal()+") ORDER BY id DESC", 1);
 						if(query.size()==0)
 						{
@@ -105,7 +104,6 @@ public class BacklogCommand extends Command
 					n = query.size();
 				}
 				
-				System.out.println(n);
 				if(n > MAX_LINES)
 				{
 					passMessage(bot, chan, user, "Requested number of lines "+n+" is too high. Returning maximum of "+MAX_LINES);

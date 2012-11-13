@@ -90,7 +90,6 @@ public class MemoCommand extends Command
 			{
 				for (String alias : nick.split("/"))
 				{
-					System.out.println(alias);
 					if (chan.getUsers().contains(bot.getUser(alias)))
 					{
 						passMessage(bot, chan, user,
@@ -190,7 +189,6 @@ public class MemoCommand extends Command
 					.select("SELECT * FROM " + getFormattedTableName()
 							+ " WHERE LOCATE(" + escapedNick
 							+ ",lower(RECIPIENT)) > 0");
-			System.out.println(returned);
 			if (returned.isEmpty())
 				return;
 			// ArrayList<Integer> IDsToDelete = new ArrayList<Integer>();
@@ -203,7 +201,6 @@ public class MemoCommand extends Command
 				String recipients = memo.get("RECIPIENT").toString();
 				for (String recipient : recipients.split("/"))
 				{
-					System.out.println(recipient);
 					if (recipient.toLowerCase().equals(nick.toLowerCase()))
 					{
 						b.sendMessage(user, "A memo for " + nick + "! "
