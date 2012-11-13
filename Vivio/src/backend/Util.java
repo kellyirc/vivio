@@ -282,7 +282,8 @@ public class Util {
 		return message.startsWith(Command.CMD_SEQUENCE_DEFAULT)
 				|| message.startsWith(Command.CMD_SEQUENCE_DEVELOPMENT)
 				|| message.startsWith(Command.CMD_SEQUENCE_NORMAL)
-				|| message.startsWith(bot.getNick() + ",");
+				|| message.startsWith(bot.getNick() + ",")
+				|| message.startsWith(bot.getNick() + ":");
 	}
 	
 	private static final String PASTEBIN_API_KEY = "0d6b3e5d1484de2d0ccf3a88c4f1435b";

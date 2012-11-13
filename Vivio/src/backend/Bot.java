@@ -469,7 +469,7 @@ public class Bot extends PircBotX implements Constants {
 			boolean forceExecute) {
 
 		String commandString;
-		if (message.startsWith(getNick() + ", ")) {
+		if (message.startsWith(getNick() + ", ") || message.startsWith(getNick()+": ")) {
 			commandString = message.split(" ")[1];
 			forceExecute = true;
 			message = message.substring(message.indexOf(" "));
