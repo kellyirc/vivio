@@ -1,4 +1,14 @@
-package commands;
+/*
+ * @author Rahat Ahmed
+ * 
+ * @description This module will send the user a snippet of the log recorded
+ * in the channel it was used in. Parameters can include the max number of
+ * lines, a measure of time, or a nickname that has recently quit.
+ * 
+ * @basecmd backlog
+ * 
+ * @category utility
+ */package commands;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;

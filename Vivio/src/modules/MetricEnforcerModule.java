@@ -1,3 +1,11 @@
+/*
+ * @author Rahat Ahmed
+ * 
+ * @description This module will observe conversation in all channels and
+ * reprimand use of non-metric units.
+ * 
+ * @category misc
+ */
 package modules;
 
 import java.util.HashMap;

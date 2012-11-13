@@ -1,3 +1,11 @@
+/*
+ * @author Rahat Ahmed
+ * 
+ * @description This module emulates the behavior of Unix program sed, allowing
+ * users to correct lines that have already been sent with regex.
+ * 
+ * @category utility
+ */
 package modules;
 
 import java.util.HashMap;
