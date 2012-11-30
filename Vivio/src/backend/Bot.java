@@ -337,10 +337,6 @@ public class Bot extends PircBotX implements Constants {
 		this.setAutoSplitMessage(true);
 		this.setMessageDelay(500);
 		//TODO: Figure out what we really want to set the IP and ports to.
-		this.setDccInetAddress(Util.getPublicIP());
-		List<Integer> ports = this.getDccPorts();
-		for(int k=5000;k<=5010;k++)
-			ports.add(k);
 		this.setFinger("Don't finger me! Vivio v" + INTERNAL_VERSION);
 
 		this.setVersion("PircBotX~Vivio v" + INTERNAL_VERSION);
