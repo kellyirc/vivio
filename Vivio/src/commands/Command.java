@@ -174,7 +174,7 @@ public abstract class Command extends Module {
 	 */
 	public boolean hasAlias(String commandString) {
 		for (String s : getAliases()) {
-			if (commandString.toLowerCase().startsWith(s.toLowerCase()))
+			if (commandString.toLowerCase().equals(s.toLowerCase()))
 				return true;
 		}
 		return false;
