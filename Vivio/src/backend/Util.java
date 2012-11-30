@@ -9,10 +9,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.tecnick.htmlutils.htmlentities.HTMLEntities;
 import commands.Command;
@@ -328,5 +335,75 @@ public class Util {
 			e.printStackTrace();
 		}
 		return "Unable to upload.";
+	}
+	
+	/**
+	 * Get an InetAddress containing this bot's public IP address. This method
+	 * will attempt to connect to http://myip.xname.org/ to get this info.
+	 * @return InetAddress of this bot's public IP address.
+	 */
+	public static InetAddress getPublicIP()
+	{
+		URLConnection con;
+		try
+		{
+			con = new URL("http://myip.xname.org/").openConnection();
+			con.connect();
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String IP = in.readLine();
+			return InetAddress.getByName(IP);
+		} catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static int minEditDistance(String a, String b)
+	{
+		if(a.length()==0 && b.length()==0)
+			return 0;
+		if(a.length()==0)
+			return b.length();
+		if(b.length()==0)
+			return a.length();
+		int[][] m = new int[a.length()+1][b.length()+1];
+		for(int i=1;i<a.length()+1;i++)
+			m[i][0] = i;
+		for(int j=1;j<b.length()+1;j++)
+			m[0][j] = j;
+
+		for(int i=1;i<a.length()+1;i++)
+			for(int j=1;j<b.length()+1;j++)
+			{
+				m[i][j] = Math.min(Math.min(m[i-1][j-1]+((a.charAt(i-1)==b.charAt(j-1))?0:1),m[i-1][j]+1),m[i][j-1]+1);
+			}
+//		System.out.println(a+" "+b);
+//		for(int i=0;i<a.length()+1;i++)
+//		{
+//			for(int j=0;j<b.length()+1;j++)
+//				System.out.print(m[i][j]);
+//			System.out.println();
+//		}
+		return m[a.length()][b.length()];
+	}
+	
+	public static <K, V extends Comparable<? super V>> List<Map.Entry<K,V>> entriesSortedByValues(Map<K,V> map)
+	{
+		List<Map.Entry<K,V>> sortedEntries = new ArrayList<Map.Entry<K,V>>();
+		sortedEntries.addAll(map.entrySet());
+		Collections.sort(sortedEntries,new Comparator<Map.Entry<K,V>>() {
+
+				@Override
+				public int compare(Entry<K, V> a, Entry<K, V> b)
+				{
+					return a.getValue().compareTo(b.getValue());
+				}
+				
+			});
+		return sortedEntries;
 	}
 }

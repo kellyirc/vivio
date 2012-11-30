@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledFuture;
@@ -333,7 +336,11 @@ public class Bot extends PircBotX implements Constants {
 		this.setVerbose(true);
 		this.setAutoSplitMessage(true);
 		this.setMessageDelay(500);
-
+		//TODO: Figure out what we really want to set the IP and ports to.
+		this.setDccInetAddress(Util.getPublicIP());
+		List<Integer> ports = this.getDccPorts();
+		for(int k=5000;k<=5010;k++)
+			ports.add(k);
 		this.setFinger("Don't finger me! Vivio v" + INTERNAL_VERSION);
 
 		this.setVersion("PircBotX~Vivio v" + INTERNAL_VERSION);
@@ -345,12 +352,13 @@ public class Bot extends PircBotX implements Constants {
 		try {
 			if (SSL)
 				this.connect(server, port, serverPass,
-						new UtilSSLSocketFactory().trustAllCertificates());
+						new UtilSSLSocketFactory().trustAllCertificates().disableDiffieHellman());
 			else
 				this.connect(server, port, serverPass);
 		} catch (IOException | IrcException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	// initialize the bot
@@ -468,7 +476,7 @@ public class Bot extends PircBotX implements Constants {
 	public boolean checkCommands(User user, String message, Channel chan,
 			boolean forceExecute) {
 
-		String commandString;
+		String commandString = "";
 		if (message.startsWith(getNick() + ", ") || message.startsWith(getNick()+": ")) {
 			commandString = message.split(" ")[1];
 			forceExecute = true;
@@ -480,7 +488,8 @@ public class Bot extends PircBotX implements Constants {
 			return false;
 
 		String comm = commandString.substring(1);
-
+		
+		ArrayList<String> unmatched = new ArrayList<>();
 		for (Module m : modules) {
 			if (m instanceof Command) {
 				Command command = (Command) m;
@@ -490,8 +499,10 @@ public class Bot extends PircBotX implements Constants {
 					continue;
 				if (!forceExecute && !messageHasCommand(message, command))
 					continue;
-				if (!command.hasAlias(forceExecute ? commandString : comm))
+				if (!command.hasAlias(forceExecute ? commandString : comm)) {
+					unmatched.addAll(command.getAliases());
 					continue;
+				}
 				int level = getLevelForUser(user, chan);
 				if (level == LEVEL_BANNED)
 					continue;
@@ -505,9 +516,31 @@ public class Bot extends PircBotX implements Constants {
 						chan, user, message.trim());
 				if (command.isStopsExecution())
 					return false;
+				return true;
 			}
 		}
-		return true;
+		//At this point, none of the commands matched the message.
+		//Check if any commands that didn't match are close.
+		if(unmatched.isEmpty())
+			return false;
+		
+		Map<String,Integer> editDistances = new HashMap<String,Integer>();
+		String attemptedCommand = (forceExecute ? commandString : comm).toLowerCase();
+		for(String alias:unmatched)
+			editDistances.put(alias, Util.minEditDistance(attemptedCommand, alias));
+		List<Map.Entry<String,Integer>> sortedDistances = Util.entriesSortedByValues(editDistances);
+		int count = Math.min(3,sortedDistances.size());
+		String suggestions = "";
+		for(Entry<String, Integer> alias:sortedDistances)
+		{
+			suggestions += alias.getKey();
+			count--;
+			if(count == 0)
+				break;
+			suggestions += ", ";
+		}
+		this.sendMessage(chan, user, "There is no command with the alias \""+attemptedCommand+"\". Did you mean: "+suggestions+"?");
+		return false;
 	}
 
 	/**
