@@ -38,6 +38,16 @@ import org.pircbotx.hooks.events.DisconnectEvent;
 import org.reflections.Reflections;
 
 import commands.Command;
+import commands.ControlCommand;
+import commands.HelpCommand;
+import commands.JoinCommand;
+import commands.ListCommand;
+import commands.NickChangeCommand;
+import commands.RawSqlCommand;
+import commands.ReloadCommand;
+import commands.ReminderCommand;
+import commands.RhymeCommand;
+import commands.ToggleCommand;
 
 /**
  * The Class Bot.
@@ -120,6 +130,8 @@ public class Bot extends PircBotX implements Constants {
 
 	/** The Constant DEFAULT_PORT. */
 	public final static int DEFAULT_PORT = 6667;
+	
+	public final static int DEFAULT_MAX_MESSAGE_LENGTH = 370;
 
 	// Variables
 
@@ -203,6 +215,9 @@ public class Bot extends PircBotX implements Constants {
 	 */
 	@Setter
 	private boolean logsSelf = true;
+	
+	@Getter @Setter
+	private int maxMessageLength = DEFAULT_MAX_MESSAGE_LENGTH;
 
 	// Module comparator
 	/**
@@ -382,7 +397,7 @@ public class Bot extends PircBotX implements Constants {
 	 */
 	public void loadModules() {
 		modules.clear();
-
+		
 		loadModulesImpl("commands", Command.class);
 		loadModulesImpl("cmods", Command.class);
 		loadModulesImpl("modules", Module.class);
@@ -595,6 +610,11 @@ public class Bot extends PircBotX implements Constants {
 	public void sendAction(String target, String action) {
 		if (banned.contains(target))
 			return;
+		
+		while(action.length() > maxMessageLength) {
+			super.sendAction(target, action.substring(0, maxMessageLength));
+			action = action.substring(maxMessageLength);
+		}
 		super.sendAction(target, action);
 	}
 
@@ -608,6 +628,11 @@ public class Bot extends PircBotX implements Constants {
 	public void sendMessage(String target, String message) {
 		if (banned.contains(target))
 			return;
+		
+		while(message.length() > maxMessageLength) {
+			super.sendMessage(target, message.substring(0, maxMessageLength));
+			message = message.substring(maxMessageLength);
+		}
 		super.sendMessage(target, message);
 	}
 
@@ -620,6 +645,11 @@ public class Bot extends PircBotX implements Constants {
 	public void sendNotice(String target, String notice) {
 		if (banned.contains(target))
 			return;
+		
+		while(notice.length() > maxMessageLength) {
+			super.sendNotice(target, notice.substring(0, maxMessageLength));
+			notice = notice.substring(maxMessageLength);
+		}
 		super.sendNotice(target, notice);
 	}
 

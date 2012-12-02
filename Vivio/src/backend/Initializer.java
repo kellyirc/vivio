@@ -43,6 +43,7 @@ public class Initializer {
 		boolean ssl = false;
 		InetAddress dccIP = null;
 		ArrayList<Integer> dccPorts = new ArrayList<>();
+		int maxMessageLength = Bot.DEFAULT_MAX_MESSAGE_LENGTH;
 
 		for (int i = 0; i < args.length; i++) {
 			if ((args[i].equals("-s") || args[i].equals("--server"))
@@ -101,6 +102,9 @@ public class Initializer {
 				}
 				
 			}
+			if (args[i].equals("--max-message-length") && args.length >= i + 1) {
+				maxMessageLength = Integer.parseInt(args[i+1], 10);
+			}
 		}
 		Bot b = null;
 //		System.out.println(server+" "+port+" "+ssl+" "+nickname+" "+password);
@@ -109,6 +113,7 @@ public class Initializer {
 			b.setDccInetAddress(dccIP);
 		else
 			b.setDccInetAddress(Util.getPublicIP());
+		b.setMaxMessageLength(maxMessageLength);
 		
 		b.getDccPorts().addAll(dccPorts);
 		System.out.println(b.getDccPorts());
@@ -119,6 +124,7 @@ public class Initializer {
 		}
 		if (nickservPass != null)
 			b.identify(nickservPass);
+		
 		return;
 	}
 
