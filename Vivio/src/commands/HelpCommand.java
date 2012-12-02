@@ -6,6 +6,12 @@
  */
 package commands;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import modules.Module;
 
 import org.pircbotx.Channel;
@@ -33,7 +39,8 @@ public class HelpCommand extends Command {
 			return;
 		}
 		String[] args = Util.getArgs(message, 2);
-
+		
+		ArrayList<String> aliases = new ArrayList<String>();
 		for (Module mod : bot.getModules()) {
 			if (mod instanceof Command) {
 				Command c = (Command) mod;
@@ -45,8 +52,29 @@ public class HelpCommand extends Command {
 									+ formatLevel(c.getAccessLevel()));
 					return;
 				}
+				else
+					aliases.addAll(c.getAliases());
 			}
 		}
+		
+		//At this point, none of the commands matched the message.
+				
+		Map<String,Integer> editDistances = new HashMap<String,Integer>();
+		String attemptedCommand = args[1].toLowerCase();
+		for(String alias:aliases)
+			editDistances.put(alias, Util.minEditDistance(attemptedCommand, alias));
+		List<Map.Entry<String,Integer>> sortedDistances = Util.entriesSortedByValues(editDistances);
+		int count = Math.min(3,sortedDistances.size());
+		String suggestions = "";
+		for(Entry<String, Integer> alias:sortedDistances)
+		{
+			suggestions += alias.getKey();
+			count--;
+			if(count == 0)
+				break;
+			suggestions += ", ";
+		}
+		bot.sendMessage(chan, user, "There is no command with the alias \""+attemptedCommand+"\". Did you mean: "+suggestions+"?");
 	}
 
 	/**

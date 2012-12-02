@@ -485,7 +485,6 @@ public class Bot extends PircBotX implements Constants {
 
 		String comm = commandString.substring(1);
 		
-		ArrayList<String> unmatched = new ArrayList<>();
 		for (Module m : modules) {
 			if (m instanceof Command) {
 				Command command = (Command) m;
@@ -495,10 +494,8 @@ public class Bot extends PircBotX implements Constants {
 					continue;
 				if (!forceExecute && !messageHasCommand(message, command))
 					continue;
-				if (!command.hasAlias(forceExecute ? commandString : comm)) {
-					unmatched.addAll(command.getAliases());
+				if (!command.hasAlias(forceExecute ? commandString : comm)) 
 					continue;
-				}
 				int level = getLevelForUser(user, chan);
 				if (level == LEVEL_BANNED)
 					continue;
@@ -515,27 +512,6 @@ public class Bot extends PircBotX implements Constants {
 				return true;
 			}
 		}
-		//At this point, none of the commands matched the message.
-		//Check if any commands that didn't match are close.
-		if(unmatched.isEmpty())
-			return false;
-		
-		Map<String,Integer> editDistances = new HashMap<String,Integer>();
-		String attemptedCommand = (forceExecute ? commandString : comm).toLowerCase();
-		for(String alias:unmatched)
-			editDistances.put(alias, Util.minEditDistance(attemptedCommand, alias));
-		List<Map.Entry<String,Integer>> sortedDistances = Util.entriesSortedByValues(editDistances);
-		int count = Math.min(3,sortedDistances.size());
-		String suggestions = "";
-		for(Entry<String, Integer> alias:sortedDistances)
-		{
-			suggestions += alias.getKey();
-			count--;
-			if(count == 0)
-				break;
-			suggestions += ", ";
-		}
-		this.sendMessage(chan, user, "There is no command with the alias \""+attemptedCommand+"\". Did you mean: "+suggestions+"?");
 		return false;
 	}
 
